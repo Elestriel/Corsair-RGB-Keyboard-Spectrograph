@@ -1,0 +1,14 @@
+0.4.2
+- Regional decimal separator settings are now taken into account, and the XML config files are now semicolon-delimited, instead of comma-delimited, to support changes to reading methods. This means crashes for that anyone who had their computers set to use something other than a period as a decimals separator are fixed.
+0.4.1
+- Added an option to minimize to System Tray.
+0.4
+- Many crashes should be resolved. There are now informative error messages for some of the most common issues.
+- Console has been removed and replaced with an in-app output, with several levels of verbosity. (3 is enough for the typical user, but if you're getting errors, set it to 6 and let me know what you get!)
+- Multi-threading has been rewritten and should be significantly more stable.
+- Keyboard layout and even model can be swapped on the fly, and no longer require a restart.
+- Maximum brightness of the background effect increased to 40 from 30.
+- Adjusting Amplitude, Background Effect Brightness, and Bar Colour is now instant, and does not require an "Apply" button.
+- Test mode can be run even without a working keyboard layout. This means that even if you get errors opening a capture device, you can enter test mode to ensure that the program can communicate with your keyboard.
+- Test mode and Regular mode can be used interchangeably, without requiring a restart.
+- Some slight changes were made to the K70 and K65 layouts. The top row of buttons (brightness, winlock, volume, etc.) might be slightly off. Feedback on this one is greatly appreciated!

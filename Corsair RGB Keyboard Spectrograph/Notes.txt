@@ -1,0 +1,53 @@
+﻿        private int StopSpectrograph()
+        {
+            try
+            {
+                if (workerThread.IsAlive == false) { return 0; };
+            }
+            catch (NullReferenceException)
+            {
+                UpdateStatus("No Worker Thread Found");
+                return 0;
+            }
+
+            UpdateStatus("Killing Worker Thread");
+
+            int i = 0;
+
+            while (workerThread.IsAlive)
+            {
+                if (i >= 6) { return 2; };
+
+                workerThread.Abort();
+                UpdateStatus("Worker Thread did not terminate. Trying again.");
+                workerThread.Abort();
+                Thread.Sleep(1000);
+                i++;
+            }
+
+            UpdateStatus("Worker Thread has been terminated");
+            return 0;
+        }
+
+		private int StartSpectrograph()
+        {
+            try
+            {
+                if (workerThread.IsAlive)
+                { 
+                    return 2; 
+                };
+            }
+            catch (ThreadStateException eThread) { Console.WriteLine(eThread); }
+            catch (NullReferenceException eNullRef) { Console.WriteLine(eNullRef); }
+
+
+            UpdateStatus("Starting Worker Thread");
+            workerThread.Start();
+            if (workerThread.IsAlive) 
+            {
+                UpdateStatus("Running");
+                return 0;
+            };
+            return 2;
+        }
