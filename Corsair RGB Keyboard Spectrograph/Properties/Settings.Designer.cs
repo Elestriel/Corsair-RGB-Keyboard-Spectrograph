@@ -61,42 +61,6 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int userRed {
-            get {
-                return ((int)(this["userRed"]));
-            }
-            set {
-                this["userRed"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int userGreen {
-            get {
-                return ((int)(this["userGreen"]));
-            }
-            set {
-                this["userGreen"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int userBlue {
-            get {
-                return ((int)(this["userBlue"]));
-            }
-            set {
-                this["userBlue"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int userBackgroundBrightness {
             get {
@@ -140,6 +104,18 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["userRefreshDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color userColorBars {
+            get {
+                return ((global::System.Drawing.Color)(this["userColorBars"]));
+            }
+            set {
+                this["userColorBars"] = value;
             }
         }
     }

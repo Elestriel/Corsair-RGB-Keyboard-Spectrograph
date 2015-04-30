@@ -37,22 +37,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.StartSpectrographButton = new System.Windows.Forms.Button();
             this.StopSpectrographButton = new System.Windows.Forms.Button();
-            this.lblKeyboard = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLight = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.KeyboardModelComboBox = new System.Windows.Forms.ComboBox();
             this.KeyboardLayoutComboBox = new System.Windows.Forms.ComboBox();
-            this.lblLayout = new System.Windows.Forms.Label();
             this.AmplitudeUD = new System.Windows.Forms.NumericUpDown();
             this.lblAmplitude = new System.Windows.Forms.Label();
-            this.lblBarColours = new System.Windows.Forms.Label();
-            this.BarRed = new System.Windows.Forms.NumericUpDown();
-            this.BarGreen = new System.Windows.Forms.NumericUpDown();
-            this.BarBlue = new System.Windows.Forms.NumericUpDown();
-            this.lblRed = new System.Windows.Forms.Label();
-            this.lblGreen = new System.Windows.Forms.Label();
-            this.lblBlue = new System.Windows.Forms.Label();
             this.lblRainbowBrightness = new System.Windows.Forms.Label();
             this.BackgroundBrightnessUD = new System.Windows.Forms.NumericUpDown();
             this.TestModeButton = new System.Windows.Forms.Button();
@@ -73,11 +64,9 @@
             this.RefreshDelayLabel = new System.Windows.Forms.Label();
             this.RefreshDelayUD = new System.Windows.Forms.NumericUpDown();
             this.LaunchCueCheck = new System.Windows.Forms.CheckBox();
+            this.colorBars = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarRed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarGreen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarBlue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TesterUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).BeginInit();
@@ -87,7 +76,7 @@
             // 
             // StartSpectrographButton
             // 
-            this.StartSpectrographButton.Location = new System.Drawing.Point(12, 250);
+            this.StartSpectrographButton.Location = new System.Drawing.Point(12, 279);
             this.StartSpectrographButton.Name = "StartSpectrographButton";
             this.StartSpectrographButton.Size = new System.Drawing.Size(87, 23);
             this.StartSpectrographButton.TabIndex = 0;
@@ -97,7 +86,7 @@
             // 
             // StopSpectrographButton
             // 
-            this.StopSpectrographButton.Location = new System.Drawing.Point(198, 250);
+            this.StopSpectrographButton.Location = new System.Drawing.Point(198, 279);
             this.StopSpectrographButton.Name = "StopSpectrographButton";
             this.StopSpectrographButton.Size = new System.Drawing.Size(87, 23);
             this.StopSpectrographButton.TabIndex = 1;
@@ -105,21 +94,12 @@
             this.StopSpectrographButton.UseVisualStyleBackColor = true;
             this.StopSpectrographButton.Click += new System.EventHandler(this.StopSpectrograph_Click);
             // 
-            // lblKeyboard
-            // 
-            this.lblKeyboard.AutoSize = true;
-            this.lblKeyboard.Location = new System.Drawing.Point(12, 15);
-            this.lblKeyboard.Name = "lblKeyboard";
-            this.lblKeyboard.Size = new System.Drawing.Size(80, 13);
-            this.lblKeyboard.TabIndex = 2;
-            this.lblKeyboard.Text = "Your Keyboard:";
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLight,
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 321);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 312);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(659, 22);
             this.statusStrip1.TabIndex = 3;
@@ -141,7 +121,7 @@
             // 
             this.KeyboardModelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.KeyboardModelComboBox.FormattingEnabled = true;
-            this.KeyboardModelComboBox.Location = new System.Drawing.Point(98, 12);
+            this.KeyboardModelComboBox.Location = new System.Drawing.Point(12, 12);
             this.KeyboardModelComboBox.Name = "KeyboardModelComboBox";
             this.KeyboardModelComboBox.Size = new System.Drawing.Size(119, 21);
             this.KeyboardModelComboBox.TabIndex = 4;
@@ -151,24 +131,15 @@
             // 
             this.KeyboardLayoutComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.KeyboardLayoutComboBox.FormattingEnabled = true;
-            this.KeyboardLayoutComboBox.Location = new System.Drawing.Point(98, 39);
+            this.KeyboardLayoutComboBox.Location = new System.Drawing.Point(155, 12);
             this.KeyboardLayoutComboBox.Name = "KeyboardLayoutComboBox";
             this.KeyboardLayoutComboBox.Size = new System.Drawing.Size(119, 21);
             this.KeyboardLayoutComboBox.TabIndex = 6;
             this.KeyboardLayoutComboBox.SelectedIndexChanged += new System.EventHandler(this.KeyboardLayoutComboBox_SelectedIndexChanged);
             // 
-            // lblLayout
-            // 
-            this.lblLayout.AutoSize = true;
-            this.lblLayout.Location = new System.Drawing.Point(25, 42);
-            this.lblLayout.Name = "lblLayout";
-            this.lblLayout.Size = new System.Drawing.Size(67, 13);
-            this.lblLayout.TabIndex = 5;
-            this.lblLayout.Text = "Your Layout:";
-            // 
             // AmplitudeUD
             // 
-            this.AmplitudeUD.Location = new System.Drawing.Point(201, 66);
+            this.AmplitudeUD.Location = new System.Drawing.Point(227, 57);
             this.AmplitudeUD.Minimum = new decimal(new int[] {
             1,
             0,
@@ -187,114 +158,24 @@
             // lblAmplitude
             // 
             this.lblAmplitude.AutoSize = true;
-            this.lblAmplitude.Location = new System.Drawing.Point(65, 68);
+            this.lblAmplitude.Location = new System.Drawing.Point(164, 59);
             this.lblAmplitude.Name = "lblAmplitude";
             this.lblAmplitude.Size = new System.Drawing.Size(57, 13);
             this.lblAmplitude.TabIndex = 9;
-            this.lblAmplitude.Text = "Sansitivity:";
-            // 
-            // lblBarColours
-            // 
-            this.lblBarColours.AutoSize = true;
-            this.lblBarColours.Location = new System.Drawing.Point(115, 118);
-            this.lblBarColours.Name = "lblBarColours";
-            this.lblBarColours.Size = new System.Drawing.Size(61, 13);
-            this.lblBarColours.TabIndex = 10;
-            this.lblBarColours.Text = "Bar Colours";
-            // 
-            // BarRed
-            // 
-            this.BarRed.Location = new System.Drawing.Point(45, 159);
-            this.BarRed.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarRed.Name = "BarRed";
-            this.BarRed.Size = new System.Drawing.Size(47, 20);
-            this.BarRed.TabIndex = 11;
-            this.BarRed.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarRed.ValueChanged += new System.EventHandler(this.BarRed_ValueChanged);
-            // 
-            // BarGreen
-            // 
-            this.BarGreen.Location = new System.Drawing.Point(123, 159);
-            this.BarGreen.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarGreen.Name = "BarGreen";
-            this.BarGreen.Size = new System.Drawing.Size(47, 20);
-            this.BarGreen.TabIndex = 12;
-            this.BarGreen.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarGreen.ValueChanged += new System.EventHandler(this.BarGreen_ValueChanged);
-            // 
-            // BarBlue
-            // 
-            this.BarBlue.Location = new System.Drawing.Point(202, 159);
-            this.BarBlue.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarBlue.Name = "BarBlue";
-            this.BarBlue.Size = new System.Drawing.Size(47, 20);
-            this.BarBlue.TabIndex = 13;
-            this.BarBlue.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.BarBlue.ValueChanged += new System.EventHandler(this.BarBlue_ValueChanged);
-            // 
-            // lblRed
-            // 
-            this.lblRed.AutoSize = true;
-            this.lblRed.Location = new System.Drawing.Point(45, 140);
-            this.lblRed.Name = "lblRed";
-            this.lblRed.Size = new System.Drawing.Size(27, 13);
-            this.lblRed.TabIndex = 14;
-            this.lblRed.Text = "Red";
-            // 
-            // lblGreen
-            // 
-            this.lblGreen.AutoSize = true;
-            this.lblGreen.Location = new System.Drawing.Point(123, 140);
-            this.lblGreen.Name = "lblGreen";
-            this.lblGreen.Size = new System.Drawing.Size(36, 13);
-            this.lblGreen.TabIndex = 15;
-            this.lblGreen.Text = "Green";
-            // 
-            // lblBlue
-            // 
-            this.lblBlue.AutoSize = true;
-            this.lblBlue.Location = new System.Drawing.Point(202, 140);
-            this.lblBlue.Name = "lblBlue";
-            this.lblBlue.Size = new System.Drawing.Size(28, 13);
-            this.lblBlue.TabIndex = 16;
-            this.lblBlue.Text = "Blue";
+            this.lblAmplitude.Text = "Sensitivity:";
             // 
             // lblRainbowBrightness
             // 
             this.lblRainbowBrightness.AutoSize = true;
-            this.lblRainbowBrightness.Location = new System.Drawing.Point(65, 94);
+            this.lblRainbowBrightness.Location = new System.Drawing.Point(101, 85);
             this.lblRainbowBrightness.Name = "lblRainbowBrightness";
-            this.lblRainbowBrightness.Size = new System.Drawing.Size(90, 13);
+            this.lblRainbowBrightness.Size = new System.Drawing.Size(120, 13);
             this.lblRainbowBrightness.TabIndex = 19;
-            this.lblRainbowBrightness.Text = "Effect Brightness:";
+            this.lblRainbowBrightness.Text = "Background Brightness:";
             // 
             // BackgroundBrightnessUD
             // 
-            this.BackgroundBrightnessUD.Location = new System.Drawing.Point(201, 92);
+            this.BackgroundBrightnessUD.Location = new System.Drawing.Point(227, 83);
             this.BackgroundBrightnessUD.Maximum = new decimal(new int[] {
             70,
             0,
@@ -312,7 +193,7 @@
             // 
             // TestModeButton
             // 
-            this.TestModeButton.Location = new System.Drawing.Point(12, 288);
+            this.TestModeButton.Location = new System.Drawing.Point(291, 279);
             this.TestModeButton.Name = "TestModeButton";
             this.TestModeButton.Size = new System.Drawing.Size(87, 23);
             this.TestModeButton.TabIndex = 20;
@@ -322,7 +203,7 @@
             // 
             // TesterUD
             // 
-            this.TesterUD.Location = new System.Drawing.Point(105, 291);
+            this.TesterUD.Location = new System.Drawing.Point(384, 282);
             this.TesterUD.Maximum = new decimal(new int[] {
             143,
             0,
@@ -346,7 +227,7 @@
             // 
             // LogLevelUD
             // 
-            this.LogLevelUD.Location = new System.Drawing.Point(238, 291);
+            this.LogLevelUD.Location = new System.Drawing.Point(517, 282);
             this.LogLevelUD.Maximum = new decimal(new int[] {
             6,
             0,
@@ -370,7 +251,7 @@
             // LogLevelLabel
             // 
             this.LogLevelLabel.AutoSize = true;
-            this.LogLevelLabel.Location = new System.Drawing.Point(175, 293);
+            this.LogLevelLabel.Location = new System.Drawing.Point(454, 284);
             this.LogLevelLabel.Name = "LogLevelLabel";
             this.LogLevelLabel.Size = new System.Drawing.Size(57, 13);
             this.LogLevelLabel.TabIndex = 24;
@@ -443,7 +324,7 @@
             // 
             this.MinimizeToTrayCheck.AutoSize = true;
             this.MinimizeToTrayCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.MinimizeToTrayCheck.Location = new System.Drawing.Point(146, 208);
+            this.MinimizeToTrayCheck.Location = new System.Drawing.Point(146, 256);
             this.MinimizeToTrayCheck.Name = "MinimizeToTrayCheck";
             this.MinimizeToTrayCheck.Size = new System.Drawing.Size(139, 17);
             this.MinimizeToTrayCheck.TabIndex = 25;
@@ -457,7 +338,7 @@
             // RefreshDelayLabel
             // 
             this.RefreshDelayLabel.AutoSize = true;
-            this.RefreshDelayLabel.Location = new System.Drawing.Point(306, 293);
+            this.RefreshDelayLabel.Location = new System.Drawing.Point(1, 61);
             this.RefreshDelayLabel.Name = "RefreshDelayLabel";
             this.RefreshDelayLabel.Size = new System.Drawing.Size(77, 13);
             this.RefreshDelayLabel.TabIndex = 27;
@@ -465,7 +346,7 @@
             // 
             // RefreshDelayUD
             // 
-            this.RefreshDelayUD.Location = new System.Drawing.Point(389, 291);
+            this.RefreshDelayUD.Location = new System.Drawing.Point(84, 59);
             this.RefreshDelayUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -489,19 +370,31 @@
             // LaunchCueCheck
             // 
             this.LaunchCueCheck.AutoSize = true;
-            this.LaunchCueCheck.Location = new System.Drawing.Point(12, 208);
+            this.LaunchCueCheck.Location = new System.Drawing.Point(12, 256);
             this.LaunchCueCheck.Name = "LaunchCueCheck";
             this.LaunchCueCheck.Size = new System.Drawing.Size(122, 17);
             this.LaunchCueCheck.TabIndex = 28;
             this.LaunchCueCheck.Text = "Launch CUE on Exit";
             this.LaunchCueCheck.UseVisualStyleBackColor = true;
             // 
+            // colorBars
+            // 
+            this.colorBars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.colorBars.Location = new System.Drawing.Point(210, 128);
+            this.colorBars.Name = "colorBars";
+            this.colorBars.Size = new System.Drawing.Size(75, 23);
+            this.colorBars.TabIndex = 29;
+            this.colorBars.Text = "Bars";
+            this.colorBars.UseVisualStyleBackColor = true;
+            this.colorBars.Click += new System.EventHandler(this.colorBars_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(659, 343);
+            this.ClientSize = new System.Drawing.Size(659, 334);
+            this.Controls.Add(this.colorBars);
             this.Controls.Add(this.LaunchCueCheck);
             this.Controls.Add(this.RefreshDelayLabel);
             this.Controls.Add(this.RefreshDelayUD);
@@ -513,20 +406,11 @@
             this.Controls.Add(this.TestModeButton);
             this.Controls.Add(this.lblRainbowBrightness);
             this.Controls.Add(this.BackgroundBrightnessUD);
-            this.Controls.Add(this.lblBlue);
-            this.Controls.Add(this.lblGreen);
-            this.Controls.Add(this.lblRed);
-            this.Controls.Add(this.BarBlue);
-            this.Controls.Add(this.BarGreen);
-            this.Controls.Add(this.BarRed);
-            this.Controls.Add(this.lblBarColours);
             this.Controls.Add(this.lblAmplitude);
             this.Controls.Add(this.AmplitudeUD);
             this.Controls.Add(this.KeyboardLayoutComboBox);
-            this.Controls.Add(this.lblLayout);
             this.Controls.Add(this.KeyboardModelComboBox);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.lblKeyboard);
             this.Controls.Add(this.StopSpectrographButton);
             this.Controls.Add(this.StartSpectrographButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -539,9 +423,6 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarRed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarGreen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarBlue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TesterUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).EndInit();
@@ -556,21 +437,12 @@
 
         private System.Windows.Forms.Button StartSpectrographButton;
         private System.Windows.Forms.Button StopSpectrographButton;
-        private System.Windows.Forms.Label lblKeyboard;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.ComboBox KeyboardModelComboBox;
         private System.Windows.Forms.ComboBox KeyboardLayoutComboBox;
-        private System.Windows.Forms.Label lblLayout;
         private System.Windows.Forms.NumericUpDown AmplitudeUD;
         private System.Windows.Forms.Label lblAmplitude;
-        private System.Windows.Forms.Label lblBarColours;
-        private System.Windows.Forms.NumericUpDown BarRed;
-        private System.Windows.Forms.NumericUpDown BarGreen;
-        private System.Windows.Forms.NumericUpDown BarBlue;
-        private System.Windows.Forms.Label lblRed;
-        private System.Windows.Forms.Label lblGreen;
-        private System.Windows.Forms.Label lblBlue;
         private System.Windows.Forms.Label lblRainbowBrightness;
         private System.Windows.Forms.NumericUpDown BackgroundBrightnessUD;
         private System.Windows.Forms.Button TestModeButton;
@@ -592,6 +464,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmQuit;
         private System.Windows.Forms.CheckBox LaunchCueCheck;
+        private System.Windows.Forms.Button colorBars;
 
     }
 }

@@ -44,9 +44,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.userKeyboardLayout = KeyboardLayoutComboBox.Text;
             Properties.Settings.Default.userAmplitude = (int)AmplitudeUD.Value;
             Properties.Settings.Default.userBackgroundBrightness = (int)BackgroundBrightnessUD.Value;
-            Properties.Settings.Default.userRed = (int)BarRed.Value;
-            Properties.Settings.Default.userGreen = (int)BarGreen.Value;
-            Properties.Settings.Default.userBlue = (int)BarBlue.Value;
+            Properties.Settings.Default.userColorBars = colorBars.BackColor;
             Properties.Settings.Default.userLogLevel = (int)LogLevelUD.Value;
             Properties.Settings.Default.userMinimizeToTray = MinimizeToTrayCheck.Checked;
             Properties.Settings.Default.userRefreshDelay = (int)RefreshDelayUD.Value;
@@ -78,9 +76,7 @@ namespace RGBKeyboardSpectrograph
             string settingKeyboardLayout = Properties.Settings.Default.userKeyboardLayout;
             int settingAmplitude = Properties.Settings.Default.userAmplitude;
             int settingBackgroundBrightness = Properties.Settings.Default.userBackgroundBrightness;
-            int settingBarRed = Properties.Settings.Default.userRed;
-            int settingBarGreen = Properties.Settings.Default.userGreen;
-            int settingBarBlue = Properties.Settings.Default.userBlue;
+            Color settingBarColor = Properties.Settings.Default.userColorBars;
             int settingLogLevel = Properties.Settings.Default.userLogLevel;
             bool settingMinimizeToTray = Properties.Settings.Default.userMinimizeToTray;
             int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
@@ -91,18 +87,13 @@ namespace RGBKeyboardSpectrograph
 
             if (settingAmplitude < 1 || settingAmplitude > 100) { settingAmplitude = 10; };
             if (settingBackgroundBrightness < 0 || settingBackgroundBrightness > 30) { settingBackgroundBrightness = 15; };
-            if (settingBarRed < 0 || settingBarRed > 7) { settingBarRed = 7; };
-            if (settingBarGreen < 0 || settingBarGreen > 7) { settingBarGreen = 7; };
-            if (settingBarBlue < 0 || settingBarBlue > 7) { settingBarBlue = 7; };
             if (settingLogLevel < 3) { settingLogLevel = 3; };
             MinimizeToTrayCheck.Checked = settingMinimizeToTray;
             if (settingRefreshDelay < 5 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
 
             AmplitudeUD.Value = settingAmplitude;
             BackgroundBrightnessUD.Value = settingBackgroundBrightness;
-            BarRed.Value = settingBarRed;
-            BarGreen.Value = settingBarGreen;
-            BarBlue.Value = settingBarBlue;
+            colorBars.BackColor = settingBarColor;
             LogLevelUD.Value = settingLogLevel;
             Program.LogLevel = settingLogLevel;
             RefreshDelayUD.Value = settingRefreshDelay;
@@ -163,10 +154,11 @@ namespace RGBKeyboardSpectrograph
             Process[] pname = Process.GetProcessesByName("CorsairHID");
             if (pname.Length != 0) UpdateStatusMessage.ShowStatusMessage(3, "Corsair Utility Engine is still running!");
             
+            
             Program.MyAmplitude = (float)AmplitudeUD.Value;
-            Program.MyBarsRed = (int)BarRed.Value;
-            Program.MyBarsGreen = (int)BarGreen.Value;
-            Program.MyBarsBlue = (int)BarBlue.Value;
+            Program.MyBarsRed = (int)(colorBars.BackColor.R);
+            Program.MyBarsGreen = (int)(colorBars.BackColor.G);
+            Program.MyBarsBlue = (int)(colorBars.BackColor.B);
             Program.MyBackgroundBrightness = (float)BackgroundBrightnessUD.Value;
             if (KeyboardLayoutComboBox.SelectedIndex < 0) {
                 MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -394,21 +386,6 @@ namespace RGBKeyboardSpectrograph
             Program.MyAmplitude = (int)AmplitudeUD.Value;
         }
 
-        private void BarRed_ValueChanged(object sender, EventArgs e)
-        {
-            Program.MyBarsRed = (int)BarRed.Value;
-        }
-
-        private void BarGreen_ValueChanged(object sender, EventArgs e)
-        {
-            Program.MyBarsGreen = (int)BarGreen.Value;
-        }
-
-        private void BarBlue_ValueChanged(object sender, EventArgs e)
-        {
-            Program.MyBarsBlue = (int)BarBlue.Value;
-        }
-
         private void KeyboardLayoutComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Program.RunKeyboardThread == 2)
@@ -457,7 +434,25 @@ namespace RGBKeyboardSpectrograph
             this.Close();
         }
 
+        private void colorBars_Click(object sender, EventArgs e)
+        {
+            
+            ColorDialog ColorPicker = new ColorDialog();
+            ColorPicker.AllowFullOpen = true;
+            ColorPicker.ShowHelp = true;
+            ColorPicker.Color = colorBars.BackColor;
+
+            if (ColorPicker.ShowDialog() == DialogResult.OK)
+            {
+                colorBars.BackColor = ColorPicker.Color;
+                Program.MyBarsRed = (int)(colorBars.BackColor.R);
+                Program.MyBarsGreen = (int)(colorBars.BackColor.G);
+                Program.MyBarsBlue = (int)(colorBars.BackColor.B);
+            }
+        }
+
 #endregion
+
 
     } //MainForm
 
