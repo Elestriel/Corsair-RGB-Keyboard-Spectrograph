@@ -154,5 +154,89 @@ namespace RGBKeyboardSpectrograph.Properties {
                 this["userUsb3Mode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userShowGraphics {
+            get {
+                return ((bool)(this["userShowGraphics"]));
+            }
+            set {
+                this["userShowGraphics"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public float userEffectWidth {
+            get {
+                return ((float)(this["userEffectWidth"]));
+            }
+            set {
+                this["userEffectWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float userEffectSpeed {
+            get {
+                return ((float)(this["userEffectSpeed"]));
+            }
+            set {
+                this["userEffectSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool userViewSettings {
+            get {
+                return ((bool)(this["userViewSettings"]));
+            }
+            set {
+                this["userViewSettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool userViewDebug {
+            get {
+                return ((bool)(this["userViewDebug"]));
+            }
+            set {
+                this["userViewDebug"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userStartMinimized {
+            get {
+                return ((bool)(this["userStartMinimized"]));
+            }
+            set {
+                this["userStartMinimized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userEffectsOnStart {
+            get {
+                return ((bool)(this["userEffectsOnStart"]));
+            }
+            set {
+                this["userEffectsOnStart"] = value;
+            }
+        }
     }
 }

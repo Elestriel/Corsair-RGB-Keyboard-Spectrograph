@@ -40,17 +40,36 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(2, "Waiting for thread to quit");
             } 
 
+            // Save application settings
+            // Listboxes
             Properties.Settings.Default.userKeyboardModel = KeyboardModelComboBox.Text;
             Properties.Settings.Default.userKeyboardLayout = KeyboardLayoutComboBox.Text;
+            Properties.Settings.Default.userColorBackgroundType = BackgroundEffectComboBox.Text;
+
+            // UpDowns
             Properties.Settings.Default.userAmplitude = (int)AmplitudeUD.Value;
             Properties.Settings.Default.userBackgroundBrightness = (int)BackgroundBrightnessUD.Value;
+            Properties.Settings.Default.userLogLevel = (int)LogLevelUD.Value;
+            Properties.Settings.Default.userRefreshDelay = (int)RefreshDelayUD.Value;
+            Properties.Settings.Default.userEffectWidth = (float)EffectWidth.Value;
+            Properties.Settings.Default.userEffectSpeed = (float)EffectSpeed.Value;
+
+            // CheckBoxes
+            Properties.Settings.Default.userMinimizeToTray = MinimizeToTrayCheck.Checked;
+            Properties.Settings.Default.userUsb3Mode = USB3ModeCheck.Checked;
+            Properties.Settings.Default.userShowGraphics = ShowGraphicsCheck.Checked;
+            Properties.Settings.Default.userStartMinimized = StartMinimizedCheck.Checked;
+            Properties.Settings.Default.userEffectsOnStart = EffectsOnStartCheck.Checked;
+
+            // Colours
             Properties.Settings.Default.userColorBars = colorBars.BackColor;
             Properties.Settings.Default.userColorBackground = colorBackground.BackColor;
-            Properties.Settings.Default.userColorBackgroundType = BackgroundEffectComboBox.Text;
-            Properties.Settings.Default.userLogLevel = (int)LogLevelUD.Value;
-            Properties.Settings.Default.userMinimizeToTray = MinimizeToTrayCheck.Checked;
-            Properties.Settings.Default.userRefreshDelay = (int)RefreshDelayUD.Value;
-            Properties.Settings.Default.userUsb3Mode = USB3Mode.Checked;
+
+            // Views
+            Properties.Settings.Default.userViewDebug = Program.MyViewDebug;
+            Properties.Settings.Default.userViewSettings = Program.MyViewSettings;
+
+            // Save Settings
             Properties.Settings.Default.Save();
         }
 
@@ -66,16 +85,15 @@ namespace RGBKeyboardSpectrograph
         
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Clean up this whole void!!
             UpdateStatusMessage.ShowStatusMessage(0, "Version " + Program.VersionNumber);
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
             notifyIcon.Visible = false;
 
             // Incomplete controls to hide
-            LaunchCueCheck.Visible = false; 
-            GraphicsPictureBox.Visible = false;
-            BackgroundEffectComboBox.Visible = false;
-            colorBackground.Visible = false;
+            //LaunchCueCheck.Visible = false; 
+            //GraphicsPictureBox.Visible = false;
+            //BackgroundEffectComboBox.Visible = false;
+            //colorBackground.Visible = false;
 
             KeyboardModelComboBox.Items.Add("K65-RGB");
             KeyboardModelComboBox.Items.Add("K70-RGB");
@@ -84,41 +102,93 @@ namespace RGBKeyboardSpectrograph
             BackgroundEffectComboBox.Items.Add("Solid Colour");
             BackgroundEffectComboBox.Items.Add("Rainbow");
             BackgroundEffectComboBox.Items.Add("Rainbow Pulse");
+            BackgroundEffectComboBox.Items.Add("Rainbow Swipes");
+            BackgroundEffectComboBox.Items.Add("Colour Waves");
             
+            // Load all settings. Those that require manipulation or verification
+            // are first loaded to variables to help manipulate them.
             UpdateStatusMessage.ShowStatusMessage(1, "Loading Settings");
-            string settingKeyboardModel = Properties.Settings.Default.userKeyboardModel;
-            string settingKeyboardLayout = Properties.Settings.Default.userKeyboardLayout;
-            int settingAmplitude = Properties.Settings.Default.userAmplitude;
-            int settingBackgroundBrightness = Properties.Settings.Default.userBackgroundBrightness;
-            Color settingBarColor = Properties.Settings.Default.userColorBars;
-            Color settingBackgroundColor = Properties.Settings.Default.userColorBackground;
-            string settingBackgroundColorType = Properties.Settings.Default.userColorBackgroundType;
-            int settingLogLevel = Properties.Settings.Default.userLogLevel;
-            bool settingMinimizeToTray = Properties.Settings.Default.userMinimizeToTray;
-            int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
-            bool settingsUsb3Mode = Properties.Settings.Default.userUsb3Mode;
 
-            // Make sure no sneaky incorrect options could be set as the text of the ComboBoxes
+            // ListBoxes
+            string settingKeyboardModel = Properties.Settings.Default.userKeyboardModel;
             if (KeyboardModelComboBox.FindStringExact(settingKeyboardModel) > -1) { KeyboardModelComboBox.SelectedIndex = KeyboardModelComboBox.FindStringExact(settingKeyboardModel); };
+
+            string settingKeyboardLayout = Properties.Settings.Default.userKeyboardLayout;
             if (KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout) > -1) { KeyboardLayoutComboBox.SelectedIndex = KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout); };
+
+            string settingBackgroundColorType = Properties.Settings.Default.userColorBackgroundType;
             if (BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType) > -1) { BackgroundEffectComboBox.SelectedIndex = BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType); };
 
+            // UpDowns
+            int settingAmplitude = Properties.Settings.Default.userAmplitude;
             if (settingAmplitude < 1 || settingAmplitude > 100) { settingAmplitude = 10; };
-            if (settingBackgroundBrightness < 0 || settingBackgroundBrightness > 30) { settingBackgroundBrightness = 15; };
-            if (settingLogLevel < 3) { settingLogLevel = 3; };
-            MinimizeToTrayCheck.Checked = settingMinimizeToTray;
-            if (settingRefreshDelay < 5 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
-
             AmplitudeUD.Value = settingAmplitude;
+
+            int settingBackgroundBrightness = Properties.Settings.Default.userBackgroundBrightness;
+            if (settingBackgroundBrightness < 0 || settingBackgroundBrightness > 70) { settingBackgroundBrightness = 15; };
             BackgroundBrightnessUD.Value = settingBackgroundBrightness;
-            colorBars.BackColor = settingBarColor;
-            colorBackground.BackColor = settingBackgroundColor;
+
+            int settingLogLevel = Properties.Settings.Default.userLogLevel;
+            if (settingLogLevel < 3) { settingLogLevel = 3; };
             LogLevelUD.Value = settingLogLevel;
             Program.LogLevel = settingLogLevel;
-            RefreshDelayUD.Value = settingRefreshDelay;
-            USB3Mode.Checked = settingsUsb3Mode;
 
+            int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
+            if (settingRefreshDelay < 5 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
+            RefreshDelayUD.Value = settingRefreshDelay;
+
+            float settingEffectWidth = Properties.Settings.Default.userEffectWidth;
+            if (settingEffectWidth < 1 || settingEffectWidth > 1000) { settingEffectWidth = 100; };
+            EffectWidth.Value = (decimal)settingEffectWidth;
+
+            float settingEffectSpeed = Properties.Settings.Default.userEffectSpeed;
+            if (settingEffectSpeed < 0.1 || settingEffectSpeed > 10) { settingEffectSpeed = 1; };
+            EffectSpeed.Value = (decimal)settingEffectSpeed;
+
+            // CheckBoxes
+            MinimizeToTrayCheck.Checked = Properties.Settings.Default.userMinimizeToTray;
+            USB3ModeCheck.Checked = Properties.Settings.Default.userUsb3Mode;
+            ShowGraphicsCheck.Checked = Properties.Settings.Default.userShowGraphics;
+            ShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
+            StartMinimizedCheck.Checked = Properties.Settings.Default.userStartMinimized;
+            EffectsOnStartCheck.Checked = Properties.Settings.Default.userEffectsOnStart;
+
+            // Colours
+            Color settingBarColor = Properties.Settings.Default.userColorBars;
+            colorBars.BackColor = settingBarColor; 
+            colorBars.ForeColor = ContrastColor(colorBars.BackColor);
+            Program.MyBarsRed = (int)(colorBars.BackColor.R);
+            Program.MyBarsGreen = (int)(colorBars.BackColor.G);
+            Program.MyBarsBlue = (int)(colorBars.BackColor.B);
+
+            Color settingBackgroundColor = Properties.Settings.Default.userColorBackground;
+            colorBackground.BackColor = settingBackgroundColor;
+            colorBackground.ForeColor = ContrastColor(colorBackground.BackColor);
+            Program.MyBgRed = (int)(colorBackground.BackColor.R);
+            Program.MyBgGreen = (int)(colorBackground.BackColor.G);
+            Program.MyBgBlue = (int)(colorBackground.BackColor.B);
+
+            // Views
+            Program.MyViewDebug = Properties.Settings.Default.userViewDebug;
+            Program.MyViewSettings = Properties.Settings.Default.userViewSettings;
+            SetWindowSize();
+
+            // Automatically minimize
+            if (Properties.Settings.Default.userStartMinimized == true) { this.WindowState = FormWindowState.Minimized; };
+
+            // Automatically start effects
+            if (Properties.Settings.Default.userEffectsOnStart == true) { StartSpectrograph_Click(null, null); };
+
+            // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
+        }
+
+        private void SetWindowSize()
+        {
+            if (Program.MyViewDebug == true) { this.Width = 683; this.Text = "RGB Keyboard Spectrograph"; }
+            else { this.Width = 312; this.Text = "RGB Spectro"; };
+            if (Program.MyViewSettings == true) { this.Height = 469; }
+            else { this.Height = 377; };
         }
 
         public bool LoadFromConfig(string KeyboardID)
@@ -137,22 +207,24 @@ namespace RGBKeyboardSpectrograph
                 keyboardPositionMaps = document.Descendants("positionmap").Select(element => element.Value).ToArray();
                 keyboardSizeMaps = document.Descendants("sizemap").Select(element => element.Value).ToArray();
 
-                switch (KeyboardModelComboBox.Text)
+                if (Program.DevMode == true)
                 {
-                    case "K65-RGB":
-                        Program.MyKeyboardID = 0x1B17;
-                        //Program.MyKeyboardID = 0x1B11;
-                        Program.MyCanvasWidth = 76;
-                        break;
-                    case "K70-RGB":
-                        Program.MyKeyboardID = 0x1B13;
-                        //Program.MyKeyboardID = 0x1B11;
-                        Program.MyCanvasWidth = 92;
-                        break;
-                    case "K95-RGB":
-                        Program.MyKeyboardID = 0x1B11;
-                        Program.MyCanvasWidth = 104;
-                        break;
+                    Program.MyKeyboardID = 0x1B11;
+                }
+                else
+                {
+                    switch (KeyboardModelComboBox.Text)
+                    {
+                        case "K65-RGB":
+                            Program.MyKeyboardID = 0x1B17;
+                            break;
+                        case "K70-RGB":
+                            Program.MyKeyboardID = 0x1B13;
+                            break;
+                        case "K95-RGB":
+                            Program.MyKeyboardID = 0x1B11;
+                            break;
+                    }
                 }
 
                 UpdateStatusMessage.ShowStatusMessage(4, "Hardware ID: " + Program.MyKeyboardID.ToString("X"));
@@ -166,7 +238,22 @@ namespace RGBKeyboardSpectrograph
                 return true;
             }
         }
-        #endregion
+
+        Color ContrastColor(Color color)
+        {
+            int d = 0;
+
+            // Check luminance with green bias
+            double a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255;
+
+            if (a < 0.5)
+                d = 0; // Bright colours, dark text
+            else
+                d = 255; // Dark colours, light text
+
+            return Color.FromArgb(d, d, d);
+        }
+        #endregion Form Stuff
 
         #region Thread Start/Stop
         private bool StartSpectrograph(int RunType)
@@ -180,6 +267,8 @@ namespace RGBKeyboardSpectrograph
             Program.MyBarsGreen = (int)(colorBars.BackColor.G);
             Program.MyBarsBlue = (int)(colorBars.BackColor.B);
             Program.MyBackgroundBrightness = (float)BackgroundBrightnessUD.Value;
+            Program.MyEffectWidth = (float)EffectWidth.Value;
+            Program.MyEffectSpeed = (float)EffectSpeed.Value;
             if (KeyboardLayoutComboBox.SelectedIndex < 0) {
                 MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 UpdateStatusMessage.ShowStatusMessage(3, "No layout selected.");
@@ -336,17 +425,33 @@ namespace RGBKeyboardSpectrograph
 
         public void UpdateGraphicOutput_NewOut(Bitmap render)
         {
-            this.Invoke((MethodInvoker)(() => GraphicsPictureBox.Image = render));
+            this.Invoke((MethodInvoker)(() => GraphicsPictureBox.Image = Program.MyGraphicRender));
         }
         #endregion
 
         #region Controls
+
+        #region Buttons
+
         private void StartSpectrograph_Click(object sender, EventArgs e)
         {
             if (Program.RunKeyboardThread == 0) { Program.RunKeyboardThread = 3; };
             if (Program.RunKeyboardThread == 1) { StopSpectrograph(); };
             if (StartSpectrograph(2) == true)
             {
+                switch (KeyboardModelComboBox.Text)
+                {
+                    case "K65-RGB":
+                        Program.MyCanvasWidth = 76;
+                        break;
+                    case "K70-RGB":
+                        Program.MyCanvasWidth = 92;
+                        break;
+                    case "K95-RGB":
+                        Program.MyCanvasWidth = 104;
+                        break;
+                }
+                Program.MyGraphicRender = new Bitmap(Program.MyCanvasWidth, 7);
                 StatusTimer.Start();
                 TestModeButton.Enabled = false;
             }
@@ -362,6 +467,31 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        private void TestModeButton_Click(object sender, EventArgs e)
+        {
+            if (Program.RunKeyboardThread == 3 || Program.RunKeyboardThread == 0)
+            {
+                UpdateStatusMessage.ShowStatusMessage(4, "Starting Test Mode");
+                if (StartSpectrograph(4) == true) { StartSpectrographButton.Enabled = false; }
+            }
+        }
+
+        private void ShowDebug_Click(object sender, EventArgs e)
+        {
+            Program.MyViewDebug = !Program.MyViewDebug;
+            SetWindowSize();
+        }
+
+        private void ShowSettings_Click(object sender, EventArgs e)
+        {
+            Program.MyViewSettings = !Program.MyViewSettings;
+            SetWindowSize();
+        }
+
+        #endregion Buttons
+
+        #region ListBoxes
+
         private void KeyboardModelComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string PreviousLayout = KeyboardLayoutComboBox.Text;
@@ -374,14 +504,71 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        private void TestModeButton_Click(object sender, EventArgs e)
+        private void KeyboardLayoutComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 3 || Program.RunKeyboardThread == 0)
+            if (Program.RunKeyboardThread == 2)
             {
-                UpdateStatusMessage.ShowStatusMessage(4, "Starting Test Mode");
-                if (StartSpectrograph(4) == true)  { StartSpectrographButton.Enabled = false; }
+                UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to apply new layout.");
             }
         }
+
+        private void BackgroundEffectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Program.MyBackgroundMode = BackgroundEffectComboBox.Text;
+            if (BackgroundEffectComboBox.Text == "Solid Colour")
+            {
+                BackgroundBrightnessUD.Enabled = false;
+                colorBackground.Enabled = true;
+                colorBackground.Visible = true;
+                EffectWidth.Enabled = false;
+                EffectSpeed.Enabled = false;
+                EffectWidth.Maximum = 1000;
+            }
+            else if (BackgroundEffectComboBox.Text == "Rainbow")
+            {
+                BackgroundBrightnessUD.Enabled = true;
+                colorBackground.Enabled = false;
+                colorBackground.Visible = false;
+                EffectWidth.Enabled = true;
+                EffectSpeed.Enabled = true;
+                EffectWidth.Maximum = 104;
+            }
+            else if (BackgroundEffectComboBox.Text == "Rainbow Pulse")
+            {
+                BackgroundBrightnessUD.Enabled = true;
+                colorBackground.Enabled = false;
+                colorBackground.Visible = false;
+                EffectWidth.Enabled = false;
+                EffectSpeed.Enabled = true;
+                EffectWidth.Maximum = 1000;
+            }
+            else if (BackgroundEffectComboBox.Text == "Rainbow Swipes")
+            {
+                BackgroundBrightnessUD.Enabled = true;
+                colorBackground.Enabled = false;
+                colorBackground.Visible = false;
+                EffectWidth.Enabled = true;
+                EffectSpeed.Enabled = true;
+                EffectWidth.Maximum = 1000;
+            }
+            else if (BackgroundEffectComboBox.Text == "Colour Waves")
+            {
+                BackgroundBrightnessUD.Enabled = true;
+                colorBackground.Enabled = false;
+                colorBackground.Visible = false;
+                EffectWidth.Enabled = true;
+                EffectSpeed.Enabled = true;
+                EffectWidth.Maximum = 1000;
+            }
+            else
+            {
+                UpdateStatusMessage.ShowStatusMessage(3, "You've selected an invalid effect.");
+            }
+        }
+
+        #endregion ListBoxes
+
+        #region UpDowns
 
         private void TesterUD_ValueChanged(object sender, EventArgs e)
         {
@@ -411,13 +598,84 @@ namespace RGBKeyboardSpectrograph
             Program.MyAmplitude = (int)AmplitudeUD.Value;
         }
 
-        private void KeyboardLayoutComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void RefreshDelayUD_ValueChanged(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 2)
+            Program.RefreshDelay = (int)RefreshDelayUD.Value;
+        }
+        private void EffectWidth_ValueChanged(object sender, EventArgs e)
+        {
+            // Apply maximum to width if Rainbow is selected
+            if (Program.MyCanvasWidth > 0 && BackgroundEffectComboBox.Text == "Rainbow") { EffectWidth.Maximum = Program.MyCanvasWidth; };
+
+            Program.MyEffectWidth = (float)EffectWidth.Value;
+        }
+
+        private void EffectSpeed_ValueChanged(object sender, EventArgs e)
+        {
+            Program.MyEffectSpeed = (float)EffectSpeed.Value;
+        }
+
+        #endregion UpDowns
+
+        #region CheckBoxes
+
+        private void USB3Mode_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.MyUsb3Mode = USB3ModeCheck.Checked;
+        }
+
+        private void ShowGraphicsCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.MyShowGraphics = ShowGraphicsCheck.Checked;
+
+            if (ShowGraphicsCheck.Checked == true)
+                GraphicsPictureBox.Visible = true;
+            else
+                GraphicsPictureBox.Visible = false;
+        }
+        #endregion Controls
+
+        #endregion CheckBoxes
+
+        #region Colours
+
+        private void colorBars_Click(object sender, EventArgs e)
+        {
+            ColorDialog ColorPicker = new ColorDialog();
+            ColorPicker.AllowFullOpen = true;
+            ColorPicker.ShowHelp = true;
+            ColorPicker.Color = colorBars.BackColor;
+
+            if (ColorPicker.ShowDialog() == DialogResult.OK)
             {
-                UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to apply new layout.");
+                colorBars.BackColor = ColorPicker.Color;
+                colorBars.ForeColor = ContrastColor(ColorPicker.Color);
+                Program.MyBarsRed = (int)(colorBars.BackColor.R);
+                Program.MyBarsGreen = (int)(colorBars.BackColor.G);
+                Program.MyBarsBlue = (int)(colorBars.BackColor.B);
             }
         }
+
+        private void colorBackground_Click(object sender, EventArgs e)
+        {
+            ColorDialog ColorPicker = new ColorDialog();
+            ColorPicker.AllowFullOpen = true;
+            ColorPicker.ShowHelp = true;
+            ColorPicker.Color = colorBackground.BackColor;
+
+            if (ColorPicker.ShowDialog() == DialogResult.OK)
+            {
+                colorBackground.BackColor = ColorPicker.Color;
+                colorBackground.ForeColor = ContrastColor(ColorPicker.Color);
+                Program.MyBgRed = (int)(colorBackground.BackColor.R);
+                Program.MyBgGreen = (int)(colorBackground.BackColor.G);
+                Program.MyBgBlue = (int)(colorBackground.BackColor.B);
+            }
+        }
+
+        #endregion Colours
+
+        #region Others
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -449,52 +707,13 @@ namespace RGBKeyboardSpectrograph
                     break;
             }
         }
-        private void RefreshDelayUD_ValueChanged(object sender, EventArgs e)
-        {
-            Program.RefreshDelay = (int)RefreshDelayUD.Value;
-        }
 
         private void tsmQuit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void colorBars_Click(object sender, EventArgs e)
-        {
-            ColorDialog ColorPicker = new ColorDialog();
-            ColorPicker.AllowFullOpen = true;
-            ColorPicker.ShowHelp = true;
-            ColorPicker.Color = colorBars.BackColor;
-
-            if (ColorPicker.ShowDialog() == DialogResult.OK)
-            {
-                colorBars.BackColor = ColorPicker.Color;
-                Program.MyBarsRed = (int)(colorBars.BackColor.R);
-                Program.MyBarsGreen = (int)(colorBars.BackColor.G);
-                Program.MyBarsBlue = (int)(colorBars.BackColor.B);
-            }
-        }
-        private void colorBackground_Click(object sender, EventArgs e)
-        {
-            ColorDialog ColorPicker = new ColorDialog();
-            ColorPicker.AllowFullOpen = true;
-            ColorPicker.ShowHelp = true;
-            ColorPicker.Color = colorBackground.BackColor;
-
-            if (ColorPicker.ShowDialog() == DialogResult.OK)
-            {
-                colorBackground.BackColor = ColorPicker.Color;
-                Program.MyBgRed = (int)(colorBackground.BackColor.R);
-                Program.MyBgGreen = (int)(colorBackground.BackColor.G);
-                Program.MyBgBlue = (int)(colorBackground.BackColor.B);
-            }
-        }
-        private void USB3Mode_CheckedChanged(object sender, EventArgs e)
-        {
-            Program.Usb3Mode = USB3Mode.Checked;
-        }
-
-#endregion
+        #endregion Others
 
     } //MainForm
 

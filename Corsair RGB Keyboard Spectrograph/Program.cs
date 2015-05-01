@@ -13,7 +13,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.4.5a";
+        public static string VersionNumber = "0.5.0";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
@@ -30,8 +30,15 @@ namespace RGBKeyboardSpectrograph
         public static string MyKeyboardName;
         public static uint MyKeyboardID;
         public static int MyCanvasWidth;
-        public static Bitmap GraphicRender;
-        public static bool Usb3Mode;
+        public static bool MyShowGraphics;
+        public static Bitmap MyGraphicRender;
+        public static bool MyUsb3Mode;
+        public static string MyBackgroundMode;
+        public static float MyEffectWidth = 10f;
+        public static float MyEffectSpeed = 1f;
+        public static float MyEffectStep = 1f;
+        public static bool MyViewSettings = false;
+        public static bool MyViewDebug = true;
 
         // Debug Stuff
         public static int TestLed;
@@ -39,6 +46,8 @@ namespace RGBKeyboardSpectrograph
         public static int RefreshDelay = 20;
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
+        public static bool DevMode = false;
+        public static float ColorsPerChannel = 7;
 
         // Worker Thread
         public static Thread newWorker = null;
@@ -53,7 +62,6 @@ namespace RGBKeyboardSpectrograph
         [STAThread]
         static void Main()
         {
-            
             try
             {
                 myAudioCapture = new AudioCapture(AudioCapture.DefaultDevice, 44100, ALFormat.Mono8, 1024);
