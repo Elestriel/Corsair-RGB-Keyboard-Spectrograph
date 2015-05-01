@@ -45,9 +45,12 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.userAmplitude = (int)AmplitudeUD.Value;
             Properties.Settings.Default.userBackgroundBrightness = (int)BackgroundBrightnessUD.Value;
             Properties.Settings.Default.userColorBars = colorBars.BackColor;
+            Properties.Settings.Default.userColorBackground = colorBackground.BackColor;
+            Properties.Settings.Default.userColorBackgroundType = BackgroundEffectComboBox.Text;
             Properties.Settings.Default.userLogLevel = (int)LogLevelUD.Value;
             Properties.Settings.Default.userMinimizeToTray = MinimizeToTrayCheck.Checked;
             Properties.Settings.Default.userRefreshDelay = (int)RefreshDelayUD.Value;
+            Properties.Settings.Default.userUsb3Mode = USB3Mode.Checked;
             Properties.Settings.Default.Save();
         }
 
@@ -63,13 +66,24 @@ namespace RGBKeyboardSpectrograph
         
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Clean up this whole void!!
             UpdateStatusMessage.ShowStatusMessage(0, "Version " + Program.VersionNumber);
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
-            LaunchCueCheck.Visible = false; //Hide the Launch CUE checkbox for now
             notifyIcon.Visible = false;
+
+            // Incomplete controls to hide
+            LaunchCueCheck.Visible = false; 
+            GraphicsPictureBox.Visible = false;
+            BackgroundEffectComboBox.Visible = false;
+            colorBackground.Visible = false;
+
             KeyboardModelComboBox.Items.Add("K65-RGB");
             KeyboardModelComboBox.Items.Add("K70-RGB");
             KeyboardModelComboBox.Items.Add("K95-RGB");
+
+            BackgroundEffectComboBox.Items.Add("Solid Colour");
+            BackgroundEffectComboBox.Items.Add("Rainbow");
+            BackgroundEffectComboBox.Items.Add("Rainbow Pulse");
             
             UpdateStatusMessage.ShowStatusMessage(1, "Loading Settings");
             string settingKeyboardModel = Properties.Settings.Default.userKeyboardModel;
@@ -77,13 +91,17 @@ namespace RGBKeyboardSpectrograph
             int settingAmplitude = Properties.Settings.Default.userAmplitude;
             int settingBackgroundBrightness = Properties.Settings.Default.userBackgroundBrightness;
             Color settingBarColor = Properties.Settings.Default.userColorBars;
+            Color settingBackgroundColor = Properties.Settings.Default.userColorBackground;
+            string settingBackgroundColorType = Properties.Settings.Default.userColorBackgroundType;
             int settingLogLevel = Properties.Settings.Default.userLogLevel;
             bool settingMinimizeToTray = Properties.Settings.Default.userMinimizeToTray;
             int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
+            bool settingsUsb3Mode = Properties.Settings.Default.userUsb3Mode;
 
             // Make sure no sneaky incorrect options could be set as the text of the ComboBoxes
             if (KeyboardModelComboBox.FindStringExact(settingKeyboardModel) > -1) { KeyboardModelComboBox.SelectedIndex = KeyboardModelComboBox.FindStringExact(settingKeyboardModel); };
             if (KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout) > -1) { KeyboardLayoutComboBox.SelectedIndex = KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout); };
+            if (BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType) > -1) { BackgroundEffectComboBox.SelectedIndex = BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType); };
 
             if (settingAmplitude < 1 || settingAmplitude > 100) { settingAmplitude = 10; };
             if (settingBackgroundBrightness < 0 || settingBackgroundBrightness > 30) { settingBackgroundBrightness = 15; };
@@ -94,9 +112,11 @@ namespace RGBKeyboardSpectrograph
             AmplitudeUD.Value = settingAmplitude;
             BackgroundBrightnessUD.Value = settingBackgroundBrightness;
             colorBars.BackColor = settingBarColor;
+            colorBackground.BackColor = settingBackgroundColor;
             LogLevelUD.Value = settingLogLevel;
             Program.LogLevel = settingLogLevel;
             RefreshDelayUD.Value = settingRefreshDelay;
+            USB3Mode.Checked = settingsUsb3Mode;
 
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
@@ -120,13 +140,13 @@ namespace RGBKeyboardSpectrograph
                 switch (KeyboardModelComboBox.Text)
                 {
                     case "K65-RGB":
-                        //Program.MyKeyboardID = 0x1B17;
-                        Program.MyKeyboardID = 0x1B11;
+                        Program.MyKeyboardID = 0x1B17;
+                        //Program.MyKeyboardID = 0x1B11;
                         Program.MyCanvasWidth = 76;
                         break;
                     case "K70-RGB":
-                        //Program.MyKeyboardID = 0x1B13;
-                        Program.MyKeyboardID = 0x1B11;
+                        Program.MyKeyboardID = 0x1B13;
+                        //Program.MyKeyboardID = 0x1B11;
                         Program.MyCanvasWidth = 92;
                         break;
                     case "K95-RGB":
@@ -313,6 +333,11 @@ namespace RGBKeyboardSpectrograph
                     break;
             }
         }
+
+        public void UpdateGraphicOutput_NewOut(Bitmap render)
+        {
+            this.Invoke((MethodInvoker)(() => GraphicsPictureBox.Image = render));
+        }
         #endregion
 
         #region Controls
@@ -436,7 +461,6 @@ namespace RGBKeyboardSpectrograph
 
         private void colorBars_Click(object sender, EventArgs e)
         {
-            
             ColorDialog ColorPicker = new ColorDialog();
             ColorPicker.AllowFullOpen = true;
             ColorPicker.ShowHelp = true;
@@ -450,9 +474,27 @@ namespace RGBKeyboardSpectrograph
                 Program.MyBarsBlue = (int)(colorBars.BackColor.B);
             }
         }
+        private void colorBackground_Click(object sender, EventArgs e)
+        {
+            ColorDialog ColorPicker = new ColorDialog();
+            ColorPicker.AllowFullOpen = true;
+            ColorPicker.ShowHelp = true;
+            ColorPicker.Color = colorBackground.BackColor;
+
+            if (ColorPicker.ShowDialog() == DialogResult.OK)
+            {
+                colorBackground.BackColor = ColorPicker.Color;
+                Program.MyBgRed = (int)(colorBackground.BackColor.R);
+                Program.MyBgGreen = (int)(colorBackground.BackColor.G);
+                Program.MyBgBlue = (int)(colorBackground.BackColor.B);
+            }
+        }
+        private void USB3Mode_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Usb3Mode = USB3Mode.Checked;
+        }
 
 #endregion
-
 
     } //MainForm
 
@@ -503,6 +545,31 @@ namespace RGBKeyboardSpectrograph
                 NewAct(strAction);
             }
         }
+    }
+
+    public delegate void GraphicOutputDelegate(Bitmap render);
+    public static class UpdateGraphicOutput
+    {
+        public static Form MainForm;
+        public static event GraphicOutputDelegate NewOut;
+
+        public static void GraphicOutput(Bitmap render)
+        {
+            ThreadSafeGraphicOutput(render);
+        }
+
+        private static void ThreadSafeGraphicOutput(Bitmap render)
+        {
+            if (MainForm != null && MainForm.InvokeRequired)
+            {
+                MainForm.Invoke(new GraphicOutputDelegate(ThreadSafeGraphicOutput), new object[] { render });
+            }
+            else
+            {
+                NewOut(render);
+            }
+        }
+
     }
 
     public static class RichTextBoxExtensions

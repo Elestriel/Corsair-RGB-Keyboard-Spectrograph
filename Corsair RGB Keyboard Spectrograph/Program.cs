@@ -13,7 +13,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.4.5";
+        public static string VersionNumber = "0.4.5a";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
@@ -21,12 +21,17 @@ namespace RGBKeyboardSpectrograph
         public static int MyBarsRed;
         public static int MyBarsGreen;
         public static int MyBarsBlue;
+        public static int MyBgRed;
+        public static int MyBgGreen;
+        public static int MyBgBlue;
         public static float MyBackgroundBrightness;
         public static byte[] MyPositionMap;
         public static float[] MySizeMap;
         public static string MyKeyboardName;
         public static uint MyKeyboardID;
         public static int MyCanvasWidth;
+        public static Bitmap GraphicRender;
+        public static bool Usb3Mode;
 
         // Debug Stuff
         public static int TestLed;

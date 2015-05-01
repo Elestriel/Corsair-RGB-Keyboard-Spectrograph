@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RGBKeyboardSpectrograph
@@ -173,6 +176,7 @@ namespace RGBKeyboardSpectrograph
         };
 
         private byte[,] ledMatrix = new byte[7, 104];
+        private int[,] drawMatrix = new int[7, 104];
 
         private byte[] redValues = new byte[144];
         private byte[] greenValues = new byte[144];
@@ -256,6 +260,7 @@ namespace RGBKeyboardSpectrograph
             }
 
             UpdateKeyboard();
+            //WriteGraphics(); Disabled for release
         }
 
         private void SetTestLed(int led)
@@ -329,6 +334,7 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(3, "An error occurred when attempting to initiate the keyboard");
                 return 1;
             }
+            InitiateDrawTable();
             return 0;
         }
 
@@ -391,6 +397,39 @@ namespace RGBKeyboardSpectrograph
             }
             UpdateStatusMessage.ShowStatusMessage(4, "InitializeLookupTable Done");
             return true;
+        }
+
+        private void InitiateDrawTable()
+        {
+            int PreviousKey = 0;
+            int CurrentKey = 0;
+            int i = 0;
+
+            for (int y = 0; y < 7; y++)
+            {
+                for (int x = 0; x < 104; x++)
+                {
+                    CurrentKey = ledMatrix[y, x];
+                    if (CurrentKey == 255)
+                    {
+                        drawMatrix[y, x] = 0;
+                    }
+                    else if (CurrentKey == PreviousKey)
+                    {
+                        drawMatrix[y, x] = i;
+                    }
+                    else
+                    {
+                        drawMatrix[y, x] = i;
+                        i++; 
+                    };
+
+                    PreviousKey = CurrentKey;
+                }
+            }
+
+            UpdateStatusMessage.ShowStatusMessage(4, "InitializeDrawTable Done");
+            return;
         }
 
         /// <summary>
@@ -511,23 +550,6 @@ namespace RGBKeyboardSpectrograph
             this.dataPacket[4][0] = 0x07;
             this.dataPacket[4][1] = 0x27;
             this.dataPacket[4][4] = 0xD8;
-            /*
-            for (int i = 0; i < 60; i++)
-            {
-                this.dataPacket[0][i + 4] = (byte)7;
-                this.dataPacket[1][i + 4] = (byte)7;
-                this.dataPacket[2][i + 4] = (byte)7;
-                this.dataPacket[3][i + 4] = (byte)7;
-                this.dataPacket[4][i + 4] = (byte)7;
-            }
-
-            this.SendUsbMessage(dataPacket[0]);
-            this.SendUsbMessage(dataPacket[1]);
-            this.SendUsbMessage(dataPacket[2]);
-            this.SendUsbMessage(dataPacket[3]);
-            this.SendUsbMessage(dataPacket[4]);
-            */
-
             
             for (int i = 0; i < 60; i++)
             {
@@ -566,26 +588,6 @@ namespace RGBKeyboardSpectrograph
             {
                 this.dataPacket[4][i + 4] = (byte)0;
             }
-                // Remove this from finished code; it's for debugging whatever might be wrong with USB
-                for (int i = 4; i < 64; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        if (this.dataPacket[j][i] > 127)
-                        {
-                            this.dataPacket[j][i] = 127;
-                            UpdateStatusMessage.ShowStatusMessage(3, "Packet over 127:" + i + ", " + j);
-                        }
-                        if (this.dataPacket[j][i] < 0)
-                        {
-                            this.dataPacket[j][i] = 0;
-                            UpdateStatusMessage.ShowStatusMessage(3, "Packet under 0:" + i + ", " + j);
-                        }
-                    }
-                }
-
-            //    Console.WriteLine("");
-            // To here
 
             for (int p = 0; p < 5; p++ )
             {
@@ -594,6 +596,7 @@ namespace RGBKeyboardSpectrograph
                     UpdateStatusMessage.ShowStatusMessage(3, "Packet " + p + " Failed");
                     WritePacketToLog(dataPacket[p], dataPacket[p]);
                 };
+                if (Program.Usb3Mode == true) { Thread.Sleep(1); };
             }
         }
 
@@ -621,6 +624,38 @@ namespace RGBKeyboardSpectrograph
             }
 
             return HidD_SetFeature(this.keyboardUsbDevice, ref usb_pkt[0], 65);
+        }
+
+        private void WriteGraphics()
+        {
+            Color[] pixelData = new Color[144];
+            Bitmap bmp = new Bitmap(104, 7);
+            
+            for (int r = 0; r < 7; r++)
+            {
+                for (int c = 0; c < 104; c++)
+                {
+                    if (this.ledMatrix[r, c] == 255)
+                    {
+                        bmp.SetPixel(c, r, Color.Black);
+                    }
+                    else
+                    {
+                        bmp.SetPixel(c, r, Color.FromArgb((7- this.redValues[drawMatrix[r,c]]) * 16,
+                                                      (7 - this.greenValues[drawMatrix[r, c]]) * 16,
+                                                      (7 - this.blueValues[drawMatrix[r, c]]) * 16));
+                    }
+                }
+            }
+            UpdateGraphicOutput.GraphicOutput(bmp);
+        }
+
+        private static int GetStride(int width, PixelFormat pxFormat)
+        {
+            int bitsPerPixel = ((int)pxFormat >> 8) & 0xFF;
+            int validBitsPerLine = width * bitsPerPixel;
+            int stride = ((validBitsPerLine + 31) / 32) * 4;
+            return stride;
         }
     }
 }

@@ -118,5 +118,41 @@ namespace RGBKeyboardSpectrograph.Properties {
                 this["userColorBars"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Fuchsia")]
+        public global::System.Drawing.Color userColorBackground {
+            get {
+                return ((global::System.Drawing.Color)(this["userColorBackground"]));
+            }
+            set {
+                this["userColorBackground"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Rainbow")]
+        public string userColorBackgroundType {
+            get {
+                return ((string)(this["userColorBackgroundType"]));
+            }
+            set {
+                this["userColorBackgroundType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userUsb3Mode {
+            get {
+                return ((bool)(this["userUsb3Mode"]));
+            }
+            set {
+                this["userUsb3Mode"] = value;
+            }
+        }
     }
 }

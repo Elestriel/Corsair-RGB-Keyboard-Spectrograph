@@ -26,5 +26,14 @@
     <Setting Name="userColorBars" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">White</Value>
     </Setting>
+    <Setting Name="userColorBackground" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Fuchsia</Value>
+    </Setting>
+    <Setting Name="userColorBackgroundType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Rainbow</Value>
+    </Setting>
+    <Setting Name="userUsb3Mode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

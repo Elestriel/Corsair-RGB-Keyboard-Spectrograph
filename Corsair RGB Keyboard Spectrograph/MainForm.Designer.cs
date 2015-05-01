@@ -22,6 +22,7 @@
         /* Copy these into InitializeComponent every time the designer nukes it
         UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
         UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
+        UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
         */
         #region Windows Form Designer generated code
 
@@ -33,6 +34,7 @@
         {
             UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
             UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
+            UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.StartSpectrographButton = new System.Windows.Forms.Button();
@@ -65,6 +67,10 @@
             this.RefreshDelayUD = new System.Windows.Forms.NumericUpDown();
             this.LaunchCueCheck = new System.Windows.Forms.CheckBox();
             this.colorBars = new System.Windows.Forms.Button();
+            this.BackgroundEffectComboBox = new System.Windows.Forms.ComboBox();
+            this.colorBackground = new System.Windows.Forms.Button();
+            this.GraphicsPictureBox = new System.Windows.Forms.PictureBox();
+            this.USB3Mode = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).BeginInit();
@@ -72,6 +78,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).BeginInit();
             this.RightClickMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RefreshDelayUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // StartSpectrographButton
@@ -380,7 +387,7 @@
             // colorBars
             // 
             this.colorBars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.colorBars.Location = new System.Drawing.Point(210, 128);
+            this.colorBars.Location = new System.Drawing.Point(199, 155);
             this.colorBars.Name = "colorBars";
             this.colorBars.Size = new System.Drawing.Size(75, 23);
             this.colorBars.TabIndex = 29;
@@ -388,12 +395,57 @@
             this.colorBars.UseVisualStyleBackColor = true;
             this.colorBars.Click += new System.EventHandler(this.colorBars_Click);
             // 
+            // BackgroundEffectComboBox
+            // 
+            this.BackgroundEffectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.BackgroundEffectComboBox.FormattingEnabled = true;
+            this.BackgroundEffectComboBox.Location = new System.Drawing.Point(12, 128);
+            this.BackgroundEffectComboBox.Name = "BackgroundEffectComboBox";
+            this.BackgroundEffectComboBox.Size = new System.Drawing.Size(181, 21);
+            this.BackgroundEffectComboBox.TabIndex = 30;
+            // 
+            // colorBackground
+            // 
+            this.colorBackground.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.colorBackground.Location = new System.Drawing.Point(199, 126);
+            this.colorBackground.Name = "colorBackground";
+            this.colorBackground.Size = new System.Drawing.Size(75, 23);
+            this.colorBackground.TabIndex = 31;
+            this.colorBackground.Text = "Background";
+            this.colorBackground.UseVisualStyleBackColor = true;
+            this.colorBackground.Click += new System.EventHandler(this.colorBackground_Click);
+            // 
+            // GraphicsPictureBox
+            // 
+            this.GraphicsPictureBox.Location = new System.Drawing.Point(12, 155);
+            this.GraphicsPictureBox.Name = "GraphicsPictureBox";
+            this.GraphicsPictureBox.Size = new System.Drawing.Size(104, 49);
+            this.GraphicsPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.GraphicsPictureBox.TabIndex = 32;
+            this.GraphicsPictureBox.TabStop = false;
+            // 
+            // USB3Mode
+            // 
+            this.USB3Mode.AutoSize = true;
+            this.USB3Mode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.USB3Mode.Location = new System.Drawing.Point(581, 283);
+            this.USB3Mode.Name = "USB3Mode";
+            this.USB3Mode.Size = new System.Drawing.Size(66, 17);
+            this.USB3Mode.TabIndex = 33;
+            this.USB3Mode.Text = "USB 3.0";
+            this.USB3Mode.UseVisualStyleBackColor = true;
+            this.USB3Mode.CheckedChanged += new System.EventHandler(this.USB3Mode_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(659, 334);
+            this.Controls.Add(this.USB3Mode);
+            this.Controls.Add(this.GraphicsPictureBox);
+            this.Controls.Add(this.colorBackground);
+            this.Controls.Add(this.BackgroundEffectComboBox);
             this.Controls.Add(this.colorBars);
             this.Controls.Add(this.LaunchCueCheck);
             this.Controls.Add(this.RefreshDelayLabel);
@@ -428,6 +480,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).EndInit();
             this.RightClickMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RefreshDelayUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -465,6 +518,10 @@
         private System.Windows.Forms.ToolStripMenuItem tsmQuit;
         private System.Windows.Forms.CheckBox LaunchCueCheck;
         private System.Windows.Forms.Button colorBars;
+        private System.Windows.Forms.ComboBox BackgroundEffectComboBox;
+        private System.Windows.Forms.Button colorBackground;
+        private System.Windows.Forms.PictureBox GraphicsPictureBox;
+        private System.Windows.Forms.CheckBox USB3Mode;
 
     }
 }
