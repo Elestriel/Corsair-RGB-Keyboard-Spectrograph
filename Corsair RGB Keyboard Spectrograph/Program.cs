@@ -13,7 +13,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.5.0";
+        public static string VersionNumber = "0.5.0a";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
