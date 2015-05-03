@@ -185,28 +185,21 @@ namespace RGBKeyboardSpectrograph
 
         private void SetWindowSize()
         {
-            float dpiX, dpiY;
-            Graphics graphics = this.CreateGraphics();
-            dpiX = graphics.DpiX;
-            dpiY = graphics.DpiY;
-
-            int ControlScaling = (int)(dpiX / 96);
-
             if (Program.MyViewDebug == true) { 
-                this.Width = 683 * ControlScaling; 
+                this.Width = 683; 
                 this.Text = "RGB Keyboard Spectrograph"; 
             }
             else 
             {
-                this.Width = 312 * ControlScaling; 
+                this.Width = 312; 
                 this.Text = "RGB Spectro"; 
             };
 
             if (Program.MyViewSettings == true) {
-                this.Height = 469 * ControlScaling; 
+                this.Height = 469; 
             }
             else {
-                this.Height = 377 * ControlScaling; 
+                this.Height = 377; 
             };
         }
 

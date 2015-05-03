@@ -572,8 +572,8 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(296, 338);
             this.Controls.Add(this.EffectsOnStartCheck);
@@ -608,7 +608,6 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.StopSpectrographButton);
             this.Controls.Add(this.StartSpectrographButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "RGB Keyboard Spectrograph";
