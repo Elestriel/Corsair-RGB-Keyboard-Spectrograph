@@ -170,24 +170,24 @@ namespace RGBKeyboardSpectrograph.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public float userEffectWidth {
+        public float userBackgroundEffectWidth {
             get {
-                return ((float)(this["userEffectWidth"]));
+                return ((float)(this["userBackgroundEffectWidth"]));
             }
             set {
-                this["userEffectWidth"] = value;
+                this["userBackgroundEffectWidth"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public float userEffectSpeed {
+        public float userBackgroundEffectSpeed {
             get {
-                return ((float)(this["userEffectSpeed"]));
+                return ((float)(this["userBackgroundEffectSpeed"]));
             }
             set {
-                this["userEffectSpeed"] = value;
+                this["userBackgroundEffectSpeed"] = value;
             }
         }
         
@@ -236,6 +236,78 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["userEffectsOnStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public float userBarEffectWidth {
+            get {
+                return ((float)(this["userBarEffectWidth"]));
+            }
+            set {
+                this["userBarEffectWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float userBarEffectSpeed {
+            get {
+                return ((float)(this["userBarEffectSpeed"]));
+            }
+            set {
+                this["userBarEffectSpeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int userCaptureMode {
+            get {
+                return ((int)(this["userCaptureMode"]));
+            }
+            set {
+                this["userCaptureMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string userCaptureDevice {
+            get {
+                return ((string)(this["userCaptureDevice"]));
+            }
+            set {
+                this["userCaptureDevice"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string userColorBarsType {
+            get {
+                return ((string)(this["userColorBarsType"]));
+            }
+            set {
+                this["userColorBarsType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int userBarBrightness {
+            get {
+                return ((int)(this["userBarBrightness"]));
+            }
+            set {
+                this["userBarBrightness"] = value;
             }
         }
     }

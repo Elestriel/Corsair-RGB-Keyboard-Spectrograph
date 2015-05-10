@@ -163,16 +163,15 @@ namespace RGBKeyboardSpectrograph
         private IntPtr keyboardUsbDevice;
 
         /* The bands of FFT data that will be used in the spectrograph.
-         * This roughly equates to 60Hz to about 17KHz. */
-        private int[] fftLookup = new int[]
-        {
-            4,5,6,7,8,9,10,11,12,14,16,18,20,22,25,28,31,34,38,42,46,50,
-            54,59,64,69,74,79,85,91,97,103,109,115,122,129,136,143,150,158,
-            166,174,182,190,198,206,214,222,230,238,246,254,263,272,281,290,
-            299,308,317,326,335,344,353,362,371,380,389,399,409,419,429,439,
-            449,459,470,481,492,503,514,525,536,547,558,570,582,594,606,618,
-            630,642,654,666,678,690,703,716,729,742,755,768,781,794,807,820,
-            833,850
+         * This roughly equates to 0Hz to about 17KHz. */
+        private int[] fftLookup = new int[] {
+            1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+            15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
+            30,31,32,33,34,35,36,37,38,39,40,41,42,43,46,
+            49,52,55,58,61,64,67,70,73,76,79,82,85,89,93,
+            97,101,105,109,113,117,121,125,129,133,137,141,146,151,156,
+            161,166,171,176,181,186,191,196,201,206,211,217,223,229,235,
+            241,247,253,259,265,271,277,283,289,295,302,309,316,323,330
         };
 
         private byte[,] ledMatrix = new byte[7, 104];
@@ -195,7 +194,7 @@ namespace RGBKeyboardSpectrograph
         {
             if (InitKeyboard(Program.MyKeyboardID, Program.MyKeyboardName) == 1)
             {
-                Program.RunKeyboardThread = 1;
+                Program.RunKeyboardThread = 0;
                 return;
             }
 
@@ -218,6 +217,7 @@ namespace RGBKeyboardSpectrograph
             int cWidth1 = CanvasWidth;
             float cWidth2 = CanvasWidth - 1;
 
+            #region Background Rendering
             switch (Program.MyBackgroundMode) 
             {
                 case "Solid Colour":
@@ -225,9 +225,9 @@ namespace RGBKeyboardSpectrograph
                     {
                         for (int y = 0; y < 7; y++)
                         {
-                            this.red = (byte)(Program.MyBgRed / 32);
-                            this.grn = (byte)(Program.MyBgGreen / 32);
-                            this.blu = (byte)(Program.MyBgBlue / 32);
+                            this.red = (byte)(Program.MyBgRed);
+                            this.grn = (byte)(Program.MyBgGreen);
+                            this.blu = (byte)(Program.MyBgBlue);
 
                             this.SetLed((x + iter) % (int)cWidth2, y, red, grn, blu);
                         }
@@ -366,46 +366,101 @@ namespace RGBKeyboardSpectrograph
                 }
                 break;
             }
-
+            #endregion Background Rendering
 
             // FFT Data to key lights;
-            float fftBandAverage;
+            byte[] compData = CompressFftToKeyboard(fftData, cWidth1);
 
+            Program.MyBarsStep += Program.MyBarsSpeed / 1;
+            if (Program.MyBarsStep >= cWidth1) { Program.MyBarsStep = 1; };
+            byte EffectBarRed = 0;
+            byte EffectBarGreen = 0;
+            byte EffectBarBlue = 0;
+
+#region Foreground Rendering
             for (int i = 0; i < cWidth1; i++)
             {
                 for (int k = 0; k < 7; k++)
                 {
-                    // Use the average from the band below, above, and including the current, to smooth out data a bit.
-                    if (i < 1)
+                    if (Program.MyBarsMode == "Rainbow Right")
                     {
-                        fftBandAverage = fftData[fftLookup[i]];
+                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + 1));
+                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
+                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
                     }
-                    else
+                    if (Program.MyBarsMode == "Rainbow Left")
                     {
-                        fftBandAverage = ((fftData[fftLookup[i] - 1] + fftData[fftLookup[i]] + fftData[fftLookup[i] + 1]) / 3);
+                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + 1));
+                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
+                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
                     }
-
-                    /* Boost the higher stuff, since it comes in lower. The highest (~15KHz+) ends up
-                     * being boosted roughly 2.145 times, thanks to the stacking effect below.
-                     * This makes a more accurate representation of what we're hearing. */
-                    if (i > 4 && i < 20) { fftBandAverage /= 2f; };
-                    if (i > 19 && i < 40) { fftBandAverage /= 1.5f; };
-                    if (i > 70) { fftBandAverage *= 1.1f; };
-                    if (i > 90) { fftBandAverage *= 1.3f; };
-                    //if (i > 98) { fftBandAverage *= 1.5f; };
-
-                    // Volume requirement curve
-                    if ((int)fftBandAverage > ((128 / (1 + (i * .8))) * (7 - k)))
+                    if (Program.MyBarsMode == "Rainbow Pulse")
                     {
-                        this.SetLed(i, k, Program.MyBarsRed, Program.MyBarsGreen, Program.MyBarsBlue);
+                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) + 1));
+                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
+                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
+                    }
+                    if (Program.MyBarsMode == "Static Rainbow")
+                    {
+                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((i / Program.MyBarsWidth) * 2 * 3.14f) + 1));
+                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
+                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
+                    }
+                    if ((int)compData[i] > ((128 / (1 + (i * .95))) * (7 - k)))
+                    {
+                        if (Program.MyBarsMode == "Solid Colour")
+                        {
+                            this.SetLed(i, k, Program.MyBarsRed, Program.MyBarsGreen, Program.MyBarsBlue);
+                        }
+                        else if (Program.MyBarsMode == "Rainbow Right" ||
+                                 Program.MyBarsMode == "Rainbow Left" || 
+                                 Program.MyBarsMode == "Rainbow Pulse" ||
+                                 Program.MyBarsMode == "Static Rainbow")
+                        {
+                            this.SetLed(i, k, EffectBarRed, EffectBarGreen, EffectBarBlue);
+                        }
                     }
                 }
             }
+#endregion Foreground Rendering
 
             UpdateKeyboard();
             if (Program.MyShowGraphics == true) WriteGraphics();
         }
 
+        private byte[] CompressFftToKeyboard(byte[] fftData, int kWidth)
+        {
+            byte[] compressedData = new byte[kWidth];
+            int calcCnt;
+            float calcAve;
+
+            for (int i = 0; i < kWidth; i++)
+            {
+                if (i >= fftLookup.Length - 1)
+                {
+                    compressedData[i] = compressedData[i - 1];
+                }
+                else
+                {
+                    if (fftLookup[i] == fftLookup[i + 1])
+                    {
+                        compressedData[i] = fftData[i];
+                    }
+                    else
+                    {
+                        calcAve = 0;
+                        for (calcCnt = 0; calcCnt < (Math.Abs(fftLookup[i] - fftLookup[i + 1]) ); calcCnt++)
+                        {
+                            calcAve += fftData[fftLookup[i] + calcCnt];
+                        }
+                        compressedData[i] = (byte)(calcAve / calcCnt);
+                    }
+
+                }
+            }
+            return compressedData;
+        }
+        
         private void SetTestLed(int led)
         {
             for (int i = 0; i < 144; i++)
@@ -419,6 +474,7 @@ namespace RGBKeyboardSpectrograph
             this.blueValues[led] = (byte)0;
 
             UpdateKeyboard();
+            if (Program.MyShowGraphics == true) WriteGraphics();
         }
         private void SetLed(int x, int y, int r, int g, int b)
         {
@@ -512,12 +568,12 @@ namespace RGBKeyboardSpectrograph
                                 keys.MoveNext();
                                 size = (int)(sizef * 4);
                             }
-                        } //try
+                        }
                         catch
                         {
                             UpdateStatusMessage.ShowStatusMessage(3, "Enumeration Failed");
                             return false;
-                        } //catch
+                        }
                     }
 
                     ledMatrix[y, x] = key;
@@ -525,7 +581,6 @@ namespace RGBKeyboardSpectrograph
                 }
                 if ((byte)keys.Current != 255 || (float)sizes.Current != 0f)
                 {
-                    //Console.WriteLine("Bad line: " + keys.Current + ", " + sizes.Current + " Key " + key, y);
                     UpdateStatusMessage.ShowStatusMessage(4, "Bad line: " + keys.Current + ", " + sizes.Current + " Key " + key + y);
                 }
                 else

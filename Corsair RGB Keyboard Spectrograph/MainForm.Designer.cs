@@ -80,6 +80,15 @@
             this.ShowDebug = new System.Windows.Forms.Button();
             this.StartMinimizedCheck = new System.Windows.Forms.CheckBox();
             this.EffectsOnStartCheck = new System.Windows.Forms.CheckBox();
+            this.comboWasapiDevices = new System.Windows.Forms.ComboBox();
+            this.radioButtonWasapiLoopback = new System.Windows.Forms.RadioButton();
+            this.radioButtonWasapi = new System.Windows.Forms.RadioButton();
+            this.BarEffectComboBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.BarBrightnessUD = new System.Windows.Forms.NumericUpDown();
+            this.BarSpeed = new System.Windows.Forms.NumericUpDown();
+            this.BarWidth = new System.Windows.Forms.NumericUpDown();
+            this.GetUpdateButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).BeginInit();
@@ -90,6 +99,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EffectWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EffectSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarBrightnessUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // StartSpectrographButton
@@ -117,9 +129,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLight,
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 316);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 440);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(296, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(663, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -185,15 +197,15 @@
             // lblRainbowBrightness
             // 
             this.lblRainbowBrightness.AutoSize = true;
-            this.lblRainbowBrightness.Location = new System.Drawing.Point(112, 85);
+            this.lblRainbowBrightness.Location = new System.Drawing.Point(12, 85);
             this.lblRainbowBrightness.Name = "lblRainbowBrightness";
-            this.lblRainbowBrightness.Size = new System.Drawing.Size(120, 13);
+            this.lblRainbowBrightness.Size = new System.Drawing.Size(77, 13);
             this.lblRainbowBrightness.TabIndex = 19;
-            this.lblRainbowBrightness.Text = "Background Brightness:";
+            this.lblRainbowBrightness.Text = "BG Brightness:";
             // 
             // BackgroundBrightnessUD
             // 
-            this.BackgroundBrightnessUD.Location = new System.Drawing.Point(238, 83);
+            this.BackgroundBrightnessUD.Location = new System.Drawing.Point(95, 83);
             this.BackgroundBrightnessUD.Maximum = new decimal(new int[] {
             70,
             0,
@@ -211,7 +223,7 @@
             // 
             // TestModeButton
             // 
-            this.TestModeButton.Location = new System.Drawing.Point(299, 282);
+            this.TestModeButton.Location = new System.Drawing.Point(300, 282);
             this.TestModeButton.Name = "TestModeButton";
             this.TestModeButton.Size = new System.Drawing.Size(87, 23);
             this.TestModeButton.TabIndex = 20;
@@ -221,7 +233,7 @@
             // 
             // TesterUD
             // 
-            this.TesterUD.Location = new System.Drawing.Point(392, 285);
+            this.TesterUD.Location = new System.Drawing.Point(393, 285);
             this.TesterUD.Maximum = new decimal(new int[] {
             143,
             0,
@@ -237,7 +249,7 @@
             this.StatusLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.StatusLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusLog.HideSelection = false;
-            this.StatusLog.Location = new System.Drawing.Point(299, 12);
+            this.StatusLog.Location = new System.Drawing.Point(300, 12);
             this.StatusLog.Name = "StatusLog";
             this.StatusLog.Size = new System.Drawing.Size(356, 264);
             this.StatusLog.TabIndex = 22;
@@ -245,7 +257,7 @@
             // 
             // LogLevelUD
             // 
-            this.LogLevelUD.Location = new System.Drawing.Point(525, 285);
+            this.LogLevelUD.Location = new System.Drawing.Point(526, 285);
             this.LogLevelUD.Maximum = new decimal(new int[] {
             6,
             0,
@@ -269,7 +281,7 @@
             // LogLevelLabel
             // 
             this.LogLevelLabel.AutoSize = true;
-            this.LogLevelLabel.Location = new System.Drawing.Point(462, 287);
+            this.LogLevelLabel.Location = new System.Drawing.Point(463, 287);
             this.LogLevelLabel.Name = "LogLevelLabel";
             this.LogLevelLabel.Size = new System.Drawing.Size(57, 13);
             this.LogLevelLabel.TabIndex = 24;
@@ -398,9 +410,9 @@
             // colorBars
             // 
             this.colorBars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.colorBars.Location = new System.Drawing.Point(210, 155);
+            this.colorBars.Location = new System.Drawing.Point(130, 155);
             this.colorBars.Name = "colorBars";
-            this.colorBars.Size = new System.Drawing.Size(75, 23);
+            this.colorBars.Size = new System.Drawing.Size(55, 23);
             this.colorBars.TabIndex = 29;
             this.colorBars.Text = "Bars";
             this.colorBars.UseVisualStyleBackColor = true;
@@ -412,24 +424,24 @@
             this.BackgroundEffectComboBox.FormattingEnabled = true;
             this.BackgroundEffectComboBox.Location = new System.Drawing.Point(12, 128);
             this.BackgroundEffectComboBox.Name = "BackgroundEffectComboBox";
-            this.BackgroundEffectComboBox.Size = new System.Drawing.Size(181, 21);
+            this.BackgroundEffectComboBox.Size = new System.Drawing.Size(112, 21);
             this.BackgroundEffectComboBox.TabIndex = 30;
             this.BackgroundEffectComboBox.SelectedIndexChanged += new System.EventHandler(this.BackgroundEffectComboBox_SelectedIndexChanged);
             // 
             // colorBackground
             // 
             this.colorBackground.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.colorBackground.Location = new System.Drawing.Point(210, 126);
+            this.colorBackground.Location = new System.Drawing.Point(130, 126);
             this.colorBackground.Name = "colorBackground";
-            this.colorBackground.Size = new System.Drawing.Size(75, 23);
+            this.colorBackground.Size = new System.Drawing.Size(55, 23);
             this.colorBackground.TabIndex = 31;
-            this.colorBackground.Text = "Background";
+            this.colorBackground.Text = "BG";
             this.colorBackground.UseVisualStyleBackColor = true;
             this.colorBackground.Click += new System.EventHandler(this.colorBackground_Click);
             // 
             // GraphicsPictureBox
             // 
-            this.GraphicsPictureBox.Location = new System.Drawing.Point(12, 162);
+            this.GraphicsPictureBox.Location = new System.Drawing.Point(12, 184);
             this.GraphicsPictureBox.Name = "GraphicsPictureBox";
             this.GraphicsPictureBox.Size = new System.Drawing.Size(165, 68);
             this.GraphicsPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -450,7 +462,7 @@
             // ShowGraphicsCheck
             // 
             this.ShowGraphicsCheck.AutoSize = true;
-            this.ShowGraphicsCheck.Location = new System.Drawing.Point(12, 236);
+            this.ShowGraphicsCheck.Location = new System.Drawing.Point(12, 259);
             this.ShowGraphicsCheck.Name = "ShowGraphicsCheck";
             this.ShowGraphicsCheck.Size = new System.Drawing.Size(136, 17);
             this.ShowGraphicsCheck.TabIndex = 34;
@@ -461,15 +473,15 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(183, 184);
+            this.label1.Location = new System.Drawing.Point(195, 113);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 35;
-            this.label1.Text = "Width:";
+            this.label1.Text = "Width";
             // 
             // EffectWidth
             // 
-            this.EffectWidth.Location = new System.Drawing.Point(238, 184);
+            this.EffectWidth.Location = new System.Drawing.Point(191, 129);
             this.EffectWidth.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -493,11 +505,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(180, 212);
+            this.label2.Location = new System.Drawing.Point(247, 113);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 38;
-            this.label2.Text = "Speed:";
+            this.label2.Text = "Speed";
             // 
             // EffectSpeed
             // 
@@ -507,7 +519,7 @@
             0,
             0,
             65536});
-            this.EffectSpeed.Location = new System.Drawing.Point(238, 210);
+            this.EffectSpeed.Location = new System.Drawing.Point(244, 129);
             this.EffectSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -519,7 +531,7 @@
             0,
             65536});
             this.EffectSpeed.Name = "EffectSpeed";
-            this.EffectSpeed.Size = new System.Drawing.Size(47, 20);
+            this.EffectSpeed.Size = new System.Drawing.Size(41, 20);
             this.EffectSpeed.TabIndex = 37;
             this.EffectSpeed.Value = new decimal(new int[] {
             1,
@@ -530,7 +542,7 @@
             // 
             // ShowSettings
             // 
-            this.ShowSettings.Location = new System.Drawing.Point(105, 282);
+            this.ShowSettings.Location = new System.Drawing.Point(198, 229);
             this.ShowSettings.Name = "ShowSettings";
             this.ShowSettings.Size = new System.Drawing.Size(87, 23);
             this.ShowSettings.TabIndex = 39;
@@ -540,7 +552,7 @@
             // 
             // ShowDebug
             // 
-            this.ShowDebug.Location = new System.Drawing.Point(198, 253);
+            this.ShowDebug.Location = new System.Drawing.Point(198, 200);
             this.ShowDebug.Name = "ShowDebug";
             this.ShowDebug.Size = new System.Drawing.Size(87, 23);
             this.ShowDebug.TabIndex = 40;
@@ -570,12 +582,155 @@
             this.EffectsOnStartCheck.Text = "Effects on Start";
             this.EffectsOnStartCheck.UseVisualStyleBackColor = true;
             // 
+            // comboWasapiDevices
+            // 
+            this.comboWasapiDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboWasapiDevices.FormattingEnabled = true;
+            this.comboWasapiDevices.Location = new System.Drawing.Point(130, 407);
+            this.comboWasapiDevices.Name = "comboWasapiDevices";
+            this.comboWasapiDevices.Size = new System.Drawing.Size(155, 21);
+            this.comboWasapiDevices.TabIndex = 45;
+            this.comboWasapiDevices.SelectedIndexChanged += new System.EventHandler(this.comboWasapiDevices_SelectedIndexChanged);
+            // 
+            // radioButtonWasapiLoopback
+            // 
+            this.radioButtonWasapiLoopback.AutoSize = true;
+            this.radioButtonWasapiLoopback.Checked = true;
+            this.radioButtonWasapiLoopback.Location = new System.Drawing.Point(12, 408);
+            this.radioButtonWasapiLoopback.Name = "radioButtonWasapiLoopback";
+            this.radioButtonWasapiLoopback.Size = new System.Drawing.Size(57, 17);
+            this.radioButtonWasapiLoopback.TabIndex = 43;
+            this.radioButtonWasapiLoopback.TabStop = true;
+            this.radioButtonWasapiLoopback.Text = "Output";
+            this.radioButtonWasapiLoopback.UseVisualStyleBackColor = true;
+            this.radioButtonWasapiLoopback.CheckedChanged += new System.EventHandler(this.radioButtonWasapiLoopback_CheckedChanged);
+            // 
+            // radioButtonWasapi
+            // 
+            this.radioButtonWasapi.AutoSize = true;
+            this.radioButtonWasapi.Location = new System.Drawing.Point(75, 408);
+            this.radioButtonWasapi.Name = "radioButtonWasapi";
+            this.radioButtonWasapi.Size = new System.Drawing.Size(49, 17);
+            this.radioButtonWasapi.TabIndex = 44;
+            this.radioButtonWasapi.Text = "Input";
+            this.radioButtonWasapi.UseVisualStyleBackColor = true;
+            this.radioButtonWasapi.CheckedChanged += new System.EventHandler(this.radioButtonWasapi_CheckedChanged);
+            // 
+            // BarEffectComboBox
+            // 
+            this.BarEffectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.BarEffectComboBox.FormattingEnabled = true;
+            this.BarEffectComboBox.Location = new System.Drawing.Point(12, 157);
+            this.BarEffectComboBox.Name = "BarEffectComboBox";
+            this.BarEffectComboBox.Size = new System.Drawing.Size(112, 21);
+            this.BarEffectComboBox.TabIndex = 46;
+            this.BarEffectComboBox.SelectedIndexChanged += new System.EventHandler(this.BarEffectComboBox_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(154, 85);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 13);
+            this.label3.TabIndex = 48;
+            this.label3.Text = "Bar Brightness:";
+            // 
+            // BarBrightnessUD
+            // 
+            this.BarBrightnessUD.Location = new System.Drawing.Point(238, 83);
+            this.BarBrightnessUD.Maximum = new decimal(new int[] {
+            70,
+            0,
+            0,
+            0});
+            this.BarBrightnessUD.Name = "BarBrightnessUD";
+            this.BarBrightnessUD.Size = new System.Drawing.Size(47, 20);
+            this.BarBrightnessUD.TabIndex = 47;
+            this.BarBrightnessUD.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.BarBrightnessUD.ValueChanged += new System.EventHandler(this.BarBrightnessUD_ValueChanged);
+            // 
+            // BarSpeed
+            // 
+            this.BarSpeed.DecimalPlaces = 1;
+            this.BarSpeed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.BarSpeed.Location = new System.Drawing.Point(244, 158);
+            this.BarSpeed.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.BarSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.BarSpeed.Name = "BarSpeed";
+            this.BarSpeed.Size = new System.Drawing.Size(41, 20);
+            this.BarSpeed.TabIndex = 50;
+            this.BarSpeed.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.BarSpeed.ValueChanged += new System.EventHandler(this.BarSpeed_ValueChanged);
+            // 
+            // BarWidth
+            // 
+            this.BarWidth.Location = new System.Drawing.Point(191, 158);
+            this.BarWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.BarWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.BarWidth.Name = "BarWidth";
+            this.BarWidth.Size = new System.Drawing.Size(47, 20);
+            this.BarWidth.TabIndex = 49;
+            this.BarWidth.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.BarWidth.ValueChanged += new System.EventHandler(this.BarWidth_ValueChanged);
+            // 
+            // GetUpdateButton
+            // 
+            this.GetUpdateButton.Location = new System.Drawing.Point(105, 282);
+            this.GetUpdateButton.Name = "GetUpdateButton";
+            this.GetUpdateButton.Size = new System.Drawing.Size(87, 23);
+            this.GetUpdateButton.TabIndex = 51;
+            this.GetUpdateButton.Text = "Get Update";
+            this.GetUpdateButton.UseVisualStyleBackColor = true;
+            this.GetUpdateButton.Visible = false;
+            this.GetUpdateButton.Click += new System.EventHandler(this.GetUpdateButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(296, 338);
+            this.ClientSize = new System.Drawing.Size(663, 462);
+            this.Controls.Add(this.GetUpdateButton);
+            this.Controls.Add(this.BarSpeed);
+            this.Controls.Add(this.BarWidth);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.BarBrightnessUD);
+            this.Controls.Add(this.BarEffectComboBox);
+            this.Controls.Add(this.comboWasapiDevices);
+            this.Controls.Add(this.radioButtonWasapiLoopback);
+            this.Controls.Add(this.radioButtonWasapi);
             this.Controls.Add(this.EffectsOnStartCheck);
             this.Controls.Add(this.StartMinimizedCheck);
             this.Controls.Add(this.ShowDebug);
@@ -625,6 +780,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EffectWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EffectSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarBrightnessUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarWidth)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -675,6 +833,15 @@
         private System.Windows.Forms.Button ShowDebug;
         private System.Windows.Forms.CheckBox StartMinimizedCheck;
         private System.Windows.Forms.CheckBox EffectsOnStartCheck;
+        private System.Windows.Forms.ComboBox comboWasapiDevices;
+        private System.Windows.Forms.RadioButton radioButtonWasapiLoopback;
+        private System.Windows.Forms.RadioButton radioButtonWasapi;
+        private System.Windows.Forms.ComboBox BarEffectComboBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown BarBrightnessUD;
+        private System.Windows.Forms.NumericUpDown BarSpeed;
+        private System.Windows.Forms.NumericUpDown BarWidth;
+        private System.Windows.Forms.Button GetUpdateButton;
 
     }
 }

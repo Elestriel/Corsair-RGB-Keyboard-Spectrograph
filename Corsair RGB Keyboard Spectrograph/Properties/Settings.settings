@@ -38,10 +38,10 @@
     <Setting Name="userShowGraphics" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userEffectWidth" Type="System.Single" Scope="User">
+    <Setting Name="userBackgroundEffectWidth" Type="System.Single" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="userEffectSpeed" Type="System.Single" Scope="User">
+    <Setting Name="userBackgroundEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="userViewSettings" Type="System.Boolean" Scope="User">
@@ -55,6 +55,24 @@
     </Setting>
     <Setting Name="userEffectsOnStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="userBarEffectWidth" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="userBarEffectSpeed" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="userCaptureMode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="userCaptureDevice" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="userColorBarsType" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="userBarBrightness" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15</Value>
     </Setting>
   </Settings>
 </SettingsFile>

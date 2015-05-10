@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,98 +9,169 @@ using System.Windows.Forms;
 
 namespace RGBKeyboardSpectrograph
 {
-    using Lomont;
-    using OpenTK.Audio;
-    using OpenTK.Audio.OpenAL;
+    using NAudio;
+    using NAudio.Wave;
+    using NAudio.Dsp;
+    using NAudio.CoreAudioApi;
+    
+    class SampleAggregator
+    {
+        // FFT
+        public event EventHandler<FftEventArgs> FftCalculated;
+        public bool PerformFFT { get; set; }
+
+        // This Complex is NAudio's own! 
+        private Complex[] fftBuffer;
+        private FftEventArgs fftArgs;
+        private int fftPos;
+        private int fftLength;
+        private int m;
+
+        public SampleAggregator(int fftLength)
+        {
+            if (!IsPowerOfTwo(fftLength))
+            {
+                throw new ArgumentException("FFT Length must be a power of two");
+            }
+            this.m = (int)Math.Log(fftLength, 2.0);
+            this.fftLength = fftLength;
+            this.fftBuffer = new Complex[fftLength];
+            this.fftArgs = new FftEventArgs(fftBuffer);
+        }
+
+        bool IsPowerOfTwo(int x)
+        {
+            return (x & (x - 1)) == 0;
+        }
+
+        public bool Add(float value)
+        {
+            if (PerformFFT && FftCalculated != null)
+            {
+                // Remember the window function! There are many others as well.
+                fftBuffer[fftPos].X = (float)(value * FastFourierTransform.HammingWindow(fftPos, fftLength));
+                fftBuffer[fftPos].Y = 0; // This is always zero with audio.
+                fftPos++;
+                if (fftPos >= fftLength)
+                {
+                    fftPos = 0;
+                    FastFourierTransform.FFT(true, m, fftBuffer);
+                    FftCalculated(this, fftArgs);
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class FftEventArgs : EventArgs
+    {
+        [DebuggerStepThrough]
+        public FftEventArgs(Complex[] result)
+        {
+            this.Result = result;
+        }
+        public Complex[] Result { get; private set; }
+    }
+
     class KBControl
     {
-        public static void KeyboardControl()
+        private static IWaveIn waveIn; // = Program.NAudioWaveIn;
+        private static KeyboardWriter keyWriter; // = new KeyboardWriter();
+
+        // More NAudio Stuff
+        private static int fftLength = 1024; // NAudio fft wants powers of two!
+
+        // There might be a sample aggregator in NAudio somewhere but I made a variation for my needs
+        private static SampleAggregator sampleAggregator = new SampleAggregator(fftLength);
+
+        #region NAudio
+        private static void NAudio_CreateDeviceHandles()
         {
-            var audioBuffer = new byte[1024];
-            var fftData = new byte[1024];
-            var fft = new double[1024];
-
-            var fftTransformer = new LomontFFT();
-
-            var writer = new KeyboardWriter();
-            if (Program.RunKeyboardThread == 1) 
+            if (Program.NAudio_FirstStart == false)
             {
-                UpdateWorkerThread.UpdateAction("Stop");
-                return;
-            };
-
-            AudioCapture audioCapture = Program.myAudioCapture;
-            try
-            {
-                if (Program.RunKeyboardThread != 4)
-                {
-                    audioCapture.Start();
-                    audioCapture.ReadSamples(audioBuffer, 1024);
-                }
-            }
-            catch (NullReferenceException)
-            {
-                UpdateStatusMessage.ShowStatusMessage(3, "Audio capture couldn't be started.");
-                UpdateWorkerThread.UpdateAction("Stop");
-                return;
-            }
-            catch (Exception)
-            {
-
+                // Clear out the old event subscriptions
+                sampleAggregator.FftCalculated -= new EventHandler<FftEventArgs>(FftCalculated);
+                waveIn.DataAvailable -= NAudio_OnDataAvailable;
+                waveIn.RecordingStopped -= NAudio_OnRecordingStopped;
             }
 
+            sampleAggregator.PerformFFT = true;
+            sampleAggregator.FftCalculated += new EventHandler<FftEventArgs>(FftCalculated);
+
+            waveIn.DataAvailable += NAudio_OnDataAvailable;
+            waveIn.RecordingStopped += NAudio_OnRecordingStopped;
+        }
+
+        private static void NAudio_StartCapture()
+        {
+            waveIn.StartRecording();
+        }
+
+        private static void NAudio_OnRecordingStopped(object sender, StoppedEventArgs e)
+        {
+            Program.NAudio_DeviceAlive = false;
+            UpdateStatusMessage.ShowStatusMessage(10, "Stopped");
+        }
+
+        private static void NAudio_StopCapture()
+        {
+            if (waveIn != null) { waveIn.StopRecording(); };
+        }
+
+        private static void NAudio_OnDataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (Program.RunKeyboardThread != 2) { NAudio_StopCapture(); };
+            byte[] buffer = e.Buffer;
+            int bytesRecorded = e.BytesRecorded;
+            int bufferIncrement = waveIn.WaveFormat.BlockAlign;
+            
+            for (int index = 0; index < bytesRecorded; index = index + bufferIncrement)
+            {
+                float sample32 = BitConverter.ToSingle(buffer, index);
+                if (sampleAggregator.Add(sample32) == true) {
+                    break; 
+                };
+            }
+             
+        }
+
+        private static void FftCalculated(object sender, FftEventArgs e)
+        {
             int CanvasWidth = Program.MyCanvasWidth;
 
-            while (true)
+            byte[] fftData = new byte[1024];
+            KeyboardWriter KeyWriter = keyWriter;
+
+            for (int i = 0; i < 1024; i++)
             {
-                for (int j = 0; j < (Program.MyCanvasWidth - 1); j++)
-                {
-                    if (Program.RunKeyboardThread == 0) 
-                    {
-                        try
-                        {
-                            audioCapture.Stop();
-                        }
-                        catch { }
-                        return;
-                    };
-                    if (Program.RunKeyboardThread == 4)
-                    {
-                        writer.Write(-1, fftData, Program.TestLed);
-                        Thread.Sleep(20);
-                    }
-                    if (Program.RunKeyboardThread == 2)
-                    {
-                        if (Program.ThreadStatus != 1) { Program.ThreadStatus = 1; };
-                        // reset mem
-                        for (int i = 0; i < 1024; i++)
-                        {
-                            audioBuffer[i] = 0;
-                            fftData[i] = 0;
-                            fft[i] = 0;
-                        }
-
-                        audioCapture.ReadSamples(audioBuffer, 1024);
-
-                        for (int i = 0; i < 1024; i++)
-                        {
-                            fft[i] = (audioBuffer[i]) * Program.MyAmplitude;
-                        }
-
-                        fftTransformer.RealFFT(fft, true);
-
-                        for (int i = 0; i < 1024; i += 2)
-                        {
-                            double fftmag = Math.Sqrt((fft[i] * fft[i]) + (fft[i + 1] * fft[i + 1]));
-                            fftData[i] = (byte)(fftmag / 32);
-                            fftData[i + 1] = fftData[i];
-                        }
-                        writer.Write(j, fftData, CanvasWidth);
-
-                        Thread.Sleep(Program.RefreshDelay);
-                    }
-                }
+                e.Result[i].X = e.Result[i].X * 100 * Program.MyAmplitude;
+                e.Result[i].Y = e.Result[i].Y * 100 * Program.MyAmplitude;
+                double fftmag = Math.Sqrt((e.Result[i].X * e.Result[i].X) + (e.Result[i].Y * e.Result[i].Y));
+                fftData[i] = (byte)(fftmag);
             }
+            keyWriter.Write(1, fftData, CanvasWidth);
+            Thread.Sleep(Program.RefreshDelay);
+        }
+        #endregion NAudio
+
+        public static void KeyboardControl()
+        {
+            waveIn = Program.NAudioWaveIn;
+//            if (Program.NAudio_FirstStart == true)
+//            {
+                NAudio_CreateDeviceHandles();
+                Program.NAudio_DeviceAlive = true;
+                Program.NAudio_NewDevice = false;
+//            };
+
+            keyWriter = new KeyboardWriter();
+            if (Program.RunKeyboardThread != 0)
+            {
+                UpdateStatusMessage.ShowStatusMessage(2, "Starting Capture");
+                waveIn.StartRecording();
+            }
+            Program.NAudio_FirstStart = false;
         }
     }
 }
@@ -108,6 +180,6 @@ namespace RGBKeyboardSpectrograph
  * 0: Destroyed
  * 1: Initiation Failed
  * 2: Running
- * 3: Created but not started
+ * 3: Not yet created
  * 4: Test Mode
  */

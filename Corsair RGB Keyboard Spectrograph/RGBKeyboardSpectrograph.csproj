@@ -38,8 +38,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\OpenTK.dll</HintPath>
+    <Reference Include="NAudio">
+      <HintPath>..\..\..\..\References\NAudio\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,10 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IWriter.cs" />
     <Compile Include="KBControl.cs" />
     <Compile Include="KeyboardWriter.cs" />
-    <Compile Include="LomontFFT.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

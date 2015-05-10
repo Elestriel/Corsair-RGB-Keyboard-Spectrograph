@@ -5,15 +5,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OpenTK.Audio;
-using OpenTK.Audio.OpenAL;
+using NAudio;
+using NAudio.Wave;
+using NAudio.CoreAudioApi;
 
 namespace RGBKeyboardSpectrograph
 {
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.5.0c";
+        public static string VersionNumber = "0.5.1";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
@@ -24,7 +25,6 @@ namespace RGBKeyboardSpectrograph
         public static int MyBgRed;
         public static int MyBgGreen;
         public static int MyBgBlue;
-        public static float MyBackgroundBrightness;
         public static byte[] MyPositionMap;
         public static float[] MySizeMap;
         public static string MyKeyboardName;
@@ -33,12 +33,26 @@ namespace RGBKeyboardSpectrograph
         public static bool MyShowGraphics;
         public static Bitmap MyGraphicRender;
         public static bool MyUsb3Mode;
+        public static bool MyViewSettings = false;
+        public static bool MyViewDebug = true;
+
         public static string MyBackgroundMode;
         public static float MyEffectWidth = 10f;
         public static float MyEffectSpeed = 1f;
         public static float MyEffectStep = 1f;
-        public static bool MyViewSettings = false;
-        public static bool MyViewDebug = true;
+        public static float MyBackgroundBrightness;
+
+        public static string MyBarsMode;
+        public static float MyBarsWidth = 10f;
+        public static float MyBarsSpeed = 1f;
+        public static float MyBarsStep = 1f;
+        public static float MyBarsBrightness;
+
+        public static bool NAudio_FirstStart = true;
+        public static bool NAudio_DeviceAlive = false;
+        public static bool NAudio_NewDevice = true;
+        public static int NAudio_DeviceType = 0;
+        public static MMDevice NAudio_MMDevice = null;
 
         // Debug Stuff
         public static int TestLed;
@@ -47,14 +61,16 @@ namespace RGBKeyboardSpectrograph
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
         public static bool DevMode = false;
+        public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
+        public static string[] VersionCheckData = new string[4];
 
         // Worker Thread
         public static Thread newWorker = null;
 
-        // Create OpenAL audio capture
-        //public static AudioCapture myAudioCapture = new AudioCapture(AudioCapture.DefaultDevice, 44100, ALFormat.Mono8, 1024);
-        public static AudioCapture myAudioCapture = null;
+        // NAudio Capture
+        public static IWaveIn NAudioWaveIn;
+        //public static WaveFileWriter NAudioWriter;
 
         /// <summary>
         /// The main entry point for the application.
@@ -62,29 +78,6 @@ namespace RGBKeyboardSpectrograph
         [STAThread]
         static void Main()
         {
-            try
-            {
-                myAudioCapture = new AudioCapture(AudioCapture.DefaultDevice, 44100, ALFormat.Mono8, 1024);
-            }
-            catch (Exception)
-            {
-                DialogResult result = MessageBox.Show("No audio input devices could be found. \n\n" +
-                "Continuing will result in instability of this program. \n" +
-                "Would you like to continue anyway?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-
-                switch (result)
-                {
-                    case DialogResult.Yes:
-                        break;
-                    case DialogResult.No:
-                        return;
-                    default:
-                        throw;
-                }
-            }
-            // Initialize the worker thread
-            newWorker = new Thread(KBControl.KeyboardControl);
-
             // Catch exceptions within the application a bit nicer
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
