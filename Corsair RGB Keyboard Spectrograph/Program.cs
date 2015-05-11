@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+/*
 using NAudio;
 using NAudio.Wave;
 using NAudio.CoreAudioApi;
+*/
 
 namespace RGBKeyboardSpectrograph
 {
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.5.1";
+        public static string VersionNumber = "0.5.2";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
@@ -48,11 +51,11 @@ namespace RGBKeyboardSpectrograph
         public static float MyBarsStep = 1f;
         public static float MyBarsBrightness;
 
-        public static bool NAudio_FirstStart = true;
-        public static bool NAudio_DeviceAlive = false;
-        public static bool NAudio_NewDevice = true;
-        public static int NAudio_DeviceType = 0;
-        public static MMDevice NAudio_MMDevice = null;
+        public static bool CSCore_FirstStart = true;
+       // public static bool CSCore_DeviceAlive = false;
+        public static bool CSCore_NewDevice = true;
+        public static int CSCore_DeviceType = 0;
+        public static bool CSCore_CaptureStarted = false;
 
         // Debug Stuff
         public static int TestLed;
@@ -69,7 +72,7 @@ namespace RGBKeyboardSpectrograph
         public static Thread newWorker = null;
 
         // NAudio Capture
-        public static IWaveIn NAudioWaveIn;
+//        public static IWaveIn NAudioWaveIn;
         //public static WaveFileWriter NAudioWriter;
 
         /// <summary>

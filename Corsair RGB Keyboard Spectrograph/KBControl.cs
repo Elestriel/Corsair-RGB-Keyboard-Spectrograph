@@ -9,11 +9,12 @@ using System.Windows.Forms;
 
 namespace RGBKeyboardSpectrograph
 {
-    using NAudio;
-    using NAudio.Wave;
-    using NAudio.Dsp;
-    using NAudio.CoreAudioApi;
-    
+    using CSCore;
+    using CSCore.SoundIn;
+    using CSCore.DSP;
+    using CSCore.Utils;
+    using CSCore.CoreAudioAPI;
+
     class SampleAggregator
     {
         // FFT
@@ -49,13 +50,13 @@ namespace RGBKeyboardSpectrograph
             if (PerformFFT && FftCalculated != null)
             {
                 // Remember the window function! There are many others as well.
-                fftBuffer[fftPos].X = (float)(value * FastFourierTransform.HammingWindow(fftPos, fftLength));
-                fftBuffer[fftPos].Y = 0; // This is always zero with audio.
+                fftBuffer[fftPos].Real = (float)(value * FastFourierTransformation.HammingWindow(fftPos, fftLength));
+                fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
                 if (fftPos >= fftLength)
                 {
                     fftPos = 0;
-                    FastFourierTransform.FFT(true, m, fftBuffer);
+                    FastFourierTransformation.Fft(fftBuffer, m, FftMode.Forward);
                     FftCalculated(this, fftArgs);
                     return true;
                 }
@@ -76,7 +77,7 @@ namespace RGBKeyboardSpectrograph
 
     class KBControl
     {
-        private static IWaveIn waveIn; // = Program.NAudioWaveIn;
+        private static WasapiCapture capture; // = Program.NAudioWaveIn;
         private static KeyboardWriter keyWriter; // = new KeyboardWriter();
 
         // More NAudio Stuff
@@ -85,55 +86,57 @@ namespace RGBKeyboardSpectrograph
         // There might be a sample aggregator in NAudio somewhere but I made a variation for my needs
         private static SampleAggregator sampleAggregator = new SampleAggregator(fftLength);
 
-        #region NAudio
-        private static void NAudio_CreateDeviceHandles()
+        // StopWatch for loop speed
+        private static Stopwatch sw;
+
+
+        private static void CreateDeviceHandles()
         {
-            if (Program.NAudio_FirstStart == false)
+            if (Program.CSCore_FirstStart == false)
             {
                 // Clear out the old event subscriptions
                 sampleAggregator.FftCalculated -= new EventHandler<FftEventArgs>(FftCalculated);
-                waveIn.DataAvailable -= NAudio_OnDataAvailable;
-                waveIn.RecordingStopped -= NAudio_OnRecordingStopped;
+                capture.DataAvailable -= new EventHandler<DataAvailableEventArgs>(CSCore_DataAvailable);
             }
 
             sampleAggregator.PerformFFT = true;
             sampleAggregator.FftCalculated += new EventHandler<FftEventArgs>(FftCalculated);
 
-            waveIn.DataAvailable += NAudio_OnDataAvailable;
-            waveIn.RecordingStopped += NAudio_OnRecordingStopped;
+            capture.DataAvailable += new EventHandler<DataAvailableEventArgs>(CSCore_DataAvailable);
         }
 
-        private static void NAudio_StartCapture()
+        private static void CSCore_DataAvailable(object sender, DataAvailableEventArgs e)
         {
-            waveIn.StartRecording();
-        }
+            if (Program.CSCore_CaptureStarted != true) { Program.CSCore_CaptureStarted = true; };
+            if (Program.RunKeyboardThread != 2) { CSCore_StopCapture(); };
+            byte[] buffer = e.Data;
+            int bytesRecorded = e.ByteCount;
+            int bufferIncrement = capture.WaveFormat.BlockAlign;
 
-        private static void NAudio_OnRecordingStopped(object sender, StoppedEventArgs e)
-        {
-            Program.NAudio_DeviceAlive = false;
-            UpdateStatusMessage.ShowStatusMessage(10, "Stopped");
-        }
-
-        private static void NAudio_StopCapture()
-        {
-            if (waveIn != null) { waveIn.StopRecording(); };
-        }
-
-        private static void NAudio_OnDataAvailable(object sender, WaveInEventArgs e)
-        {
-            if (Program.RunKeyboardThread != 2) { NAudio_StopCapture(); };
-            byte[] buffer = e.Buffer;
-            int bytesRecorded = e.BytesRecorded;
-            int bufferIncrement = waveIn.WaveFormat.BlockAlign;
-            
-            for (int index = 0; index < bytesRecorded; index = index + bufferIncrement)
+            for (int index = 0; index < bytesRecorded; index += bufferIncrement)
             {
                 float sample32 = BitConverter.ToSingle(buffer, index);
-                if (sampleAggregator.Add(sample32) == true) {
-                    break; 
+                if (sampleAggregator.Add(sample32) == true)
+                {
+                    break;
                 };
             }
-             
+        }
+
+        private static void CSCore_StopCapture()
+        {
+            try { capture.Stop(); }
+            catch { }
+            CSCore_Cleanup();
+        }
+
+        private static void CSCore_Cleanup()
+        {
+            if (capture != null)
+            {
+                capture.Dispose();
+                capture = null;
+            }
         }
 
         private static void FftCalculated(object sender, FftEventArgs e)
@@ -145,33 +148,61 @@ namespace RGBKeyboardSpectrograph
 
             for (int i = 0; i < 1024; i++)
             {
-                e.Result[i].X = e.Result[i].X * 100 * Program.MyAmplitude;
-                e.Result[i].Y = e.Result[i].Y * 100 * Program.MyAmplitude;
-                double fftmag = Math.Sqrt((e.Result[i].X * e.Result[i].X) + (e.Result[i].Y * e.Result[i].Y));
+                e.Result[i].Real = e.Result[i].Real * 100 * Program.MyAmplitude;
+                e.Result[i].Imaginary = e.Result[i].Imaginary * 100 * Program.MyAmplitude;
+                double fftmag = Math.Sqrt((e.Result[i].Real * e.Result[i].Real) + (e.Result[i].Imaginary * e.Result[i].Imaginary));
                 fftData[i] = (byte)(fftmag);
             }
             keyWriter.Write(1, fftData, CanvasWidth);
-            Thread.Sleep(Program.RefreshDelay);
+            if (Program.LogLevel == 5)
+            {
+                UpdateStatusMessage.ShowStatusMessage(10, "Loop Time: " + sw.ElapsedMilliseconds);
+                sw.Restart();
+            };
+            if (Program.RefreshDelay > 0) { Thread.Sleep(Program.RefreshDelay); };
         }
-        #endregion NAudio
-
-        public static void KeyboardControl()
+        
+        public static void KeyboardControl(int captureType, MMDevice captureDevice)
         {
-            waveIn = Program.NAudioWaveIn;
-//            if (Program.NAudio_FirstStart == true)
-//            {
-                NAudio_CreateDeviceHandles();
-                Program.NAudio_DeviceAlive = true;
-                Program.NAudio_NewDevice = false;
-//            };
+            Program.CSCore_CaptureStarted = false;
+
+            switch (captureType)
+            {
+                case 0:
+                    capture = new WasapiLoopbackCapture();
+                    break;
+                case 1:
+                    capture = new WasapiCapture();
+                    capture.Device = captureDevice;
+                    break;
+                default:
+                    capture = new WasapiLoopbackCapture();
+                    break;
+            }
+
+            CreateDeviceHandles();
+            Program.CSCore_NewDevice = false;
 
             keyWriter = new KeyboardWriter();
+
+            sw = new Stopwatch();
+            sw.Start(); // Start loop counting stopwatch
+
             if (Program.RunKeyboardThread != 0)
             {
                 UpdateStatusMessage.ShowStatusMessage(2, "Starting Capture");
-                waveIn.StartRecording();
+                capture.Initialize();
+                capture.Start();
             }
-            Program.NAudio_FirstStart = false;
+            Program.CSCore_FirstStart = false;
+
+            while (Program.CSCore_CaptureStarted == false)
+            {
+                if (Program.RunKeyboardThread != 2) { 
+                    CSCore_StopCapture();
+                    break;
+                };
+            }
         }
     }
 }

@@ -26,7 +26,7 @@
         */
         #region Windows Form Designer generated code
 
-        /// <summary>
+        /// <summary>^
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
@@ -379,11 +379,6 @@
             this.RefreshDelayUD.Location = new System.Drawing.Point(95, 57);
             this.RefreshDelayUD.Maximum = new decimal(new int[] {
             1000,
-            0,
-            0,
-            0});
-            this.RefreshDelayUD.Minimum = new decimal(new int[] {
-            5,
             0,
             0,
             0});
@@ -763,6 +758,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.StopSpectrographButton);
             this.Controls.Add(this.StartSpectrographButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "RGB Keyboard Spectrograph";

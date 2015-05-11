@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -216,6 +217,7 @@ namespace RGBKeyboardSpectrograph
             }
             int cWidth1 = CanvasWidth;
             float cWidth2 = CanvasWidth - 1;
+
 
             #region Background Rendering
             switch (Program.MyBackgroundMode) 
@@ -553,7 +555,6 @@ namespace RGBKeyboardSpectrograph
                     {
                         try
                         {
-
                             float sizef = (float)sizes.Current;
                             sizes.MoveNext();
                             if (sizef < 0)
@@ -787,6 +788,7 @@ namespace RGBKeyboardSpectrograph
                     WritePacketToLog(dataPacket[p], dataPacket[p]);
                 };
                 if (Program.MyUsb3Mode == true) { Thread.Sleep(1); };
+                Program.ThreadStatus = 1;
             }
         }
 

@@ -13,10 +13,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using NAudio;
-using NAudio.Wave;
-using NAudio.Dsp;
-using NAudio.CoreAudioApi;
+
+using CSCore;
+using CSCore.CoreAudioAPI;
 
 namespace RGBKeyboardSpectrograph
 {
@@ -41,7 +40,6 @@ namespace RGBKeyboardSpectrograph
 
             if (Program.RunKeyboardThread != 0) { 
                 StopSpectrograph();
-                NAudio_Cleanup();
             };
 
             Thread.Sleep(1000);
@@ -89,7 +87,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.userViewSettings = Program.MyViewSettings;
 
             // Capture Settings
-            Properties.Settings.Default.userCaptureMode = Program.NAudio_DeviceType;
+            Properties.Settings.Default.userCaptureMode = Program.CSCore_DeviceType;
             Properties.Settings.Default.userCaptureDevice = comboWasapiDevices.Text;
 
             // Save Settings
@@ -103,6 +101,7 @@ namespace RGBKeyboardSpectrograph
                 notifyIcon.Visible = true;
                 notifyIcon.ShowBalloonTip(3000);
                 this.ShowInTaskbar = false;
+                this.Visible = false;
             }
         }
         
@@ -127,6 +126,7 @@ namespace RGBKeyboardSpectrograph
             // Incomplete controls to hide
             LaunchCueCheck.Visible = false; 
 
+            // Populate Combo Boxes
             KeyboardModelComboBox.Items.Add("K65-RGB");
             KeyboardModelComboBox.Items.Add("K70-RGB");
             KeyboardModelComboBox.Items.Add("K95-RGB");
@@ -143,8 +143,9 @@ namespace RGBKeyboardSpectrograph
             BarEffectComboBox.Items.Add("Rainbow Pulse");
             BarEffectComboBox.Items.Add("Static Rainbow");
 
+            // Get Input Device list
             var deviceEnum = new MMDeviceEnumerator();
-            var devices = deviceEnum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active).ToList();
+            var devices = deviceEnum.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).ToList();
             comboWasapiDevices.DataSource = devices;
             comboWasapiDevices.DisplayMember = "FriendlyName";
             
@@ -187,7 +188,7 @@ namespace RGBKeyboardSpectrograph
             Program.LogLevel = settingLogLevel;
 
             int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
-            if (settingRefreshDelay < 5 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
+            if (settingRefreshDelay < 0 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
             RefreshDelayUD.Value = settingRefreshDelay;
 
             float settingEffectWidth = Properties.Settings.Default.userBackgroundEffectWidth;
@@ -385,13 +386,13 @@ namespace RGBKeyboardSpectrograph
             Program.MyBarsGreen = (int)(colorBars.BackColor.G / Program.ColorModeDivisor);
             Program.MyBarsBlue = (int)(colorBars.BackColor.B / Program.ColorModeDivisor);
             Program.MyBackgroundBrightness = (float)BackgroundBrightnessUD.Value;
+            Program.MyBarsBrightness = (float)BarBrightnessUD.Value;    
             Program.MyEffectWidth = (float)EffectWidth.Value;
             Program.MyEffectSpeed = (float)EffectSpeed.Value;
 
             // Get NAudio device info
-            if (radioButtonWasapiLoopback.Checked == true) { Program.NAudio_DeviceType = 0; };
-            if (radioButtonWasapi.Checked == true) { Program.NAudio_DeviceType = 1; };
-            Program.NAudio_MMDevice = (MMDevice)comboWasapiDevices.SelectedItem;
+            if (radioButtonWasapiLoopback.Checked == true) { Program.CSCore_DeviceType = 0; };
+            if (radioButtonWasapi.Checked == true) { Program.CSCore_DeviceType = 1; };
 
             // Break if there's no keyboard layout selected
             if (KeyboardLayoutComboBox.SelectedIndex < 0) {
@@ -449,43 +450,34 @@ namespace RGBKeyboardSpectrograph
                 return false;
             }
 
-            // Create a waveIn based on the option selected by the user
-            if (Program.NAudio_NewDevice == true && Program.NAudioWaveIn != null)
+            // Set capture type (input/output) and device, if output is selected
+            int captureType;
+            MMDevice captureDevice;
+            if (radioButtonWasapiLoopback.Checked)
             {
-                NAudio_Cleanup();
+                captureType = 0;
+                captureDevice = null;
+            }
+            else if (radioButtonWasapi.Checked)
+            {
+                captureType = 1;
+                captureDevice = (MMDevice)comboWasapiDevices.SelectedItem;
+            }
+            else
+            {
+                captureType = 0;
+                captureDevice = null;
             }
 
-            if (Program.NAudioWaveIn == null)
-            {
-                UpdateStatusMessage.ShowStatusMessage(2, "Creating Device");
-                switch (Program.NAudio_DeviceType)
-                {
-                    case 0:
-                        Program.NAudioWaveIn = new WasapiLoopbackCapture();
-                        break;
-                    case 1:
-                        Program.NAudioWaveIn = new WasapiCapture(Program.NAudio_MMDevice);
-                        break;
-                }
-            }
-
-            // Launch Worker Thread
-            workerThread = new Thread(KBControl.KeyboardControl);
+            // Launch worker thread, passing it the type and device to use
+            workerThread = new Thread(() => KBControl.KeyboardControl(captureType, captureDevice));
             workerThread.Start();
-
+            
             // Set Program-wide current keyboard name
             Program.MyKeyboardName = KeyboardModelComboBox.Text;
 
             Program.RunKeyboardThread = RunType;
             return true;
-        }
-        private static void NAudio_Cleanup()
-        {
-            if (Program.NAudioWaveIn != null)
-            {
-                Program.NAudioWaveIn.Dispose();
-                Program.NAudioWaveIn = null;
-            }
         }
 
         private void StopSpectrograph()
@@ -664,6 +656,20 @@ namespace RGBKeyboardSpectrograph
             {
                 KeyboardLayoutComboBox.Text = PreviousLayout;
             }
+            switch (KeyboardModelComboBox.Text)
+            {
+                case "K65-RGB":
+                    Program.MyCanvasWidth = 76;
+                    break;
+                case "K70-RGB":
+                    Program.MyCanvasWidth = 92;
+                    break;
+                case "K95-RGB":
+                    Program.MyCanvasWidth = 104;
+                    break;
+            }
+            EffectWidth_ValueChanged(null, null);
+            BarWidth_ValueChanged(null, null);
         }
 
         private void KeyboardLayoutComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -832,7 +838,11 @@ namespace RGBKeyboardSpectrograph
         private void EffectWidth_ValueChanged(object sender, EventArgs e)
         {
             // Apply maximum to width if Rainbow is selected
-            if (Program.MyCanvasWidth > 0 && BackgroundEffectComboBox.Text == "Rainbow") { EffectWidth.Maximum = Program.MyCanvasWidth; };
+            if (Program.MyCanvasWidth > 0 && BackgroundEffectComboBox.Text == "Rainbow")
+            {
+                if (EffectWidth.Value > Program.MyCanvasWidth) { EffectWidth.Value = Program.MyCanvasWidth; };
+                EffectWidth.Maximum = Program.MyCanvasWidth;
+            };
 
             Program.MyEffectWidth = (float)EffectWidth.Value;
         }
@@ -844,7 +854,13 @@ namespace RGBKeyboardSpectrograph
         private void BarWidth_ValueChanged(object sender, EventArgs e)
         {
             // Apply maximum to width if Rainbow is selected
-            if (Program.MyCanvasWidth > 0 && BarEffectComboBox.Text == "Rainbow") { BarWidth.Maximum = Program.MyCanvasWidth; };
+            if (Program.MyCanvasWidth > 0 && (BarEffectComboBox.Text == "Rainbow Right" ||
+                                              BarEffectComboBox.Text == "Rainbow Left"))
+            {
+                if (BarWidth.Value > Program.MyCanvasWidth) { BarWidth.Value = Program.MyCanvasWidth; };
+                BarWidth.Maximum = Program.MyCanvasWidth;
+                BarWidth.Value = BarWidth.Maximum;
+            };
 
             Program.MyBarsWidth = (float)BarWidth.Value;
         }
@@ -916,30 +932,30 @@ namespace RGBKeyboardSpectrograph
 
         private void radioButtonWasapiLoopback_CheckedChanged(object sender, EventArgs e)
         {
-            if (Program.NAudio_NewDevice == false)
+            if (Program.CSCore_NewDevice == false)
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to change devices.");
-                Program.NAudio_NewDevice = true;
+                Program.CSCore_NewDevice = true;
             }
-            if (radioButtonWasapiLoopback.Checked == true) { Program.NAudio_DeviceType = 0; };
+            if (radioButtonWasapiLoopback.Checked == true) { Program.CSCore_DeviceType = 0; };
         }
 
         private void radioButtonWasapi_CheckedChanged(object sender, EventArgs e)
         {
-            if (Program.NAudio_NewDevice == false)
+            if (Program.CSCore_NewDevice == false)
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to change devices.");
-                Program.NAudio_NewDevice = true;
+                Program.CSCore_NewDevice = true;
             }
-            if (radioButtonWasapi.Checked == true) { Program.NAudio_DeviceType = 1; };
+            if (radioButtonWasapi.Checked == true) { Program.CSCore_DeviceType = 1; };
         }
 
         private void comboWasapiDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Program.NAudio_NewDevice == false)
+            if (Program.CSCore_NewDevice == false)
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to change devices.");
-                Program.NAudio_NewDevice = true;
+                Program.CSCore_NewDevice = true;
             }
         }
 
@@ -949,6 +965,7 @@ namespace RGBKeyboardSpectrograph
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            this.Visible = true;
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
             notifyIcon.Visible = false;
@@ -957,12 +974,6 @@ namespace RGBKeyboardSpectrograph
         private void StatusTimer_Tick(object sender, EventArgs e)
         {
             Application.DoEvents();
-            switch (workerThread.IsAlive)
-            {
-                case false:
-                    StatusLight.BackColor = Color.Red;
-                    break;
-                case true:
                     if (Program.ThreadStatus == 1)
                     {
                         Program.ThreadStatus = 0;
@@ -972,10 +983,8 @@ namespace RGBKeyboardSpectrograph
                     {
                         StatusLight.BackColor = Color.Orange;
                     }
-                    break;
-                default:
-                    break;
-            }
+
+
         }
 
         private void tsmQuit_Click(object sender, EventArgs e)
@@ -985,11 +994,7 @@ namespace RGBKeyboardSpectrograph
 
         #endregion Others
 
-
-
         #endregion Controls
-
-
 
     } //MainForm
 
