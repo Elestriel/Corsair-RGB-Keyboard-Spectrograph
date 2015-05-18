@@ -42,7 +42,7 @@ namespace RGBKeyboardSpectrograph
                 StopSpectrograph();
             };
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
 
             if (Program.RunKeyboardThread != 3) { 
                 while (workerThread.IsAlive)
@@ -51,6 +51,13 @@ namespace RGBKeyboardSpectrograph
                     Thread.Sleep(1000);
                     UpdateStatusMessage.ShowStatusMessage(2, "Waiting for thread to quit...");
                 } 
+            }
+
+            if (Program.MyRestoreOnExit == true)
+            {
+                UpdateStatusMessage.ShowStatusMessage(1, "Restoring Keyboard Lighting");
+                KeyboardWriter restoreLightingWriter = new KeyboardWriter(true);
+                Thread.Sleep(500);
             }
 
             // Save application settings
@@ -77,6 +84,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.userShowGraphics = ShowGraphicsCheck.Checked;
             Properties.Settings.Default.userStartMinimized = StartMinimizedCheck.Checked;
             Properties.Settings.Default.userEffectsOnStart = EffectsOnStartCheck.Checked;
+            Properties.Settings.Default.userRestoreLighting = RestoreLightingCheck.Checked;
 
             // Colours
             Properties.Settings.Default.userColorBars = colorBars.BackColor;
@@ -142,6 +150,7 @@ namespace RGBKeyboardSpectrograph
             BarEffectComboBox.Items.Add("Rainbow Left");
             BarEffectComboBox.Items.Add("Rainbow Pulse");
             BarEffectComboBox.Items.Add("Static Rainbow");
+            BarEffectComboBox.Items.Add("Classic Bars");
 
             // Get Input Device list
             var deviceEnum = new MMDeviceEnumerator();
@@ -161,10 +170,12 @@ namespace RGBKeyboardSpectrograph
             if (KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout) > -1) { KeyboardLayoutComboBox.SelectedIndex = KeyboardLayoutComboBox.FindStringExact(settingKeyboardLayout); };
 
             string settingBackgroundColorType = Properties.Settings.Default.userColorBackgroundType;
-            if (BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType) > -1) { BackgroundEffectComboBox.SelectedIndex = BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType); };
+            if (BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType) > -1) { BackgroundEffectComboBox.SelectedIndex = BackgroundEffectComboBox.FindStringExact(settingBackgroundColorType); }
+            else {BackgroundEffectComboBox.SelectedIndex = 1; };
 
             string settingBarColorType = Properties.Settings.Default.userColorBarsType;
-            if (BarEffectComboBox.FindStringExact(settingBarColorType) > -1) { BarEffectComboBox.SelectedIndex = BarEffectComboBox.FindStringExact(settingBarColorType); };
+            if (BarEffectComboBox.FindStringExact(settingBarColorType) > -1) { BarEffectComboBox.SelectedIndex = BarEffectComboBox.FindStringExact(settingBarColorType); }
+            else { BarEffectComboBox.SelectedIndex = 1; };
 
             string settingCaptureDeviceName = Properties.Settings.Default.userCaptureDevice;
             if (comboWasapiDevices.FindStringExact(settingCaptureDeviceName) > -1) { comboWasapiDevices.SelectedIndex = comboWasapiDevices.FindStringExact(settingCaptureDeviceName); };
@@ -192,7 +203,7 @@ namespace RGBKeyboardSpectrograph
             RefreshDelayUD.Value = settingRefreshDelay;
 
             float settingEffectWidth = Properties.Settings.Default.userBackgroundEffectWidth;
-            if (settingEffectWidth < 1 || settingEffectWidth > 1000) { settingEffectWidth = 100; };
+            if (settingEffectWidth < 1 || settingEffectWidth > 1000) { settingEffectWidth = 104; };
             EffectWidth.Value = (decimal)settingEffectWidth;
 
             float settingEffectSpeed = Properties.Settings.Default.userBackgroundEffectSpeed;
@@ -200,7 +211,7 @@ namespace RGBKeyboardSpectrograph
             EffectSpeed.Value = (decimal)settingEffectSpeed;
 
             float settingBarWidth = Properties.Settings.Default.userBarEffectWidth;
-            if (settingBarWidth < 1 || settingBarWidth > 1000) { settingBarWidth = 100; };
+            if (settingBarWidth < 1 || settingBarWidth > 1000) { settingBarWidth = 104; };
             BarWidth.Value = (decimal)settingBarWidth;
 
             float settingBarSpeed = Properties.Settings.Default.userBarEffectSpeed;
@@ -214,6 +225,7 @@ namespace RGBKeyboardSpectrograph
             ShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
             StartMinimizedCheck.Checked = Properties.Settings.Default.userStartMinimized;
             EffectsOnStartCheck.Checked = Properties.Settings.Default.userEffectsOnStart;
+            RestoreLightingCheck.Checked = Properties.Settings.Default.userRestoreLighting;
 
             // RadioButtons
             switch (Properties.Settings.Default.userCaptureMode)
@@ -228,6 +240,7 @@ namespace RGBKeyboardSpectrograph
                     radioButtonWasapiLoopback.Checked = true;
                     break;
             }
+            radioButtonWasapiLoopback_CheckedChanged(null, null);
 
             // Colours
             Color settingBarColor = Properties.Settings.Default.userColorBars;
@@ -389,8 +402,9 @@ namespace RGBKeyboardSpectrograph
             Program.MyBarsBrightness = (float)BarBrightnessUD.Value;    
             Program.MyEffectWidth = (float)EffectWidth.Value;
             Program.MyEffectSpeed = (float)EffectSpeed.Value;
+            Program.MyRestoreOnExit = RestoreLightingCheck.Checked;
 
-            // Get NAudio device info
+            // Get audio device info
             if (radioButtonWasapiLoopback.Checked == true) { Program.CSCore_DeviceType = 0; };
             if (radioButtonWasapi.Checked == true) { Program.CSCore_DeviceType = 1; };
 
@@ -450,32 +464,40 @@ namespace RGBKeyboardSpectrograph
                 return false;
             }
 
-            // Set capture type (input/output) and device, if output is selected
             int captureType;
             MMDevice captureDevice;
-            if (radioButtonWasapiLoopback.Checked)
+
+            if (RunType == 4) // Test Mode
             {
                 captureType = 0;
                 captureDevice = null;
-            }
-            else if (radioButtonWasapi.Checked)
-            {
-                captureType = 1;
-                captureDevice = (MMDevice)comboWasapiDevices.SelectedItem;
             }
             else
             {
-                captureType = 0;
-                captureDevice = null;
+                // Set capture type (input/output) and device, if output is selected
+                if (radioButtonWasapiLoopback.Checked)
+                {
+                    captureType = 0;
+                    captureDevice = null;
+                }
+                else if (radioButtonWasapi.Checked)
+                {
+                    captureType = 1;
+                    captureDevice = (MMDevice)comboWasapiDevices.SelectedItem;
+                }
+                else
+                {
+                    captureType = 0;
+                    captureDevice = null;
+                }
             }
 
             // Launch worker thread, passing it the type and device to use
             workerThread = new Thread(() => KBControl.KeyboardControl(captureType, captureDevice));
             workerThread.Start();
-            
+
             // Set Program-wide current keyboard name
             Program.MyKeyboardName = KeyboardModelComboBox.Text;
-
             Program.RunKeyboardThread = RunType;
             return true;
         }
@@ -784,6 +806,15 @@ namespace RGBKeyboardSpectrograph
                 BarSpeed.Enabled = true;
                 BarWidth.Maximum = 104;
             }
+            else if (BarEffectComboBox.Text == "Classic Bars")
+            {
+                BarBrightnessUD.Enabled = true;
+                colorBars.Enabled = true;
+                colorBars.Visible = true;
+                BarWidth.Enabled = false;
+                BarSpeed.Enabled = false;
+                BarWidth.Maximum = 104;
+            }
 
         }
 
@@ -888,6 +919,11 @@ namespace RGBKeyboardSpectrograph
                 GraphicsPictureBox.Visible = false;
         }
 
+        private void RestoreLightingCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.MyRestoreOnExit = RestoreLightingCheck.Checked;
+        }
+
         #endregion CheckBoxes
 
         #region Colours
@@ -928,7 +964,7 @@ namespace RGBKeyboardSpectrograph
 
         #endregion Colours
 
-        #region NAudio
+        #region CSCore
 
         private void radioButtonWasapiLoopback_CheckedChanged(object sender, EventArgs e)
         {
@@ -937,7 +973,10 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to change devices.");
                 Program.CSCore_NewDevice = true;
             }
-            if (radioButtonWasapiLoopback.Checked == true) { Program.CSCore_DeviceType = 0; };
+            if (radioButtonWasapiLoopback.Checked == true) { 
+                Program.CSCore_DeviceType = 0;
+                comboWasapiDevices.Enabled = false;
+            };
         }
 
         private void radioButtonWasapi_CheckedChanged(object sender, EventArgs e)
@@ -947,7 +986,10 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to change devices.");
                 Program.CSCore_NewDevice = true;
             }
-            if (radioButtonWasapi.Checked == true) { Program.CSCore_DeviceType = 1; };
+            if (radioButtonWasapi.Checked == true) {
+                Program.CSCore_DeviceType = 1;
+                comboWasapiDevices.Enabled = true;
+            };
         }
 
         private void comboWasapiDevices_SelectedIndexChanged(object sender, EventArgs e)
@@ -959,7 +1001,7 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion NAudio
+        #endregion CSCore
 
         #region Others
 
@@ -993,7 +1035,7 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion Others
-
+        
         #endregion Controls
 
     } //MainForm

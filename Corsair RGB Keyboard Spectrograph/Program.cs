@@ -6,18 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-/*
-using NAudio;
-using NAudio.Wave;
-using NAudio.CoreAudioApi;
-*/
 
 namespace RGBKeyboardSpectrograph
 {
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.5.2";
+        public static string VersionNumber = "0.5.3";
 
         // Application Variables
         public static int RunKeyboardThread = 3;
@@ -38,6 +33,7 @@ namespace RGBKeyboardSpectrograph
         public static bool MyUsb3Mode;
         public static bool MyViewSettings = false;
         public static bool MyViewDebug = true;
+        public static bool MyRestoreOnExit = false;
 
         public static string MyBackgroundMode;
         public static float MyEffectWidth = 10f;
@@ -52,7 +48,6 @@ namespace RGBKeyboardSpectrograph
         public static float MyBarsBrightness;
 
         public static bool CSCore_FirstStart = true;
-       // public static bool CSCore_DeviceAlive = false;
         public static bool CSCore_NewDevice = true;
         public static int CSCore_DeviceType = 0;
         public static bool CSCore_CaptureStarted = false;

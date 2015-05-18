@@ -39,7 +39,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="userBackgroundEffectWidth" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">104</Value>
     </Setting>
     <Setting Name="userBackgroundEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -57,7 +57,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="userBarEffectWidth" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">104</Value>
     </Setting>
     <Setting Name="userBarEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -73,6 +73,9 @@
     </Setting>
     <Setting Name="userBarBrightness" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="userRestoreLighting" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

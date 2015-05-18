@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace RGBKeyboardSpectrograph
 {
     public class KeyboardWriter
@@ -163,18 +164,6 @@ namespace RGBKeyboardSpectrograph
 
         private IntPtr keyboardUsbDevice;
 
-        /* The bands of FFT data that will be used in the spectrograph.
-         * This roughly equates to 0Hz to about 17KHz. */
-        private int[] fftLookup = new int[] {
-            1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-            15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
-            30,31,32,33,34,35,36,37,38,39,40,41,42,43,46,
-            49,52,55,58,61,64,67,70,73,76,79,82,85,89,93,
-            97,101,105,109,113,117,121,125,129,133,137,141,146,151,156,
-            161,166,171,176,181,186,191,196,201,206,211,217,223,229,235,
-            241,247,253,259,265,271,277,283,289,295,302,309,316,323,330
-        };
-
         private byte[,] ledMatrix = new byte[7, 104];
         private int[,] drawMatrix = new int[7, 104];
 
@@ -189,10 +178,32 @@ namespace RGBKeyboardSpectrograph
 
         private byte[][] dataPacket = new byte[5][]; // 2nd dimension initialized to size 64
 
-        byte red, grn, blu;
+        private bool isRestoringLighting = false;
+        private byte[] RestorePacket1 = {0x07, 0x05, 0x02, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        private byte[] RestorePacket2 = {0x07, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-        public KeyboardWriter()
+        byte red, grn, blu;
+        /* // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr lpOverlapped); 
+        */
+        public KeyboardWriter(bool restoreLighting = false)
         {
+            if (restoreLighting == true)
+            {
+                isRestoringLighting = true;
+                InitKeyboard(Program.MyKeyboardID, Program.MyKeyboardName);
+                bool packet1success = SendUsbMessage(RestorePacket1);
+                bool packet2success = SendUsbMessage(RestorePacket2);
+                return;
+            }
+
             if (InitKeyboard(Program.MyKeyboardID, Program.MyKeyboardName) == 1)
             {
                 Program.RunKeyboardThread = 0;
@@ -408,7 +419,8 @@ namespace RGBKeyboardSpectrograph
                         EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
                         EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
                     }
-                    if ((int)compData[i] > ((128 / (1 + (i * .95))) * (7 - k)))
+                    if ((int)compData[i] > ((32 / (1 + (i * .95))) * (7 - k)))
+                    //if ((int)compData[i] > (-Math.Log10(i)+2.2) * (7-k))
                     {
                         if (Program.MyBarsMode == "Solid Colour")
                         {
@@ -420,6 +432,13 @@ namespace RGBKeyboardSpectrograph
                                  Program.MyBarsMode == "Static Rainbow")
                         {
                             this.SetLed(i, k, EffectBarRed, EffectBarGreen, EffectBarBlue);
+                        }
+                        else if (Program.MyBarsMode == "Classic Bars")
+                        {
+                            byte LitBright = (byte)(Program.MyBarsBrightness / 10);
+                            if (k == 1 || k == 0) { this.SetLed(i, k, LitBright, 0, 0); }
+                            else if (k == 2) { this.SetLed(i, k, LitBright, LitBright, 0); }
+                            else { this.SetLed(i, k, 0, LitBright, 0); };
                         }
                     }
                 }
@@ -433,33 +452,26 @@ namespace RGBKeyboardSpectrograph
         private byte[] CompressFftToKeyboard(byte[] fftData, int kWidth)
         {
             byte[] compressedData = new byte[kWidth];
-            int calcCnt;
-            float calcAve;
+
+            int tempCalc;
+            double iPower;
+            string tempStr = "";
+            int prevCalc = 0;
 
             for (int i = 0; i < kWidth; i++)
             {
-                if (i >= fftLookup.Length - 1)
-                {
-                    compressedData[i] = compressedData[i - 1];
-                }
-                else
-                {
-                    if (fftLookup[i] == fftLookup[i + 1])
-                    {
-                        compressedData[i] = fftData[i];
-                    }
-                    else
-                    {
-                        calcAve = 0;
-                        for (calcCnt = 0; calcCnt < (Math.Abs(fftLookup[i] - fftLookup[i + 1]) ); calcCnt++)
-                        {
-                            calcAve += fftData[fftLookup[i] + calcCnt];
-                        }
-                        compressedData[i] = (byte)(calcAve / calcCnt);
-                    }
+                iPower = Math.Pow((double)i, 2);
+                float keyboardSizeMultiplier = (float)(Math.Pow(Program.MyCanvasWidth, 2));
+                tempCalc = (int)((330f / keyboardSizeMultiplier) * iPower) + 1;
 
-                }
+                while (prevCalc >= tempCalc) { tempCalc += 1; };
+
+                compressedData[i] = fftData[tempCalc];
+                prevCalc = tempCalc;
+
+                tempStr += tempCalc + ", ";
             }
+
             return compressedData;
         }
         
@@ -476,7 +488,6 @@ namespace RGBKeyboardSpectrograph
             this.blueValues[led] = (byte)0;
 
             UpdateKeyboard();
-            if (Program.MyShowGraphics == true) WriteGraphics();
         }
         private void SetLed(int x, int y, int r, int g, int b)
         {
@@ -524,16 +535,18 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(3, KeyboardName + " not found");
                 return 1;
             }
-
+            
             UpdateStatusMessage.ShowStatusMessage(4, KeyboardName + " Found");
-
-            // Construct XY lookup table
-            if (InitiateLookupTable() == false)
+            if (isRestoringLighting == false)
             {
-                UpdateStatusMessage.ShowStatusMessage(3, "An error occurred when attempting to initiate the keyboard");
-                return 1;
+                // Construct XY lookup table
+                if (InitiateLookupTable() == false)
+                {
+                    UpdateStatusMessage.ShowStatusMessage(3, "An error occurred when attempting to initiate the keyboard");
+                    return 1;
+                }
+                InitiateDrawTable();
             }
-            InitiateDrawTable();
             return 0;
         }
 
@@ -814,8 +827,11 @@ namespace RGBKeyboardSpectrograph
             {
                 usb_pkt[i] = data_pkt[i - 1];
             }
-
+            
             return HidD_SetFeature(this.keyboardUsbDevice, ref usb_pkt[0], 65);
+            // More stuff for new USB methods.
+            //uint written = 0;
+            //return WriteFile(this.keyboardUsbDevice, usb_pkt, 65, ref written, IntPtr.Zero);
         }
 
         private void WriteGraphics()

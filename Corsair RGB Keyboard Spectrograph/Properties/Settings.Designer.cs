@@ -169,7 +169,7 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("104")]
         public float userBackgroundEffectWidth {
             get {
                 return ((float)(this["userBackgroundEffectWidth"]));
@@ -241,7 +241,7 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("104")]
         public float userBarEffectWidth {
             get {
                 return ((float)(this["userBarEffectWidth"]));
@@ -308,6 +308,18 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["userBarBrightness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userRestoreLighting {
+            get {
+                return ((bool)(this["userRestoreLighting"]));
+            }
+            set {
+                this["userRestoreLighting"] = value;
             }
         }
     }

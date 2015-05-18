@@ -21,7 +21,6 @@ namespace RGBKeyboardSpectrograph
         public event EventHandler<FftEventArgs> FftCalculated;
         public bool PerformFFT { get; set; }
 
-        // This Complex is NAudio's own! 
         private Complex[] fftBuffer;
         private FftEventArgs fftArgs;
         private int fftPos;
@@ -49,8 +48,8 @@ namespace RGBKeyboardSpectrograph
         {
             if (PerformFFT && FftCalculated != null)
             {
-                // Remember the window function! There are many others as well.
-                fftBuffer[fftPos].Real = (float)(value * FastFourierTransformation.HammingWindow(fftPos, fftLength));
+                //fftBuffer[fftPos].Real = (float)(value * FastFourierTransformation.HammingWindow(fftPos, fftLength));
+                fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
                 fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
                 if (fftPos >= fftLength)
@@ -77,18 +76,14 @@ namespace RGBKeyboardSpectrograph
 
     class KBControl
     {
-        private static WasapiCapture capture; // = Program.NAudioWaveIn;
-        private static KeyboardWriter keyWriter; // = new KeyboardWriter();
+        private static WasapiCapture capture;
+        private static KeyboardWriter keyWriter;
 
-        // More NAudio Stuff
-        private static int fftLength = 1024; // NAudio fft wants powers of two!
-
-        // There might be a sample aggregator in NAudio somewhere but I made a variation for my needs
-        private static SampleAggregator sampleAggregator = new SampleAggregator(fftLength);
-
+        private static int fftLength;
+        private static SampleAggregator sampleAggregator;
+        
         // StopWatch for loop speed
         private static Stopwatch sw;
-
 
         private static void CreateDeviceHandles()
         {
@@ -113,10 +108,11 @@ namespace RGBKeyboardSpectrograph
             int bytesRecorded = e.ByteCount;
             int bufferIncrement = capture.WaveFormat.BlockAlign;
 
+
             for (int index = 0; index < bytesRecorded; index += bufferIncrement)
             {
                 float sample32 = BitConverter.ToSingle(buffer, index);
-                if (sampleAggregator.Add(sample32) == true)
+                if (sampleAggregator.Add(sample32 * Program.MyAmplitude * 50) == true)
                 {
                     break;
                 };
@@ -143,13 +139,13 @@ namespace RGBKeyboardSpectrograph
         {
             int CanvasWidth = Program.MyCanvasWidth;
 
-            byte[] fftData = new byte[1024];
+            byte[] fftData = new byte[fftLength];
             KeyboardWriter KeyWriter = keyWriter;
 
-            for (int i = 0; i < 1024; i++)
+            for (int i = 0; i < fftLength; i++)
             {
-                e.Result[i].Real = e.Result[i].Real * 100 * Program.MyAmplitude;
-                e.Result[i].Imaginary = e.Result[i].Imaginary * 100 * Program.MyAmplitude;
+                e.Result[i].Real = e.Result[i].Real;
+                e.Result[i].Imaginary = e.Result[i].Imaginary;
                 double fftmag = Math.Sqrt((e.Result[i].Real * e.Result[i].Real) + (e.Result[i].Imaginary * e.Result[i].Imaginary));
                 fftData[i] = (byte)(fftmag);
             }
@@ -164,44 +160,76 @@ namespace RGBKeyboardSpectrograph
         
         public static void KeyboardControl(int captureType, MMDevice captureDevice)
         {
-            Program.CSCore_CaptureStarted = false;
-
-            switch (captureType)
+            if (Program.RunKeyboardThread == 4)
             {
-                case 0:
-                    capture = new WasapiLoopbackCapture();
-                    break;
-                case 1:
-                    capture = new WasapiCapture();
-                    capture.Device = captureDevice;
-                    break;
-                default:
-                    capture = new WasapiLoopbackCapture();
-                    break;
+                keyWriter = new KeyboardWriter();
+                while (Program.RunKeyboardThread == 4) {
+                    keyWriter.Write(-1, null, Program.TestLed);
+                    Thread.Sleep(20);
+                }
             }
-
-            CreateDeviceHandles();
-            Program.CSCore_NewDevice = false;
-
-            keyWriter = new KeyboardWriter();
-
-            sw = new Stopwatch();
-            sw.Start(); // Start loop counting stopwatch
-
-            if (Program.RunKeyboardThread != 0)
+            else
             {
-                UpdateStatusMessage.ShowStatusMessage(2, "Starting Capture");
+                Program.CSCore_CaptureStarted = false;
+
+                switch (captureType)
+                {
+                    case 0:
+                        capture = new WasapiLoopbackCapture();
+                        break;
+                    case 1:
+                        capture = new WasapiCapture();
+                        capture.Device = captureDevice;
+                        break;
+                    default:
+                        capture = new WasapiLoopbackCapture();
+                        break;
+                }
+
                 capture.Initialize();
-                capture.Start();
-            }
-            Program.CSCore_FirstStart = false;
+                int captureSampleRate = capture.WaveFormat.SampleRate;
+                switch (captureSampleRate)
+                {
+                    case 48000:
+                        fftLength = 1024;
+                        break;
+                    case 96000:
+                        fftLength = 2048;
+                        break;
+                    case 192000:
+                        fftLength = 4096;
+                        break;
+                    default:
+                        fftLength = 1024;
+                        break;
+                }
 
-            while (Program.CSCore_CaptureStarted == false)
-            {
-                if (Program.RunKeyboardThread != 2) { 
-                    CSCore_StopCapture();
-                    break;
-                };
+                sampleAggregator = new SampleAggregator(fftLength);
+
+                CreateDeviceHandles();
+                Program.CSCore_NewDevice = false;
+
+                keyWriter = new KeyboardWriter();
+
+                sw = new Stopwatch();
+                sw.Start(); // Start loop counting stopwatch
+
+                if (Program.RunKeyboardThread != 0)
+                {
+                    UpdateStatusMessage.ShowStatusMessage(2, "Starting Capture");
+                    capture.Start();
+                }
+                Program.CSCore_FirstStart = false;
+
+
+                while (Program.CSCore_CaptureStarted == false)
+                {
+                    if (Program.RunKeyboardThread != 2)
+                    {
+                        CSCore_StopCapture();
+                        break;
+                    };
+                }
             }
         }
     }

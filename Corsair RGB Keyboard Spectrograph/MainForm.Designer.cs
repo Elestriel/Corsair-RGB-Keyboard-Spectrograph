@@ -89,6 +89,7 @@
             this.BarSpeed = new System.Windows.Forms.NumericUpDown();
             this.BarWidth = new System.Windows.Forms.NumericUpDown();
             this.GetUpdateButton = new System.Windows.Forms.Button();
+            this.RestoreLightingCheck = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).BeginInit();
@@ -446,7 +447,7 @@
             // USB3ModeCheck
             // 
             this.USB3ModeCheck.AutoSize = true;
-            this.USB3ModeCheck.Location = new System.Drawing.Point(12, 361);
+            this.USB3ModeCheck.Location = new System.Drawing.Point(12, 384);
             this.USB3ModeCheck.Name = "USB3ModeCheck";
             this.USB3ModeCheck.Size = new System.Drawing.Size(66, 17);
             this.USB3ModeCheck.TabIndex = 33;
@@ -491,7 +492,7 @@
             this.EffectWidth.Size = new System.Drawing.Size(47, 20);
             this.EffectWidth.TabIndex = 36;
             this.EffectWidth.Value = new decimal(new int[] {
-            100,
+            104,
             0,
             0,
             0});
@@ -694,7 +695,7 @@
             this.BarWidth.Size = new System.Drawing.Size(47, 20);
             this.BarWidth.TabIndex = 49;
             this.BarWidth.Value = new decimal(new int[] {
-            100,
+            104,
             0,
             0,
             0});
@@ -711,12 +712,24 @@
             this.GetUpdateButton.Visible = false;
             this.GetUpdateButton.Click += new System.EventHandler(this.GetUpdateButton_Click);
             // 
+            // RestoreLightingCheck
+            // 
+            this.RestoreLightingCheck.AutoSize = true;
+            this.RestoreLightingCheck.Location = new System.Drawing.Point(12, 361);
+            this.RestoreLightingCheck.Name = "RestoreLightingCheck";
+            this.RestoreLightingCheck.Size = new System.Drawing.Size(138, 17);
+            this.RestoreLightingCheck.TabIndex = 52;
+            this.RestoreLightingCheck.Text = "Restore Lighting on Exit";
+            this.RestoreLightingCheck.UseVisualStyleBackColor = true;
+            this.RestoreLightingCheck.CheckedChanged += new System.EventHandler(this.RestoreLightingCheck_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(663, 462);
+            this.Controls.Add(this.RestoreLightingCheck);
             this.Controls.Add(this.GetUpdateButton);
             this.Controls.Add(this.BarSpeed);
             this.Controls.Add(this.BarWidth);
@@ -838,6 +851,7 @@
         private System.Windows.Forms.NumericUpDown BarSpeed;
         private System.Windows.Forms.NumericUpDown BarWidth;
         private System.Windows.Forms.Button GetUpdateButton;
+        private System.Windows.Forms.CheckBox RestoreLightingCheck;
 
     }
 }
