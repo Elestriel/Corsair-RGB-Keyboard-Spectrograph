@@ -193,30 +193,6 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool userViewSettings {
-            get {
-                return ((bool)(this["userViewSettings"]));
-            }
-            set {
-                this["userViewSettings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool userViewDebug {
-            get {
-                return ((bool)(this["userViewDebug"]));
-            }
-            set {
-                this["userViewDebug"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool userStartMinimized {
             get {
@@ -320,6 +296,30 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["userRestoreLighting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string userCueLocation {
+            get {
+                return ((string)(this["userCueLocation"]));
+            }
+            set {
+                this["userCueLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool userLaunchCueOnExit {
+            get {
+                return ((bool)(this["userLaunchCueOnExit"]));
+            }
+            set {
+                this["userLaunchCueOnExit"] = value;
             }
         }
     }

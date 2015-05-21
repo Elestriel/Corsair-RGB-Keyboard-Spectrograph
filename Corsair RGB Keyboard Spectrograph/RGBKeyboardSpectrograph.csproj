@@ -60,7 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KBControl.cs" />
+    <Compile Include="Effects.cs" />
+    <Compile Include="SpectroControl.cs" />
     <Compile Include="KeyboardWriter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -70,6 +71,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlToKeyMap.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -99,6 +101,65 @@
   <ItemGroup>
     <Content Include="CorsairLogo.ico" />
     <Content Include="CorsairLogoTransparent.ico" />
+    <Content Include="corsair_devices\cgk65rgb\image\be.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\br.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\ch.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\de.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\es.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\eu.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\fr.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\it.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\jp.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\kr.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\mex.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\na.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\nd.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\ru.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\tw.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\image\uk.jpg" />
+    <Content Include="corsair_devices\cgk65rgb\profile_cgk65rgb.xml" />
+    <Content Include="corsair_devices\k70rgb\image\be.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\br.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\ch.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\de.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\es.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\eu.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\fr.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\it.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\jp.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\kr.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\mex.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\na.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\nd.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\ru.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\tw.jpg" />
+    <Content Include="corsair_devices\k70rgb\image\uk.jpg" />
+    <Content Include="corsair_devices\k70rgb\profile_k70rgb.xml" />
+    <Content Include="corsair_devices\k95rgb\image\be.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\br.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\ch.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\de.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\es.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\eu.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\fr.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\it.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\jp.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\kr.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\mex.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\na.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\nd.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\ru.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\tw.jpg" />
+    <Content Include="corsair_devices\k95rgb\image\uk.jpg" />
+    <Content Include="corsair_devices\k95rgb\profile_k95rgb.xml" />
+    <Content Include="corsair_devices\m65rgb\image\m65rgb.png" />
+    <Content Include="corsair_devices\m65rgb\profile_m65rgb.xml" />
+    <Content Include="corsair_devices\sabre1\image\sabre1-lighting.png" />
+    <Content Include="corsair_devices\sabre1\image\sabre1.png" />
+    <Content Include="corsair_devices\sabre1\profile_sabre1.xml" />
+    <Content Include="corsair_devices\sabre2\image\sabre2-lighting.png" />
+    <Content Include="corsair_devices\sabre2\image\sabre2.png" />
+    <Content Include="corsair_devices\sabre2\profile_sabre2.xml" />
     <Content Include="Corsair_Sails_Small.ico" />
     <Content Include="K65-RGB.xml">
       <SubType>Designer</SubType>
@@ -115,7 +176,8 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y "$(ProjectDir)K65-RGB.xml" "$(ProjectDir)$(OutDir)"
 xcopy /Y "$(ProjectDir)K70-RGB.xml" "$(ProjectDir)$(OutDir)"
-xcopy /Y "$(ProjectDir)K95-RGB.xml" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
+xcopy /Y "$(ProjectDir)K95-RGB.xml" "$(ProjectDir)$(OutDir)"
+xcopy /S /I /Y "$(ProjectDir)corsair_devices\*" "$(ProjectDir)$(OutDir)corsair_devices\*"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

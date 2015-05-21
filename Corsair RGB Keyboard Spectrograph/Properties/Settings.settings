@@ -44,12 +44,6 @@
     <Setting Name="userBackgroundEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="userViewSettings" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="userViewDebug" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="userStartMinimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -75,6 +69,12 @@
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="userRestoreLighting" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="userCueLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="userLaunchCueOnExit" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

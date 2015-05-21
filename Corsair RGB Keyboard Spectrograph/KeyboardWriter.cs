@@ -171,9 +171,6 @@ namespace RGBKeyboardSpectrograph
         private byte[] greenValues = new byte[144];
         private byte[] blueValues = new byte[144];
 
-        private float PulseRed = 0;
-        private float PulseGrn = 0;
-        private float PulseBlu = 0;
         private float CPC = Program.ColorsPerChannel;
 
         private byte[][] dataPacket = new byte[5][]; // 2nd dimension initialized to size 64
@@ -188,7 +185,9 @@ namespace RGBKeyboardSpectrograph
                                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-        byte red, grn, blu;
+        private static Effects Foreground;
+        private static Effects Background;
+
         /* // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
         [DllImport("kernel32.dll", SetLastError = true)]
         static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr lpOverlapped); 
@@ -198,13 +197,13 @@ namespace RGBKeyboardSpectrograph
             if (restoreLighting == true)
             {
                 isRestoringLighting = true;
-                InitKeyboard(Program.MyKeyboardID, Program.MyKeyboardName);
+                InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardName);
                 bool packet1success = SendUsbMessage(RestorePacket1);
                 bool packet2success = SendUsbMessage(RestorePacket2);
                 return;
             }
 
-            if (InitKeyboard(Program.MyKeyboardID, Program.MyKeyboardName) == 1)
+            if (InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardName) == 1)
             {
                 Program.RunKeyboardThread = 0;
                 return;
@@ -229,224 +228,43 @@ namespace RGBKeyboardSpectrograph
             int cWidth1 = CanvasWidth;
             float cWidth2 = CanvasWidth - 1;
 
+            // Background Rendering
+            //Program.SpectroBg.Step += Program.SpectroBg.Speed;
+            //if (Program.MyEffectStep >= cWidth1) { Program.MyEffectStep = 1; };
+            Program.SpectroBg.StepIncrement(cWidth1);
 
-            #region Background Rendering
-            switch (Program.MyBackgroundMode) 
-            {
-                case "Solid Colour":
-                    for (int x = 0; x < cWidth1; x++)
-                    {
-                        for (int y = 0; y < 7; y++)
-                        {
-                            this.red = (byte)(Program.MyBgRed);
-                            this.grn = (byte)(Program.MyBgGreen);
-                            this.blu = (byte)(Program.MyBgBlue);
-
-                            this.SetLed((x + iter) % (int)cWidth2, y, red, grn, blu);
-                        }
-                    }
-                break;
-                case "Rainbow":
-                    Program.MyEffectStep += Program.MyEffectSpeed;
-                    if (Program.MyEffectStep >= cWidth1) { Program.MyEffectStep = 1; };
-
-                    for (int x = 0; x < cWidth1; x++)
-                    {
-                        for (int y = 0; y < 7; y++)
-                        {
-                            this.red = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin((x / Program.MyEffectWidth) * 2 * 3.14f) + 1));
-                            this.grn = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin(((x / Program.MyEffectWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                            this.blu = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin(((x / Program.MyEffectWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-
-                            this.SetLed((x + (int)Program.MyEffectStep) % (int)cWidth2, y, red, grn, blu);
-                        }
-                    }
-                break;
-                case "Rainbow Pulse":
-                    for (int x = 0; x < cWidth1; x++)
-                    {
-                        for (int y = 0; y < 7; y++)
-                        {
-                            if (Program.MyEffectStep > 6) {Program.MyEffectStep = 0; };
-
-                            if (Program.MyEffectStep == 0) 
-                            {
-                                PulseRed = CPC;
-                                PulseGrn = CPC;
-                                PulseBlu = CPC;
-                                Program.MyEffectStep = 1;
-                            };
-                            if (Program.MyEffectStep == 1)
-                            {
-                                PulseGrn += (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseGrn > CPC)
-                                {
-                                    PulseGrn = CPC;
-                                    Program.MyEffectStep = 2;
-                                };
-                            };
-                            if (Program.MyEffectStep == 2)
-                            {
-                                PulseRed -= (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseRed < 0)
-                                {
-                                    PulseRed = 0;
-                                    Program.MyEffectStep = 3;
-                                };
-                            };
-                            if (Program.MyEffectStep == 3)
-                            {
-                                PulseBlu += (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseBlu > CPC)
-                                {
-                                    PulseBlu = CPC;
-                                    Program.MyEffectStep = 4;
-                                };
-                            };
-                            if (Program.MyEffectStep == 4)
-                            {
-                                PulseGrn -= (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseGrn < 0)
-                                {
-                                    PulseGrn = 0;
-                                    Program.MyEffectStep = 5;
-                                };
-                            };
-                            if (Program.MyEffectStep == 5)
-                            {
-                                PulseRed += (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseRed > CPC)
-                                {
-                                    PulseRed = CPC;
-                                    Program.MyEffectStep = 6;
-                                };
-                            };
-                            if (Program.MyEffectStep == 6)
-                            {
-                                PulseBlu -= (Program.MyEffectSpeed / (Program.MyCanvasWidth * 7));
-                                if (PulseBlu < 0)
-                                {
-                                    PulseBlu = 0;
-                                    Program.MyEffectStep = 1;
-                                };
-                            }
-
-                            if (CPC == 7)
-                            {
-                                this.red = (byte)(PulseRed / (70 / Program.MyBackgroundBrightness));
-                                this.grn = (byte)(PulseGrn / (70 / Program.MyBackgroundBrightness));
-                                this.blu = (byte)(PulseBlu / (70 / Program.MyBackgroundBrightness));
-                            }
-                            else if (CPC == 255)
-                            {
-                                this.red = (byte)(((PulseRed * (Program.MyBackgroundBrightness / 70)) / 32));
-                                this.grn = (byte)(((PulseGrn * (Program.MyBackgroundBrightness / 70)) / 32));
-                                this.blu = (byte)(((PulseBlu * (Program.MyBackgroundBrightness / 70)) / 32));
-                            }
-
-                            this.SetLed((x + iter) % (int)cWidth2, y, red, grn, blu);
-                        }
-                    }
-                break;
-                case "Rainbow Swipes":
-                    Program.MyEffectStep = Program.MyEffectStep + Program.MyEffectSpeed;
-                    if (Program.MyEffectStep >= Program.MyEffectWidth) { Program.MyEffectStep = 1; };
-                    for (int x = 0; x < cWidth1; x++)
-                    {
-                        for (int y = 0; y < 7; y++)
-                        {
-                            this.red = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin((x + Program.MyEffectStep / Program.MyEffectWidth) * 2 * 3.14f) + 1));
-                            this.grn = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin(((x + Program.MyEffectStep / Program.MyEffectWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                            this.blu = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin(((x + Program.MyEffectStep / Program.MyEffectWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-
-                            this.SetLed((x + iter) % (int)cWidth2, y, red, grn, blu);
-                        }
-                    }
-                break;
-                case "Colour Waves":
-                Program.MyEffectStep = Program.MyEffectStep + Program.MyEffectSpeed;
-                if (Program.MyEffectStep >= Program.MyEffectWidth) { Program.MyEffectStep = 1; };
-                for (int x = 0; x < cWidth1; x++)
-                {
-                    for (int y = 0; y < 7; y++)
-                    {
-                        this.red = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin(((x + Program.MyEffectStep) / Program.MyEffectWidth) * 2 * 3.14f) + 1));
-                        this.grn = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin((((x + Program.MyEffectStep) / Program.MyEffectWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                        this.blu = (byte)((Program.MyBackgroundBrightness / 10) * (Math.Sin((((x + Program.MyEffectStep) / Program.MyEffectWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-
-                        this.SetLed((x + iter) % (int)cWidth2, y, red, grn, blu);
-                    }
-                }
-                break;
-            }
-            #endregion Background Rendering
-
-            // FFT Data to key lights;
-            byte[] compData = CompressFftToKeyboard(fftData, cWidth1);
-
-            Program.MyBarsStep += Program.MyBarsSpeed / 1;
-            if (Program.MyBarsStep >= cWidth1) { Program.MyBarsStep = 1; };
-            byte EffectBarRed = 0;
-            byte EffectBarGreen = 0;
-            byte EffectBarBlue = 0;
-
-#region Foreground Rendering
             for (int i = 0; i < cWidth1; i++)
             {
                 for (int k = 0; k < 7; k++)
                 {
-                    if (Program.MyBarsMode == "Rainbow Right")
-                    {
-                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + 1));
-                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i - Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-                    }
-                    if (Program.MyBarsMode == "Rainbow Left")
-                    {
-                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + 1));
-                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((((i + Program.MyBarsStep) / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-                    }
-                    if (Program.MyBarsMode == "Rainbow Pulse")
-                    {
-                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) + 1));
-                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((Program.MyBarsStep / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-                    }
-                    if (Program.MyBarsMode == "Static Rainbow")
-                    {
-                        EffectBarRed = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin((i / Program.MyBarsWidth) * 2 * 3.14f) + 1));
-                        EffectBarGreen = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) - (6.28f / 3)) + 1));
-                        EffectBarBlue = (byte)((Program.MyBarsBrightness / 10) * (Math.Sin(((i / Program.MyBarsWidth) * 2 * 3.14f) + (6.28f / 3)) + 1));
-                    }
+                    Background = new Effects("Background", Program.SpectroBg.Mode, i, k);
+                    this.SetLed(i, k, Background.Red, Background.Grn, Background.Blu);
+                }
+            }
+
+            // FFT Data to key lights;
+            byte[] compData = CompressFftToKeyboard(fftData, cWidth1);
+
+            // Foreground Rendering
+            //Program.MyBarsStep += Program.MyBarsSpeed;
+            //if (Program.MyBarsStep >= cWidth1) { Program.MyBarsStep = 1; };
+            Program.SpectroBars.StepIncrement(cWidth1);
+
+            for (int i = 0; i < cWidth1; i++)
+            {
+                for (int k = 0; k < 7; k++)
+                {
                     if ((int)compData[i] > ((32 / (1 + (i * .95))) * (7 - k)))
                     //if ((int)compData[i] > (-Math.Log10(i)+2.2) * (7-k))
                     {
-                        if (Program.MyBarsMode == "Solid Colour")
-                        {
-                            this.SetLed(i, k, Program.MyBarsRed, Program.MyBarsGreen, Program.MyBarsBlue);
-                        }
-                        else if (Program.MyBarsMode == "Rainbow Right" ||
-                                 Program.MyBarsMode == "Rainbow Left" || 
-                                 Program.MyBarsMode == "Rainbow Pulse" ||
-                                 Program.MyBarsMode == "Static Rainbow")
-                        {
-                            this.SetLed(i, k, EffectBarRed, EffectBarGreen, EffectBarBlue);
-                        }
-                        else if (Program.MyBarsMode == "Classic Bars")
-                        {
-                            byte LitBright = (byte)(Program.MyBarsBrightness / 10);
-                            if (k == 1 || k == 0) { this.SetLed(i, k, LitBright, 0, 0); }
-                            else if (k == 2) { this.SetLed(i, k, LitBright, LitBright, 0); }
-                            else { this.SetLed(i, k, 0, LitBright, 0); };
-                        }
+                        Foreground = new Effects("SpectroForeground", Program.SpectroBars.Mode, i, k);
+                        this.SetLed(i, k, Foreground.Red, Foreground.Grn, Foreground.Blu);
                     }
                 }
             }
-#endregion Foreground Rendering
 
             UpdateKeyboard();
-            if (Program.MyShowGraphics == true) WriteGraphics();
+            if (Program.SpectroShowGraphics == true) WriteGraphics();
         }
 
         private byte[] CompressFftToKeyboard(byte[] fftData, int kWidth)
@@ -800,7 +618,7 @@ namespace RGBKeyboardSpectrograph
                     UpdateStatusMessage.ShowStatusMessage(3, "Packet " + p + " Failed");
                     WritePacketToLog(dataPacket[p], dataPacket[p]);
                 };
-                if (Program.MyUsb3Mode == true) { Thread.Sleep(1); };
+                if (Program.SettingsUsb3Mode == true) { Thread.Sleep(1); };
                 Program.ThreadStatus = 1;
             }
         }
@@ -844,17 +662,17 @@ namespace RGBKeyboardSpectrograph
                 {
                     if (this.ledMatrix[r, c] == 255)
                     {
-                        Program.MyGraphicRender.SetPixel(c, r, Color.Black);
+                        Program.SpectroGraphicRender.SetPixel(c, r, Color.Black);
                     }
                     else
                     {
-                        Program.MyGraphicRender.SetPixel(c, r, Color.FromArgb((7 - this.redValues[drawMatrix[r, c]]) * 32,
+                        Program.SpectroGraphicRender.SetPixel(c, r, Color.FromArgb((7 - this.redValues[drawMatrix[r, c]]) * 32,
                                                       (7 - this.greenValues[drawMatrix[r, c]]) * 32,
                                                       (7 - this.blueValues[drawMatrix[r, c]]) * 32));
                     }
                 }
             }
-            UpdateGraphicOutput.GraphicOutput(Program.MyGraphicRender);
+            UpdateGraphicOutput.GraphicOutput(Program.SpectroGraphicRender);
         }
     }
 }

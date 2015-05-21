@@ -26,7 +26,7 @@
         */
         #region Windows Form Designer generated code
 
-        /// <summary>^
+        /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
@@ -42,17 +42,16 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLight = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.KeyboardModelComboBox = new System.Windows.Forms.ComboBox();
-            this.KeyboardLayoutComboBox = new System.Windows.Forms.ComboBox();
-            this.AmplitudeUD = new System.Windows.Forms.NumericUpDown();
-            this.lblAmplitude = new System.Windows.Forms.Label();
-            this.lblRainbowBrightness = new System.Windows.Forms.Label();
-            this.BackgroundBrightnessUD = new System.Windows.Forms.NumericUpDown();
-            this.TestModeButton = new System.Windows.Forms.Button();
-            this.TesterUD = new System.Windows.Forms.NumericUpDown();
-            this.StatusLog = new System.Windows.Forms.RichTextBox();
-            this.LogLevelUD = new System.Windows.Forms.NumericUpDown();
-            this.LogLevelLabel = new System.Windows.Forms.Label();
+            this.SettingsKeyboardModelCB = new System.Windows.Forms.ComboBox();
+            this.SettingsKeyboardLayoutCB = new System.Windows.Forms.ComboBox();
+            this.SpectroAmplitudeUD = new System.Windows.Forms.NumericUpDown();
+            this.SpectroAmplitudeLabel = new System.Windows.Forms.Label();
+            this.SpectroBgBrightnessUD = new System.Windows.Forms.NumericUpDown();
+            this.DebugTestModeButton = new System.Windows.Forms.Button();
+            this.DebugTesterUD = new System.Windows.Forms.NumericUpDown();
+            this.DebugStatusLog = new System.Windows.Forms.RichTextBox();
+            this.DebugLogLevelUD = new System.Windows.Forms.NumericUpDown();
+            this.DebugLogLevelLabel = new System.Windows.Forms.Label();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,53 +60,68 @@
             this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmQuit = new System.Windows.Forms.ToolStripMenuItem();
-            this.MinimizeToTrayCheck = new System.Windows.Forms.CheckBox();
+            this.SettingsMinimizeToTrayCheck = new System.Windows.Forms.CheckBox();
             this.StatusTimer = new System.Windows.Forms.Timer(this.components);
-            this.RefreshDelayLabel = new System.Windows.Forms.Label();
-            this.RefreshDelayUD = new System.Windows.Forms.NumericUpDown();
-            this.LaunchCueCheck = new System.Windows.Forms.CheckBox();
-            this.colorBars = new System.Windows.Forms.Button();
-            this.BackgroundEffectComboBox = new System.Windows.Forms.ComboBox();
-            this.colorBackground = new System.Windows.Forms.Button();
+            this.SpectroRefreshDelayLabel = new System.Windows.Forms.Label();
+            this.SpectroRefreshDelayUD = new System.Windows.Forms.NumericUpDown();
+            this.SettingsLaunchCueCheck = new System.Windows.Forms.CheckBox();
+            this.SpectroColorBars = new System.Windows.Forms.Button();
+            this.SpectroBgEffectCB = new System.Windows.Forms.ComboBox();
+            this.SpectroColorBg = new System.Windows.Forms.Button();
             this.GraphicsPictureBox = new System.Windows.Forms.PictureBox();
-            this.USB3ModeCheck = new System.Windows.Forms.CheckBox();
-            this.ShowGraphicsCheck = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.EffectWidth = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.EffectSpeed = new System.Windows.Forms.NumericUpDown();
-            this.ShowSettings = new System.Windows.Forms.Button();
-            this.ShowDebug = new System.Windows.Forms.Button();
-            this.StartMinimizedCheck = new System.Windows.Forms.CheckBox();
-            this.EffectsOnStartCheck = new System.Windows.Forms.CheckBox();
-            this.comboWasapiDevices = new System.Windows.Forms.ComboBox();
-            this.radioButtonWasapiLoopback = new System.Windows.Forms.RadioButton();
-            this.radioButtonWasapi = new System.Windows.Forms.RadioButton();
-            this.BarEffectComboBox = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.BarBrightnessUD = new System.Windows.Forms.NumericUpDown();
-            this.BarSpeed = new System.Windows.Forms.NumericUpDown();
-            this.BarWidth = new System.Windows.Forms.NumericUpDown();
-            this.GetUpdateButton = new System.Windows.Forms.Button();
-            this.RestoreLightingCheck = new System.Windows.Forms.CheckBox();
+            this.SettingsUSB3ModeCheck = new System.Windows.Forms.CheckBox();
+            this.SpectroShowGraphicsCheck = new System.Windows.Forms.CheckBox();
+            this.SpectroWidthLabel = new System.Windows.Forms.Label();
+            this.SpectroBgWidth = new System.Windows.Forms.NumericUpDown();
+            this.SpectroSpeedLabel = new System.Windows.Forms.Label();
+            this.SpectroBgSpeed = new System.Windows.Forms.NumericUpDown();
+            this.SettingsStartMinimizedCheck = new System.Windows.Forms.CheckBox();
+            this.SettingsEffectsOnStartCheck = new System.Windows.Forms.CheckBox();
+            this.SpectroWasapiDevicesCB = new System.Windows.Forms.ComboBox();
+            this.SpectroWasapiLoopbackRadio = new System.Windows.Forms.RadioButton();
+            this.SpectroWasapiRadio = new System.Windows.Forms.RadioButton();
+            this.SpectroBarEffectCB = new System.Windows.Forms.ComboBox();
+            this.SpectroBrightnessLabel = new System.Windows.Forms.Label();
+            this.SpectroBarBrightnessUD = new System.Windows.Forms.NumericUpDown();
+            this.SpectroBarSpeed = new System.Windows.Forms.NumericUpDown();
+            this.SpectroBarWidth = new System.Windows.Forms.NumericUpDown();
+            this.SettingsGetUpdateButton = new System.Windows.Forms.Button();
+            this.SettingsRestoreLightingCheck = new System.Windows.Forms.CheckBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabSpectro = new System.Windows.Forms.TabPage();
+            this.tabEffects = new System.Windows.Forms.TabPage();
+            this.EffectRandomRadio = new System.Windows.Forms.RadioButton();
+            this.tabStatic = new System.Windows.Forms.TabPage();
+            this.KeyboardImageBox = new System.Windows.Forms.PictureBox();
+            this.StaticGetKeyboardImage = new System.Windows.Forms.Button();
+            this.tabSettings = new System.Windows.Forms.TabPage();
+            this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
+            this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
+            this.SettingsCuePathLabel = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TesterUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DebugTesterUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DebugLogLevelUD)).BeginInit();
             this.RightClickMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RefreshDelayUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroRefreshDelayUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EffectWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EffectSpeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarBrightnessUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarSpeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarBrightnessUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarWidth)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabSpectro.SuspendLayout();
+            this.tabEffects.SuspendLayout();
+            this.tabStatic.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KeyboardImageBox)).BeginInit();
+            this.tabSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // StartSpectrographButton
             // 
-            this.StartSpectrographButton.Location = new System.Drawing.Point(12, 282);
+            this.StartSpectrographButton.Location = new System.Drawing.Point(15, 275);
             this.StartSpectrographButton.Name = "StartSpectrographButton";
             this.StartSpectrographButton.Size = new System.Drawing.Size(87, 23);
             this.StartSpectrographButton.TabIndex = 0;
@@ -117,7 +131,7 @@
             // 
             // StopSpectrographButton
             // 
-            this.StopSpectrographButton.Location = new System.Drawing.Point(198, 282);
+            this.StopSpectrographButton.Location = new System.Drawing.Point(191, 275);
             this.StopSpectrographButton.Name = "StopSpectrographButton";
             this.StopSpectrographButton.Size = new System.Drawing.Size(87, 23);
             this.StopSpectrographButton.TabIndex = 1;
@@ -130,9 +144,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLight,
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 440);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 387);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(663, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(728, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -148,145 +162,136 @@
             this.StatusLabel.Size = new System.Drawing.Size(67, 17);
             this.StatusLabel.Text = "StatusLabel";
             // 
-            // KeyboardModelComboBox
+            // SettingsKeyboardModelCB
             // 
-            this.KeyboardModelComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.KeyboardModelComboBox.FormattingEnabled = true;
-            this.KeyboardModelComboBox.Location = new System.Drawing.Point(12, 12);
-            this.KeyboardModelComboBox.Name = "KeyboardModelComboBox";
-            this.KeyboardModelComboBox.Size = new System.Drawing.Size(130, 21);
-            this.KeyboardModelComboBox.TabIndex = 4;
-            this.KeyboardModelComboBox.SelectedIndexChanged += new System.EventHandler(this.KeyboardModelComboBox_SelectedIndexChanged);
+            this.SettingsKeyboardModelCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SettingsKeyboardModelCB.FormattingEnabled = true;
+            this.SettingsKeyboardModelCB.Location = new System.Drawing.Point(13, 13);
+            this.SettingsKeyboardModelCB.Name = "SettingsKeyboardModelCB";
+            this.SettingsKeyboardModelCB.Size = new System.Drawing.Size(130, 21);
+            this.SettingsKeyboardModelCB.TabIndex = 4;
+            this.SettingsKeyboardModelCB.SelectedIndexChanged += new System.EventHandler(this.SettingsKeyboardModelCB_SelectedIndexChanged);
             // 
-            // KeyboardLayoutComboBox
+            // SettingsKeyboardLayoutCB
             // 
-            this.KeyboardLayoutComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.KeyboardLayoutComboBox.FormattingEnabled = true;
-            this.KeyboardLayoutComboBox.Location = new System.Drawing.Point(155, 12);
-            this.KeyboardLayoutComboBox.Name = "KeyboardLayoutComboBox";
-            this.KeyboardLayoutComboBox.Size = new System.Drawing.Size(130, 21);
-            this.KeyboardLayoutComboBox.TabIndex = 6;
-            this.KeyboardLayoutComboBox.SelectedIndexChanged += new System.EventHandler(this.KeyboardLayoutComboBox_SelectedIndexChanged);
+            this.SettingsKeyboardLayoutCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SettingsKeyboardLayoutCB.FormattingEnabled = true;
+            this.SettingsKeyboardLayoutCB.Location = new System.Drawing.Point(13, 40);
+            this.SettingsKeyboardLayoutCB.Name = "SettingsKeyboardLayoutCB";
+            this.SettingsKeyboardLayoutCB.Size = new System.Drawing.Size(130, 21);
+            this.SettingsKeyboardLayoutCB.TabIndex = 6;
+            this.SettingsKeyboardLayoutCB.SelectedIndexChanged += new System.EventHandler(this.SettingsKeyboardLayoutCB_SelectedIndexChanged);
             // 
-            // AmplitudeUD
+            // SpectroAmplitudeUD
             // 
-            this.AmplitudeUD.Location = new System.Drawing.Point(238, 57);
-            this.AmplitudeUD.Minimum = new decimal(new int[] {
+            this.SpectroAmplitudeUD.Location = new System.Drawing.Point(231, 249);
+            this.SpectroAmplitudeUD.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.AmplitudeUD.Name = "AmplitudeUD";
-            this.AmplitudeUD.Size = new System.Drawing.Size(47, 20);
-            this.AmplitudeUD.TabIndex = 8;
-            this.AmplitudeUD.Value = new decimal(new int[] {
+            this.SpectroAmplitudeUD.Name = "SpectroAmplitudeUD";
+            this.SpectroAmplitudeUD.Size = new System.Drawing.Size(47, 20);
+            this.SpectroAmplitudeUD.TabIndex = 8;
+            this.SpectroAmplitudeUD.Value = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.AmplitudeUD.ValueChanged += new System.EventHandler(this.AmplitudeUD_ValueChanged);
+            this.SpectroAmplitudeUD.ValueChanged += new System.EventHandler(this.SpectroAmplitudeUD_ValueChanged);
             // 
-            // lblAmplitude
+            // SpectroAmplitudeLabel
             // 
-            this.lblAmplitude.AutoSize = true;
-            this.lblAmplitude.Location = new System.Drawing.Point(175, 59);
-            this.lblAmplitude.Name = "lblAmplitude";
-            this.lblAmplitude.Size = new System.Drawing.Size(57, 13);
-            this.lblAmplitude.TabIndex = 9;
-            this.lblAmplitude.Text = "Sensitivity:";
+            this.SpectroAmplitudeLabel.AutoSize = true;
+            this.SpectroAmplitudeLabel.Location = new System.Drawing.Point(168, 251);
+            this.SpectroAmplitudeLabel.Name = "SpectroAmplitudeLabel";
+            this.SpectroAmplitudeLabel.Size = new System.Drawing.Size(57, 13);
+            this.SpectroAmplitudeLabel.TabIndex = 9;
+            this.SpectroAmplitudeLabel.Text = "Sensitivity:";
             // 
-            // lblRainbowBrightness
+            // SpectroBgBrightnessUD
             // 
-            this.lblRainbowBrightness.AutoSize = true;
-            this.lblRainbowBrightness.Location = new System.Drawing.Point(12, 85);
-            this.lblRainbowBrightness.Name = "lblRainbowBrightness";
-            this.lblRainbowBrightness.Size = new System.Drawing.Size(77, 13);
-            this.lblRainbowBrightness.TabIndex = 19;
-            this.lblRainbowBrightness.Text = "BG Brightness:";
-            // 
-            // BackgroundBrightnessUD
-            // 
-            this.BackgroundBrightnessUD.Location = new System.Drawing.Point(95, 83);
-            this.BackgroundBrightnessUD.Maximum = new decimal(new int[] {
+            this.SpectroBgBrightnessUD.Location = new System.Drawing.Point(294, 26);
+            this.SpectroBgBrightnessUD.Maximum = new decimal(new int[] {
             70,
             0,
             0,
             0});
-            this.BackgroundBrightnessUD.Name = "BackgroundBrightnessUD";
-            this.BackgroundBrightnessUD.Size = new System.Drawing.Size(47, 20);
-            this.BackgroundBrightnessUD.TabIndex = 18;
-            this.BackgroundBrightnessUD.Value = new decimal(new int[] {
+            this.SpectroBgBrightnessUD.Name = "SpectroBgBrightnessUD";
+            this.SpectroBgBrightnessUD.Size = new System.Drawing.Size(47, 20);
+            this.SpectroBgBrightnessUD.TabIndex = 18;
+            this.SpectroBgBrightnessUD.Value = new decimal(new int[] {
             15,
             0,
             0,
             0});
-            this.BackgroundBrightnessUD.ValueChanged += new System.EventHandler(this.BackgroundBrightnessUD_ValueChanged);
+            this.SpectroBgBrightnessUD.ValueChanged += new System.EventHandler(this.SpectroBackgroundBrightnessUD_ValueChanged);
             // 
-            // TestModeButton
+            // DebugTestModeButton
             // 
-            this.TestModeButton.Location = new System.Drawing.Point(300, 282);
-            this.TestModeButton.Name = "TestModeButton";
-            this.TestModeButton.Size = new System.Drawing.Size(87, 23);
-            this.TestModeButton.TabIndex = 20;
-            this.TestModeButton.Text = "Test Mode";
-            this.TestModeButton.UseVisualStyleBackColor = true;
-            this.TestModeButton.Click += new System.EventHandler(this.TestModeButton_Click);
+            this.DebugTestModeButton.Location = new System.Drawing.Point(424, 309);
+            this.DebugTestModeButton.Name = "DebugTestModeButton";
+            this.DebugTestModeButton.Size = new System.Drawing.Size(87, 23);
+            this.DebugTestModeButton.TabIndex = 20;
+            this.DebugTestModeButton.Text = "Test Mode";
+            this.DebugTestModeButton.UseVisualStyleBackColor = true;
+            this.DebugTestModeButton.Click += new System.EventHandler(this.DebugTestModeButton_Click);
             // 
-            // TesterUD
+            // DebugTesterUD
             // 
-            this.TesterUD.Location = new System.Drawing.Point(393, 285);
-            this.TesterUD.Maximum = new decimal(new int[] {
+            this.DebugTesterUD.Location = new System.Drawing.Point(517, 312);
+            this.DebugTesterUD.Maximum = new decimal(new int[] {
             143,
             0,
             0,
             0});
-            this.TesterUD.Name = "TesterUD";
-            this.TesterUD.Size = new System.Drawing.Size(47, 20);
-            this.TesterUD.TabIndex = 21;
-            this.TesterUD.ValueChanged += new System.EventHandler(this.TesterUD_ValueChanged);
+            this.DebugTesterUD.Name = "DebugTesterUD";
+            this.DebugTesterUD.Size = new System.Drawing.Size(47, 20);
+            this.DebugTesterUD.TabIndex = 21;
+            this.DebugTesterUD.ValueChanged += new System.EventHandler(this.DebugTesterUD_ValueChanged);
             // 
-            // StatusLog
+            // DebugStatusLog
             // 
-            this.StatusLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.StatusLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLog.HideSelection = false;
-            this.StatusLog.Location = new System.Drawing.Point(300, 12);
-            this.StatusLog.Name = "StatusLog";
-            this.StatusLog.Size = new System.Drawing.Size(356, 264);
-            this.StatusLog.TabIndex = 22;
-            this.StatusLog.Text = "";
+            this.DebugStatusLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.DebugStatusLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DebugStatusLog.HideSelection = false;
+            this.DebugStatusLog.Location = new System.Drawing.Point(424, 44);
+            this.DebugStatusLog.Name = "DebugStatusLog";
+            this.DebugStatusLog.Size = new System.Drawing.Size(278, 259);
+            this.DebugStatusLog.TabIndex = 22;
+            this.DebugStatusLog.Text = "";
             // 
-            // LogLevelUD
+            // DebugLogLevelUD
             // 
-            this.LogLevelUD.Location = new System.Drawing.Point(526, 285);
-            this.LogLevelUD.Maximum = new decimal(new int[] {
+            this.DebugLogLevelUD.Location = new System.Drawing.Point(655, 312);
+            this.DebugLogLevelUD.Maximum = new decimal(new int[] {
             6,
             0,
             0,
             0});
-            this.LogLevelUD.Minimum = new decimal(new int[] {
+            this.DebugLogLevelUD.Minimum = new decimal(new int[] {
             3,
             0,
             0,
             0});
-            this.LogLevelUD.Name = "LogLevelUD";
-            this.LogLevelUD.Size = new System.Drawing.Size(47, 20);
-            this.LogLevelUD.TabIndex = 23;
-            this.LogLevelUD.Value = new decimal(new int[] {
+            this.DebugLogLevelUD.Name = "DebugLogLevelUD";
+            this.DebugLogLevelUD.Size = new System.Drawing.Size(47, 20);
+            this.DebugLogLevelUD.TabIndex = 23;
+            this.DebugLogLevelUD.Value = new decimal(new int[] {
             3,
             0,
             0,
             0});
-            this.LogLevelUD.ValueChanged += new System.EventHandler(this.VerbosityUD_ValueChanged);
+            this.DebugLogLevelUD.ValueChanged += new System.EventHandler(this.DebugVerbosityUD_ValueChanged);
             // 
-            // LogLevelLabel
+            // DebugLogLevelLabel
             // 
-            this.LogLevelLabel.AutoSize = true;
-            this.LogLevelLabel.Location = new System.Drawing.Point(463, 287);
-            this.LogLevelLabel.Name = "LogLevelLabel";
-            this.LogLevelLabel.Size = new System.Drawing.Size(57, 13);
-            this.LogLevelLabel.TabIndex = 24;
-            this.LogLevelLabel.Text = "Log Level:";
+            this.DebugLogLevelLabel.AutoSize = true;
+            this.DebugLogLevelLabel.Location = new System.Drawing.Point(592, 314);
+            this.DebugLogLevelLabel.Name = "DebugLogLevelLabel";
+            this.DebugLogLevelLabel.Size = new System.Drawing.Size(57, 13);
+            this.DebugLogLevelLabel.TabIndex = 24;
+            this.DebugLogLevelLabel.Text = "Log Level:";
             // 
             // notifyIcon
             // 
@@ -351,426 +356,516 @@
             this.tsmQuit.Text = "Quit";
             this.tsmQuit.Click += new System.EventHandler(this.tsmQuit_Click);
             // 
-            // MinimizeToTrayCheck
+            // SettingsMinimizeToTrayCheck
             // 
-            this.MinimizeToTrayCheck.AutoSize = true;
-            this.MinimizeToTrayCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.MinimizeToTrayCheck.Location = new System.Drawing.Point(146, 338);
-            this.MinimizeToTrayCheck.Name = "MinimizeToTrayCheck";
-            this.MinimizeToTrayCheck.Size = new System.Drawing.Size(139, 17);
-            this.MinimizeToTrayCheck.TabIndex = 25;
-            this.MinimizeToTrayCheck.Text = "Minimize to System Tray";
-            this.MinimizeToTrayCheck.UseVisualStyleBackColor = true;
+            this.SettingsMinimizeToTrayCheck.AutoSize = true;
+            this.SettingsMinimizeToTrayCheck.Location = new System.Drawing.Point(13, 76);
+            this.SettingsMinimizeToTrayCheck.Name = "SettingsMinimizeToTrayCheck";
+            this.SettingsMinimizeToTrayCheck.Size = new System.Drawing.Size(139, 17);
+            this.SettingsMinimizeToTrayCheck.TabIndex = 25;
+            this.SettingsMinimizeToTrayCheck.Text = "Minimize to System Tray";
+            this.SettingsMinimizeToTrayCheck.UseVisualStyleBackColor = true;
             // 
             // StatusTimer
             // 
             this.StatusTimer.Tick += new System.EventHandler(this.StatusTimer_Tick);
             // 
-            // RefreshDelayLabel
+            // SpectroRefreshDelayLabel
             // 
-            this.RefreshDelayLabel.AutoSize = true;
-            this.RefreshDelayLabel.Location = new System.Drawing.Point(12, 59);
-            this.RefreshDelayLabel.Name = "RefreshDelayLabel";
-            this.RefreshDelayLabel.Size = new System.Drawing.Size(77, 13);
-            this.RefreshDelayLabel.TabIndex = 27;
-            this.RefreshDelayLabel.Text = "Refresh Delay:";
+            this.SpectroRefreshDelayLabel.AutoSize = true;
+            this.SpectroRefreshDelayLabel.Location = new System.Drawing.Point(12, 251);
+            this.SpectroRefreshDelayLabel.Name = "SpectroRefreshDelayLabel";
+            this.SpectroRefreshDelayLabel.Size = new System.Drawing.Size(77, 13);
+            this.SpectroRefreshDelayLabel.TabIndex = 27;
+            this.SpectroRefreshDelayLabel.Text = "Refresh Delay:";
             // 
-            // RefreshDelayUD
+            // SpectroRefreshDelayUD
             // 
-            this.RefreshDelayUD.Location = new System.Drawing.Point(95, 57);
-            this.RefreshDelayUD.Maximum = new decimal(new int[] {
+            this.SpectroRefreshDelayUD.Location = new System.Drawing.Point(95, 249);
+            this.SpectroRefreshDelayUD.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.RefreshDelayUD.Name = "RefreshDelayUD";
-            this.RefreshDelayUD.Size = new System.Drawing.Size(47, 20);
-            this.RefreshDelayUD.TabIndex = 26;
-            this.RefreshDelayUD.Value = new decimal(new int[] {
+            this.SpectroRefreshDelayUD.Name = "SpectroRefreshDelayUD";
+            this.SpectroRefreshDelayUD.Size = new System.Drawing.Size(47, 20);
+            this.SpectroRefreshDelayUD.TabIndex = 26;
+            this.SpectroRefreshDelayUD.Value = new decimal(new int[] {
             20,
             0,
             0,
             0});
-            this.RefreshDelayUD.ValueChanged += new System.EventHandler(this.RefreshDelayUD_ValueChanged);
+            this.SpectroRefreshDelayUD.ValueChanged += new System.EventHandler(this.SpectroRefreshDelayUD_ValueChanged);
             // 
-            // LaunchCueCheck
+            // SettingsLaunchCueCheck
             // 
-            this.LaunchCueCheck.AutoSize = true;
-            this.LaunchCueCheck.Location = new System.Drawing.Point(12, 338);
-            this.LaunchCueCheck.Name = "LaunchCueCheck";
-            this.LaunchCueCheck.Size = new System.Drawing.Size(122, 17);
-            this.LaunchCueCheck.TabIndex = 28;
-            this.LaunchCueCheck.Text = "Launch CUE on Exit";
-            this.LaunchCueCheck.UseVisualStyleBackColor = true;
+            this.SettingsLaunchCueCheck.AutoSize = true;
+            this.SettingsLaunchCueCheck.Location = new System.Drawing.Point(13, 154);
+            this.SettingsLaunchCueCheck.Name = "SettingsLaunchCueCheck";
+            this.SettingsLaunchCueCheck.Size = new System.Drawing.Size(122, 17);
+            this.SettingsLaunchCueCheck.TabIndex = 28;
+            this.SettingsLaunchCueCheck.Text = "Launch CUE on Exit";
+            this.SettingsLaunchCueCheck.UseVisualStyleBackColor = true;
+            this.SettingsLaunchCueCheck.CheckedChanged += new System.EventHandler(this.SettingsLaunchCueCheck_CheckedChanged);
             // 
-            // colorBars
+            // SpectroColorBars
             // 
-            this.colorBars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.colorBars.Location = new System.Drawing.Point(130, 155);
-            this.colorBars.Name = "colorBars";
-            this.colorBars.Size = new System.Drawing.Size(55, 23);
-            this.colorBars.TabIndex = 29;
-            this.colorBars.Text = "Bars";
-            this.colorBars.UseVisualStyleBackColor = true;
-            this.colorBars.Click += new System.EventHandler(this.colorBars_Click);
+            this.SpectroColorBars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SpectroColorBars.Location = new System.Drawing.Point(133, 52);
+            this.SpectroColorBars.Name = "SpectroColorBars";
+            this.SpectroColorBars.Size = new System.Drawing.Size(55, 23);
+            this.SpectroColorBars.TabIndex = 29;
+            this.SpectroColorBars.Text = "Bars";
+            this.SpectroColorBars.UseVisualStyleBackColor = true;
+            this.SpectroColorBars.Click += new System.EventHandler(this.SpectroColorBars_Click);
             // 
-            // BackgroundEffectComboBox
+            // SpectroBgEffectCB
             // 
-            this.BackgroundEffectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.BackgroundEffectComboBox.FormattingEnabled = true;
-            this.BackgroundEffectComboBox.Location = new System.Drawing.Point(12, 128);
-            this.BackgroundEffectComboBox.Name = "BackgroundEffectComboBox";
-            this.BackgroundEffectComboBox.Size = new System.Drawing.Size(112, 21);
-            this.BackgroundEffectComboBox.TabIndex = 30;
-            this.BackgroundEffectComboBox.SelectedIndexChanged += new System.EventHandler(this.BackgroundEffectComboBox_SelectedIndexChanged);
+            this.SpectroBgEffectCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpectroBgEffectCB.FormattingEnabled = true;
+            this.SpectroBgEffectCB.Location = new System.Drawing.Point(15, 25);
+            this.SpectroBgEffectCB.Name = "SpectroBgEffectCB";
+            this.SpectroBgEffectCB.Size = new System.Drawing.Size(112, 21);
+            this.SpectroBgEffectCB.TabIndex = 30;
+            this.SpectroBgEffectCB.SelectedIndexChanged += new System.EventHandler(this.SpectroBackgroundEffectCB_SelectedIndexChanged);
             // 
-            // colorBackground
+            // SpectroColorBg
             // 
-            this.colorBackground.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.colorBackground.Location = new System.Drawing.Point(130, 126);
-            this.colorBackground.Name = "colorBackground";
-            this.colorBackground.Size = new System.Drawing.Size(55, 23);
-            this.colorBackground.TabIndex = 31;
-            this.colorBackground.Text = "BG";
-            this.colorBackground.UseVisualStyleBackColor = true;
-            this.colorBackground.Click += new System.EventHandler(this.colorBackground_Click);
+            this.SpectroColorBg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SpectroColorBg.Location = new System.Drawing.Point(133, 23);
+            this.SpectroColorBg.Name = "SpectroColorBg";
+            this.SpectroColorBg.Size = new System.Drawing.Size(55, 23);
+            this.SpectroColorBg.TabIndex = 31;
+            this.SpectroColorBg.Text = "BG";
+            this.SpectroColorBg.UseVisualStyleBackColor = true;
+            this.SpectroColorBg.Click += new System.EventHandler(this.SpectroColorBackground_Click);
             // 
             // GraphicsPictureBox
             // 
-            this.GraphicsPictureBox.Location = new System.Drawing.Point(12, 184);
+            this.GraphicsPictureBox.Location = new System.Drawing.Point(15, 81);
             this.GraphicsPictureBox.Name = "GraphicsPictureBox";
             this.GraphicsPictureBox.Size = new System.Drawing.Size(165, 68);
             this.GraphicsPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.GraphicsPictureBox.TabIndex = 32;
             this.GraphicsPictureBox.TabStop = false;
             // 
-            // USB3ModeCheck
+            // SettingsUSB3ModeCheck
             // 
-            this.USB3ModeCheck.AutoSize = true;
-            this.USB3ModeCheck.Location = new System.Drawing.Point(12, 384);
-            this.USB3ModeCheck.Name = "USB3ModeCheck";
-            this.USB3ModeCheck.Size = new System.Drawing.Size(66, 17);
-            this.USB3ModeCheck.TabIndex = 33;
-            this.USB3ModeCheck.Text = "USB 3.0";
-            this.USB3ModeCheck.UseVisualStyleBackColor = true;
-            this.USB3ModeCheck.CheckedChanged += new System.EventHandler(this.USB3Mode_CheckedChanged);
+            this.SettingsUSB3ModeCheck.AutoSize = true;
+            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(13, 209);
+            this.SettingsUSB3ModeCheck.Name = "SettingsUSB3ModeCheck";
+            this.SettingsUSB3ModeCheck.Size = new System.Drawing.Size(66, 17);
+            this.SettingsUSB3ModeCheck.TabIndex = 33;
+            this.SettingsUSB3ModeCheck.Text = "USB 3.0";
+            this.SettingsUSB3ModeCheck.UseVisualStyleBackColor = true;
+            this.SettingsUSB3ModeCheck.CheckedChanged += new System.EventHandler(this.SettingsUSB3Mode_CheckedChanged);
             // 
-            // ShowGraphicsCheck
+            // SpectroShowGraphicsCheck
             // 
-            this.ShowGraphicsCheck.AutoSize = true;
-            this.ShowGraphicsCheck.Location = new System.Drawing.Point(12, 259);
-            this.ShowGraphicsCheck.Name = "ShowGraphicsCheck";
-            this.ShowGraphicsCheck.Size = new System.Drawing.Size(136, 17);
-            this.ShowGraphicsCheck.TabIndex = 34;
-            this.ShowGraphicsCheck.Text = "Show Graphical Output";
-            this.ShowGraphicsCheck.UseVisualStyleBackColor = true;
-            this.ShowGraphicsCheck.CheckedChanged += new System.EventHandler(this.ShowGraphicsCheck_CheckedChanged);
+            this.SpectroShowGraphicsCheck.AutoSize = true;
+            this.SpectroShowGraphicsCheck.Location = new System.Drawing.Point(15, 156);
+            this.SpectroShowGraphicsCheck.Name = "SpectroShowGraphicsCheck";
+            this.SpectroShowGraphicsCheck.Size = new System.Drawing.Size(136, 17);
+            this.SpectroShowGraphicsCheck.TabIndex = 34;
+            this.SpectroShowGraphicsCheck.Text = "Show Graphical Output";
+            this.SpectroShowGraphicsCheck.UseVisualStyleBackColor = true;
+            this.SpectroShowGraphicsCheck.CheckedChanged += new System.EventHandler(this.SpectroShowGraphicsCheck_CheckedChanged);
             // 
-            // label1
+            // SpectroWidthLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(195, 113);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 35;
-            this.label1.Text = "Width";
+            this.SpectroWidthLabel.AutoSize = true;
+            this.SpectroWidthLabel.Location = new System.Drawing.Point(194, 10);
+            this.SpectroWidthLabel.Name = "SpectroWidthLabel";
+            this.SpectroWidthLabel.Size = new System.Drawing.Size(35, 13);
+            this.SpectroWidthLabel.TabIndex = 35;
+            this.SpectroWidthLabel.Text = "Width";
             // 
-            // EffectWidth
+            // SpectroBgWidth
             // 
-            this.EffectWidth.Location = new System.Drawing.Point(191, 129);
-            this.EffectWidth.Maximum = new decimal(new int[] {
+            this.SpectroBgWidth.Location = new System.Drawing.Point(194, 26);
+            this.SpectroBgWidth.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.EffectWidth.Minimum = new decimal(new int[] {
+            this.SpectroBgWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.EffectWidth.Name = "EffectWidth";
-            this.EffectWidth.Size = new System.Drawing.Size(47, 20);
-            this.EffectWidth.TabIndex = 36;
-            this.EffectWidth.Value = new decimal(new int[] {
+            this.SpectroBgWidth.Name = "SpectroBgWidth";
+            this.SpectroBgWidth.Size = new System.Drawing.Size(47, 20);
+            this.SpectroBgWidth.TabIndex = 36;
+            this.SpectroBgWidth.Value = new decimal(new int[] {
             104,
             0,
             0,
             0});
-            this.EffectWidth.ValueChanged += new System.EventHandler(this.EffectWidth_ValueChanged);
+            this.SpectroBgWidth.ValueChanged += new System.EventHandler(this.SpectroEffectWidth_ValueChanged);
             // 
-            // label2
+            // SpectroSpeedLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(247, 113);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
-            this.label2.TabIndex = 38;
-            this.label2.Text = "Speed";
+            this.SpectroSpeedLabel.AutoSize = true;
+            this.SpectroSpeedLabel.Location = new System.Drawing.Point(244, 10);
+            this.SpectroSpeedLabel.Name = "SpectroSpeedLabel";
+            this.SpectroSpeedLabel.Size = new System.Drawing.Size(38, 13);
+            this.SpectroSpeedLabel.TabIndex = 38;
+            this.SpectroSpeedLabel.Text = "Speed";
             // 
-            // EffectSpeed
+            // SpectroBgSpeed
             // 
-            this.EffectSpeed.DecimalPlaces = 1;
-            this.EffectSpeed.Increment = new decimal(new int[] {
+            this.SpectroBgSpeed.DecimalPlaces = 1;
+            this.SpectroBgSpeed.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.EffectSpeed.Location = new System.Drawing.Point(244, 129);
-            this.EffectSpeed.Maximum = new decimal(new int[] {
+            this.SpectroBgSpeed.Location = new System.Drawing.Point(247, 26);
+            this.SpectroBgSpeed.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.EffectSpeed.Minimum = new decimal(new int[] {
+            this.SpectroBgSpeed.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.EffectSpeed.Name = "EffectSpeed";
-            this.EffectSpeed.Size = new System.Drawing.Size(41, 20);
-            this.EffectSpeed.TabIndex = 37;
-            this.EffectSpeed.Value = new decimal(new int[] {
+            this.SpectroBgSpeed.Name = "SpectroBgSpeed";
+            this.SpectroBgSpeed.Size = new System.Drawing.Size(41, 20);
+            this.SpectroBgSpeed.TabIndex = 37;
+            this.SpectroBgSpeed.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.EffectSpeed.ValueChanged += new System.EventHandler(this.EffectSpeed_ValueChanged);
+            this.SpectroBgSpeed.ValueChanged += new System.EventHandler(this.SpectroEffectSpeed_ValueChanged);
             // 
-            // ShowSettings
+            // SettingsStartMinimizedCheck
             // 
-            this.ShowSettings.Location = new System.Drawing.Point(198, 229);
-            this.ShowSettings.Name = "ShowSettings";
-            this.ShowSettings.Size = new System.Drawing.Size(87, 23);
-            this.ShowSettings.TabIndex = 39;
-            this.ShowSettings.Text = "Settings";
-            this.ShowSettings.UseVisualStyleBackColor = true;
-            this.ShowSettings.Click += new System.EventHandler(this.ShowSettings_Click);
+            this.SettingsStartMinimizedCheck.AutoSize = true;
+            this.SettingsStartMinimizedCheck.Location = new System.Drawing.Point(13, 99);
+            this.SettingsStartMinimizedCheck.Name = "SettingsStartMinimizedCheck";
+            this.SettingsStartMinimizedCheck.Size = new System.Drawing.Size(97, 17);
+            this.SettingsStartMinimizedCheck.TabIndex = 41;
+            this.SettingsStartMinimizedCheck.Text = "Start Minimized";
+            this.SettingsStartMinimizedCheck.UseVisualStyleBackColor = true;
             // 
-            // ShowDebug
+            // SettingsEffectsOnStartCheck
             // 
-            this.ShowDebug.Location = new System.Drawing.Point(198, 200);
-            this.ShowDebug.Name = "ShowDebug";
-            this.ShowDebug.Size = new System.Drawing.Size(87, 23);
-            this.ShowDebug.TabIndex = 40;
-            this.ShowDebug.Text = "Debug";
-            this.ShowDebug.UseVisualStyleBackColor = true;
-            this.ShowDebug.Click += new System.EventHandler(this.ShowDebug_Click);
+            this.SettingsEffectsOnStartCheck.AutoSize = true;
+            this.SettingsEffectsOnStartCheck.Location = new System.Drawing.Point(13, 122);
+            this.SettingsEffectsOnStartCheck.Name = "SettingsEffectsOnStartCheck";
+            this.SettingsEffectsOnStartCheck.Size = new System.Drawing.Size(99, 17);
+            this.SettingsEffectsOnStartCheck.TabIndex = 42;
+            this.SettingsEffectsOnStartCheck.Text = "Effects on Start";
+            this.SettingsEffectsOnStartCheck.UseVisualStyleBackColor = true;
             // 
-            // StartMinimizedCheck
+            // SpectroWasapiDevicesCB
             // 
-            this.StartMinimizedCheck.AutoSize = true;
-            this.StartMinimizedCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.StartMinimizedCheck.Location = new System.Drawing.Point(188, 361);
-            this.StartMinimizedCheck.Name = "StartMinimizedCheck";
-            this.StartMinimizedCheck.Size = new System.Drawing.Size(97, 17);
-            this.StartMinimizedCheck.TabIndex = 41;
-            this.StartMinimizedCheck.Text = "Start Minimized";
-            this.StartMinimizedCheck.UseVisualStyleBackColor = true;
+            this.SpectroWasapiDevicesCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpectroWasapiDevicesCB.FormattingEnabled = true;
+            this.SpectroWasapiDevicesCB.Location = new System.Drawing.Point(70, 212);
+            this.SpectroWasapiDevicesCB.Name = "SpectroWasapiDevicesCB";
+            this.SpectroWasapiDevicesCB.Size = new System.Drawing.Size(208, 21);
+            this.SpectroWasapiDevicesCB.TabIndex = 45;
+            this.SpectroWasapiDevicesCB.SelectedIndexChanged += new System.EventHandler(this.SpectroWasapiDevicesCB_SelectedIndexChanged);
             // 
-            // EffectsOnStartCheck
+            // SpectroWasapiLoopbackRadio
             // 
-            this.EffectsOnStartCheck.AutoSize = true;
-            this.EffectsOnStartCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.EffectsOnStartCheck.Location = new System.Drawing.Point(186, 384);
-            this.EffectsOnStartCheck.Name = "EffectsOnStartCheck";
-            this.EffectsOnStartCheck.Size = new System.Drawing.Size(99, 17);
-            this.EffectsOnStartCheck.TabIndex = 42;
-            this.EffectsOnStartCheck.Text = "Effects on Start";
-            this.EffectsOnStartCheck.UseVisualStyleBackColor = true;
+            this.SpectroWasapiLoopbackRadio.AutoSize = true;
+            this.SpectroWasapiLoopbackRadio.Checked = true;
+            this.SpectroWasapiLoopbackRadio.Location = new System.Drawing.Point(15, 190);
+            this.SpectroWasapiLoopbackRadio.Name = "SpectroWasapiLoopbackRadio";
+            this.SpectroWasapiLoopbackRadio.Size = new System.Drawing.Size(57, 17);
+            this.SpectroWasapiLoopbackRadio.TabIndex = 43;
+            this.SpectroWasapiLoopbackRadio.TabStop = true;
+            this.SpectroWasapiLoopbackRadio.Text = "Output";
+            this.SpectroWasapiLoopbackRadio.UseVisualStyleBackColor = true;
+            this.SpectroWasapiLoopbackRadio.CheckedChanged += new System.EventHandler(this.SpectroWasapiLoopbackRadio_CheckedChanged);
             // 
-            // comboWasapiDevices
+            // SpectroWasapiRadio
             // 
-            this.comboWasapiDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboWasapiDevices.FormattingEnabled = true;
-            this.comboWasapiDevices.Location = new System.Drawing.Point(130, 407);
-            this.comboWasapiDevices.Name = "comboWasapiDevices";
-            this.comboWasapiDevices.Size = new System.Drawing.Size(155, 21);
-            this.comboWasapiDevices.TabIndex = 45;
-            this.comboWasapiDevices.SelectedIndexChanged += new System.EventHandler(this.comboWasapiDevices_SelectedIndexChanged);
+            this.SpectroWasapiRadio.AutoSize = true;
+            this.SpectroWasapiRadio.Location = new System.Drawing.Point(15, 213);
+            this.SpectroWasapiRadio.Name = "SpectroWasapiRadio";
+            this.SpectroWasapiRadio.Size = new System.Drawing.Size(49, 17);
+            this.SpectroWasapiRadio.TabIndex = 44;
+            this.SpectroWasapiRadio.Text = "Input";
+            this.SpectroWasapiRadio.UseVisualStyleBackColor = true;
+            this.SpectroWasapiRadio.CheckedChanged += new System.EventHandler(this.SpectroWasapiRadio_CheckedChanged);
             // 
-            // radioButtonWasapiLoopback
+            // SpectroBarEffectCB
             // 
-            this.radioButtonWasapiLoopback.AutoSize = true;
-            this.radioButtonWasapiLoopback.Checked = true;
-            this.radioButtonWasapiLoopback.Location = new System.Drawing.Point(12, 408);
-            this.radioButtonWasapiLoopback.Name = "radioButtonWasapiLoopback";
-            this.radioButtonWasapiLoopback.Size = new System.Drawing.Size(57, 17);
-            this.radioButtonWasapiLoopback.TabIndex = 43;
-            this.radioButtonWasapiLoopback.TabStop = true;
-            this.radioButtonWasapiLoopback.Text = "Output";
-            this.radioButtonWasapiLoopback.UseVisualStyleBackColor = true;
-            this.radioButtonWasapiLoopback.CheckedChanged += new System.EventHandler(this.radioButtonWasapiLoopback_CheckedChanged);
+            this.SpectroBarEffectCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpectroBarEffectCB.FormattingEnabled = true;
+            this.SpectroBarEffectCB.Location = new System.Drawing.Point(15, 54);
+            this.SpectroBarEffectCB.Name = "SpectroBarEffectCB";
+            this.SpectroBarEffectCB.Size = new System.Drawing.Size(112, 21);
+            this.SpectroBarEffectCB.TabIndex = 46;
+            this.SpectroBarEffectCB.SelectedIndexChanged += new System.EventHandler(this.SpectroBarEffectCB_SelectedIndexChanged);
             // 
-            // radioButtonWasapi
+            // SpectroBrightnessLabel
             // 
-            this.radioButtonWasapi.AutoSize = true;
-            this.radioButtonWasapi.Location = new System.Drawing.Point(75, 408);
-            this.radioButtonWasapi.Name = "radioButtonWasapi";
-            this.radioButtonWasapi.Size = new System.Drawing.Size(49, 17);
-            this.radioButtonWasapi.TabIndex = 44;
-            this.radioButtonWasapi.Text = "Input";
-            this.radioButtonWasapi.UseVisualStyleBackColor = true;
-            this.radioButtonWasapi.CheckedChanged += new System.EventHandler(this.radioButtonWasapi_CheckedChanged);
+            this.SpectroBrightnessLabel.AutoSize = true;
+            this.SpectroBrightnessLabel.Location = new System.Drawing.Point(293, 10);
+            this.SpectroBrightnessLabel.Name = "SpectroBrightnessLabel";
+            this.SpectroBrightnessLabel.Size = new System.Drawing.Size(56, 13);
+            this.SpectroBrightnessLabel.TabIndex = 48;
+            this.SpectroBrightnessLabel.Text = "Brightness";
             // 
-            // BarEffectComboBox
+            // SpectroBarBrightnessUD
             // 
-            this.BarEffectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.BarEffectComboBox.FormattingEnabled = true;
-            this.BarEffectComboBox.Location = new System.Drawing.Point(12, 157);
-            this.BarEffectComboBox.Name = "BarEffectComboBox";
-            this.BarEffectComboBox.Size = new System.Drawing.Size(112, 21);
-            this.BarEffectComboBox.TabIndex = 46;
-            this.BarEffectComboBox.SelectedIndexChanged += new System.EventHandler(this.BarEffectComboBox_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 85);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(78, 13);
-            this.label3.TabIndex = 48;
-            this.label3.Text = "Bar Brightness:";
-            // 
-            // BarBrightnessUD
-            // 
-            this.BarBrightnessUD.Location = new System.Drawing.Point(238, 83);
-            this.BarBrightnessUD.Maximum = new decimal(new int[] {
+            this.SpectroBarBrightnessUD.Location = new System.Drawing.Point(294, 55);
+            this.SpectroBarBrightnessUD.Maximum = new decimal(new int[] {
             70,
             0,
             0,
             0});
-            this.BarBrightnessUD.Name = "BarBrightnessUD";
-            this.BarBrightnessUD.Size = new System.Drawing.Size(47, 20);
-            this.BarBrightnessUD.TabIndex = 47;
-            this.BarBrightnessUD.Value = new decimal(new int[] {
+            this.SpectroBarBrightnessUD.Name = "SpectroBarBrightnessUD";
+            this.SpectroBarBrightnessUD.Size = new System.Drawing.Size(47, 20);
+            this.SpectroBarBrightnessUD.TabIndex = 47;
+            this.SpectroBarBrightnessUD.Value = new decimal(new int[] {
             15,
             0,
             0,
             0});
-            this.BarBrightnessUD.ValueChanged += new System.EventHandler(this.BarBrightnessUD_ValueChanged);
+            this.SpectroBarBrightnessUD.ValueChanged += new System.EventHandler(this.SpectroBarBrightnessUD_ValueChanged);
             // 
-            // BarSpeed
+            // SpectroBarSpeed
             // 
-            this.BarSpeed.DecimalPlaces = 1;
-            this.BarSpeed.Increment = new decimal(new int[] {
+            this.SpectroBarSpeed.DecimalPlaces = 1;
+            this.SpectroBarSpeed.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.BarSpeed.Location = new System.Drawing.Point(244, 158);
-            this.BarSpeed.Maximum = new decimal(new int[] {
+            this.SpectroBarSpeed.Location = new System.Drawing.Point(247, 55);
+            this.SpectroBarSpeed.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.BarSpeed.Minimum = new decimal(new int[] {
+            this.SpectroBarSpeed.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.BarSpeed.Name = "BarSpeed";
-            this.BarSpeed.Size = new System.Drawing.Size(41, 20);
-            this.BarSpeed.TabIndex = 50;
-            this.BarSpeed.Value = new decimal(new int[] {
+            this.SpectroBarSpeed.Name = "SpectroBarSpeed";
+            this.SpectroBarSpeed.Size = new System.Drawing.Size(41, 20);
+            this.SpectroBarSpeed.TabIndex = 50;
+            this.SpectroBarSpeed.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.BarSpeed.ValueChanged += new System.EventHandler(this.BarSpeed_ValueChanged);
+            this.SpectroBarSpeed.ValueChanged += new System.EventHandler(this.SpectroBarSpeed_ValueChanged);
             // 
-            // BarWidth
+            // SpectroBarWidth
             // 
-            this.BarWidth.Location = new System.Drawing.Point(191, 158);
-            this.BarWidth.Maximum = new decimal(new int[] {
+            this.SpectroBarWidth.Location = new System.Drawing.Point(194, 55);
+            this.SpectroBarWidth.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.BarWidth.Minimum = new decimal(new int[] {
+            this.SpectroBarWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.BarWidth.Name = "BarWidth";
-            this.BarWidth.Size = new System.Drawing.Size(47, 20);
-            this.BarWidth.TabIndex = 49;
-            this.BarWidth.Value = new decimal(new int[] {
+            this.SpectroBarWidth.Name = "SpectroBarWidth";
+            this.SpectroBarWidth.Size = new System.Drawing.Size(47, 20);
+            this.SpectroBarWidth.TabIndex = 49;
+            this.SpectroBarWidth.Value = new decimal(new int[] {
             104,
             0,
             0,
             0});
-            this.BarWidth.ValueChanged += new System.EventHandler(this.BarWidth_ValueChanged);
+            this.SpectroBarWidth.ValueChanged += new System.EventHandler(this.SpectroBarWidth_ValueChanged);
             // 
-            // GetUpdateButton
+            // SettingsGetUpdateButton
             // 
-            this.GetUpdateButton.Location = new System.Drawing.Point(105, 282);
-            this.GetUpdateButton.Name = "GetUpdateButton";
-            this.GetUpdateButton.Size = new System.Drawing.Size(87, 23);
-            this.GetUpdateButton.TabIndex = 51;
-            this.GetUpdateButton.Text = "Get Update";
-            this.GetUpdateButton.UseVisualStyleBackColor = true;
-            this.GetUpdateButton.Visible = false;
-            this.GetUpdateButton.Click += new System.EventHandler(this.GetUpdateButton_Click);
+            this.SettingsGetUpdateButton.Location = new System.Drawing.Point(13, 248);
+            this.SettingsGetUpdateButton.Name = "SettingsGetUpdateButton";
+            this.SettingsGetUpdateButton.Size = new System.Drawing.Size(87, 23);
+            this.SettingsGetUpdateButton.TabIndex = 51;
+            this.SettingsGetUpdateButton.Text = "Get Update";
+            this.SettingsGetUpdateButton.UseVisualStyleBackColor = true;
+            this.SettingsGetUpdateButton.Visible = false;
+            this.SettingsGetUpdateButton.Click += new System.EventHandler(this.SettingsGetUpdateButton_Click);
             // 
-            // RestoreLightingCheck
+            // SettingsRestoreLightingCheck
             // 
-            this.RestoreLightingCheck.AutoSize = true;
-            this.RestoreLightingCheck.Location = new System.Drawing.Point(12, 361);
-            this.RestoreLightingCheck.Name = "RestoreLightingCheck";
-            this.RestoreLightingCheck.Size = new System.Drawing.Size(138, 17);
-            this.RestoreLightingCheck.TabIndex = 52;
-            this.RestoreLightingCheck.Text = "Restore Lighting on Exit";
-            this.RestoreLightingCheck.UseVisualStyleBackColor = true;
-            this.RestoreLightingCheck.CheckedChanged += new System.EventHandler(this.RestoreLightingCheck_CheckedChanged);
+            this.SettingsRestoreLightingCheck.AutoSize = true;
+            this.SettingsRestoreLightingCheck.Location = new System.Drawing.Point(13, 177);
+            this.SettingsRestoreLightingCheck.Name = "SettingsRestoreLightingCheck";
+            this.SettingsRestoreLightingCheck.Size = new System.Drawing.Size(138, 17);
+            this.SettingsRestoreLightingCheck.TabIndex = 52;
+            this.SettingsRestoreLightingCheck.Text = "Restore Lighting on Exit";
+            this.SettingsRestoreLightingCheck.UseVisualStyleBackColor = true;
+            this.SettingsRestoreLightingCheck.CheckedChanged += new System.EventHandler(this.SettingsRestoreLightingCheck_CheckedChanged);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabSpectro);
+            this.tabControl1.Controls.Add(this.tabEffects);
+            this.tabControl1.Controls.Add(this.tabStatic);
+            this.tabControl1.Controls.Add(this.tabSettings);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(704, 365);
+            this.tabControl1.TabIndex = 53;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // tabSpectro
+            // 
+            this.tabSpectro.Controls.Add(this.SpectroWasapiDevicesCB);
+            this.tabSpectro.Controls.Add(this.StartSpectrographButton);
+            this.tabSpectro.Controls.Add(this.StopSpectrographButton);
+            this.tabSpectro.Controls.Add(this.SpectroAmplitudeUD);
+            this.tabSpectro.Controls.Add(this.SpectroWasapiLoopbackRadio);
+            this.tabSpectro.Controls.Add(this.SpectroWasapiRadio);
+            this.tabSpectro.Controls.Add(this.SpectroAmplitudeLabel);
+            this.tabSpectro.Controls.Add(this.SpectroBarSpeed);
+            this.tabSpectro.Controls.Add(this.SpectroBgBrightnessUD);
+            this.tabSpectro.Controls.Add(this.SpectroBarWidth);
+            this.tabSpectro.Controls.Add(this.SpectroBrightnessLabel);
+            this.tabSpectro.Controls.Add(this.SpectroRefreshDelayUD);
+            this.tabSpectro.Controls.Add(this.SpectroBarBrightnessUD);
+            this.tabSpectro.Controls.Add(this.SpectroRefreshDelayLabel);
+            this.tabSpectro.Controls.Add(this.SpectroBarEffectCB);
+            this.tabSpectro.Controls.Add(this.SpectroColorBars);
+            this.tabSpectro.Controls.Add(this.SpectroBgEffectCB);
+            this.tabSpectro.Controls.Add(this.SpectroColorBg);
+            this.tabSpectro.Controls.Add(this.GraphicsPictureBox);
+            this.tabSpectro.Controls.Add(this.SpectroShowGraphicsCheck);
+            this.tabSpectro.Controls.Add(this.SpectroWidthLabel);
+            this.tabSpectro.Controls.Add(this.SpectroBgWidth);
+            this.tabSpectro.Controls.Add(this.SpectroBgSpeed);
+            this.tabSpectro.Controls.Add(this.SpectroSpeedLabel);
+            this.tabSpectro.Location = new System.Drawing.Point(4, 22);
+            this.tabSpectro.Name = "tabSpectro";
+            this.tabSpectro.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSpectro.Size = new System.Drawing.Size(696, 339);
+            this.tabSpectro.TabIndex = 0;
+            this.tabSpectro.Text = "Spectro";
+            this.tabSpectro.UseVisualStyleBackColor = true;
+            // 
+            // tabEffects
+            // 
+            this.tabEffects.Controls.Add(this.EffectRandomRadio);
+            this.tabEffects.Location = new System.Drawing.Point(4, 22);
+            this.tabEffects.Name = "tabEffects";
+            this.tabEffects.Size = new System.Drawing.Size(696, 339);
+            this.tabEffects.TabIndex = 3;
+            this.tabEffects.Text = "Effects";
+            this.tabEffects.UseVisualStyleBackColor = true;
+            // 
+            // EffectRandomRadio
+            // 
+            this.EffectRandomRadio.AutoSize = true;
+            this.EffectRandomRadio.Checked = true;
+            this.EffectRandomRadio.Location = new System.Drawing.Point(12, 15);
+            this.EffectRandomRadio.Name = "EffectRandomRadio";
+            this.EffectRandomRadio.Size = new System.Drawing.Size(126, 17);
+            this.EffectRandomRadio.TabIndex = 0;
+            this.EffectRandomRadio.TabStop = true;
+            this.EffectRandomRadio.Text = "Light up random keys";
+            this.EffectRandomRadio.UseVisualStyleBackColor = true;
+            // 
+            // tabStatic
+            // 
+            this.tabStatic.Controls.Add(this.KeyboardImageBox);
+            this.tabStatic.Controls.Add(this.StaticGetKeyboardImage);
+            this.tabStatic.Location = new System.Drawing.Point(4, 22);
+            this.tabStatic.Name = "tabStatic";
+            this.tabStatic.Size = new System.Drawing.Size(696, 339);
+            this.tabStatic.TabIndex = 4;
+            this.tabStatic.Text = "Static Keys";
+            this.tabStatic.UseVisualStyleBackColor = true;
+            // 
+            // KeyboardImageBox
+            // 
+            this.KeyboardImageBox.Location = new System.Drawing.Point(15, 13);
+            this.KeyboardImageBox.Name = "KeyboardImageBox";
+            this.KeyboardImageBox.Size = new System.Drawing.Size(660, 222);
+            this.KeyboardImageBox.TabIndex = 2;
+            this.KeyboardImageBox.TabStop = false;
+            this.KeyboardImageBox.Click += new System.EventHandler(this.KeyboardImageBox_Click);
+            // 
+            // StaticGetKeyboardImage
+            // 
+            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(15, 241);
+            this.StaticGetKeyboardImage.Name = "StaticGetKeyboardImage";
+            this.StaticGetKeyboardImage.Size = new System.Drawing.Size(75, 23);
+            this.StaticGetKeyboardImage.TabIndex = 1;
+            this.StaticGetKeyboardImage.Text = "Get Image";
+            this.StaticGetKeyboardImage.UseVisualStyleBackColor = true;
+            this.StaticGetKeyboardImage.Click += new System.EventHandler(this.StaticGetKeyboardImage_Click);
+            // 
+            // tabSettings
+            // 
+            this.tabSettings.Controls.Add(this.SettingsBrowseCuePathButton);
+            this.tabSettings.Controls.Add(this.SettingsCuePathTextBox);
+            this.tabSettings.Controls.Add(this.SettingsCuePathLabel);
+            this.tabSettings.Controls.Add(this.SettingsMinimizeToTrayCheck);
+            this.tabSettings.Controls.Add(this.SettingsKeyboardLayoutCB);
+            this.tabSettings.Controls.Add(this.SettingsGetUpdateButton);
+            this.tabSettings.Controls.Add(this.SettingsRestoreLightingCheck);
+            this.tabSettings.Controls.Add(this.SettingsKeyboardModelCB);
+            this.tabSettings.Controls.Add(this.SettingsLaunchCueCheck);
+            this.tabSettings.Controls.Add(this.SettingsUSB3ModeCheck);
+            this.tabSettings.Controls.Add(this.SettingsStartMinimizedCheck);
+            this.tabSettings.Controls.Add(this.SettingsEffectsOnStartCheck);
+            this.tabSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabSettings.Name = "tabSettings";
+            this.tabSettings.Size = new System.Drawing.Size(696, 339);
+            this.tabSettings.TabIndex = 2;
+            this.tabSettings.Text = "Settings";
+            this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // SettingsBrowseCuePathButton
+            // 
+            this.SettingsBrowseCuePathButton.Location = new System.Drawing.Point(13, 305);
+            this.SettingsBrowseCuePathButton.Name = "SettingsBrowseCuePathButton";
+            this.SettingsBrowseCuePathButton.Size = new System.Drawing.Size(87, 23);
+            this.SettingsBrowseCuePathButton.TabIndex = 55;
+            this.SettingsBrowseCuePathButton.Text = "Browse";
+            this.SettingsBrowseCuePathButton.UseVisualStyleBackColor = true;
+            this.SettingsBrowseCuePathButton.Click += new System.EventHandler(this.SettingsBrowseCuePathButton_Click);
+            // 
+            // SettingsCuePathTextBox
+            // 
+            this.SettingsCuePathTextBox.Location = new System.Drawing.Point(106, 307);
+            this.SettingsCuePathTextBox.Name = "SettingsCuePathTextBox";
+            this.SettingsCuePathTextBox.Size = new System.Drawing.Size(580, 20);
+            this.SettingsCuePathTextBox.TabIndex = 54;
+            this.SettingsCuePathTextBox.TextChanged += new System.EventHandler(this.SettingsCuePathTextBox_TextChanged);
+            // 
+            // SettingsCuePathLabel
+            // 
+            this.SettingsCuePathLabel.AutoSize = true;
+            this.SettingsCuePathLabel.Location = new System.Drawing.Point(103, 291);
+            this.SettingsCuePathLabel.Name = "SettingsCuePathLabel";
+            this.SettingsCuePathLabel.Size = new System.Drawing.Size(128, 13);
+            this.SettingsCuePathLabel.TabIndex = 53;
+            this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(663, 462);
-            this.Controls.Add(this.RestoreLightingCheck);
-            this.Controls.Add(this.GetUpdateButton);
-            this.Controls.Add(this.BarSpeed);
-            this.Controls.Add(this.BarWidth);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.BarBrightnessUD);
-            this.Controls.Add(this.BarEffectComboBox);
-            this.Controls.Add(this.comboWasapiDevices);
-            this.Controls.Add(this.radioButtonWasapiLoopback);
-            this.Controls.Add(this.radioButtonWasapi);
-            this.Controls.Add(this.EffectsOnStartCheck);
-            this.Controls.Add(this.StartMinimizedCheck);
-            this.Controls.Add(this.ShowDebug);
-            this.Controls.Add(this.ShowSettings);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.EffectSpeed);
-            this.Controls.Add(this.EffectWidth);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.ShowGraphicsCheck);
-            this.Controls.Add(this.USB3ModeCheck);
-            this.Controls.Add(this.GraphicsPictureBox);
-            this.Controls.Add(this.colorBackground);
-            this.Controls.Add(this.BackgroundEffectComboBox);
-            this.Controls.Add(this.colorBars);
-            this.Controls.Add(this.LaunchCueCheck);
-            this.Controls.Add(this.RefreshDelayLabel);
-            this.Controls.Add(this.RefreshDelayUD);
-            this.Controls.Add(this.MinimizeToTrayCheck);
-            this.Controls.Add(this.LogLevelLabel);
-            this.Controls.Add(this.LogLevelUD);
-            this.Controls.Add(this.StatusLog);
-            this.Controls.Add(this.TesterUD);
-            this.Controls.Add(this.TestModeButton);
-            this.Controls.Add(this.lblRainbowBrightness);
-            this.Controls.Add(this.BackgroundBrightnessUD);
-            this.Controls.Add(this.lblAmplitude);
-            this.Controls.Add(this.AmplitudeUD);
-            this.Controls.Add(this.KeyboardLayoutComboBox);
-            this.Controls.Add(this.KeyboardModelComboBox);
+            this.ClientSize = new System.Drawing.Size(728, 409);
+            this.Controls.Add(this.DebugTestModeButton);
+            this.Controls.Add(this.DebugTesterUD);
+            this.Controls.Add(this.DebugStatusLog);
+            this.Controls.Add(this.DebugLogLevelUD);
+            this.Controls.Add(this.DebugLogLevelLabel);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.StopSpectrographButton);
-            this.Controls.Add(this.StartSpectrographButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -780,18 +875,27 @@
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AmplitudeUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BackgroundBrightnessUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TesterUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LogLevelUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DebugTesterUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DebugLogLevelUD)).EndInit();
             this.RightClickMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.RefreshDelayUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroRefreshDelayUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GraphicsPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EffectWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EffectSpeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarBrightnessUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarSpeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BarWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBgSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarBrightnessUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SpectroBarWidth)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabSpectro.ResumeLayout(false);
+            this.tabSpectro.PerformLayout();
+            this.tabEffects.ResumeLayout(false);
+            this.tabEffects.PerformLayout();
+            this.tabStatic.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.KeyboardImageBox)).EndInit();
+            this.tabSettings.ResumeLayout(false);
+            this.tabSettings.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -803,23 +907,22 @@
         private System.Windows.Forms.Button StopSpectrographButton;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
-        private System.Windows.Forms.ComboBox KeyboardModelComboBox;
-        private System.Windows.Forms.ComboBox KeyboardLayoutComboBox;
-        private System.Windows.Forms.NumericUpDown AmplitudeUD;
-        private System.Windows.Forms.Label lblAmplitude;
-        private System.Windows.Forms.Label lblRainbowBrightness;
-        private System.Windows.Forms.NumericUpDown BackgroundBrightnessUD;
-        private System.Windows.Forms.Button TestModeButton;
-        private System.Windows.Forms.NumericUpDown TesterUD;
-        private System.Windows.Forms.RichTextBox StatusLog;
-        private System.Windows.Forms.NumericUpDown LogLevelUD;
-        private System.Windows.Forms.Label LogLevelLabel;
+        private System.Windows.Forms.ComboBox SettingsKeyboardModelCB;
+        private System.Windows.Forms.ComboBox SettingsKeyboardLayoutCB;
+        private System.Windows.Forms.NumericUpDown SpectroAmplitudeUD;
+        private System.Windows.Forms.Label SpectroAmplitudeLabel;
+        private System.Windows.Forms.NumericUpDown SpectroBgBrightnessUD;
+        private System.Windows.Forms.Button DebugTestModeButton;
+        private System.Windows.Forms.NumericUpDown DebugTesterUD;
+        private System.Windows.Forms.RichTextBox DebugStatusLog;
+        private System.Windows.Forms.NumericUpDown DebugLogLevelUD;
+        private System.Windows.Forms.Label DebugLogLevelLabel;
         private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.CheckBox MinimizeToTrayCheck;
+        private System.Windows.Forms.CheckBox SettingsMinimizeToTrayCheck;
         private System.Windows.Forms.ToolStripStatusLabel StatusLight;
         private System.Windows.Forms.Timer StatusTimer;
-        private System.Windows.Forms.Label RefreshDelayLabel;
-        private System.Windows.Forms.NumericUpDown RefreshDelayUD;
+        private System.Windows.Forms.Label SpectroRefreshDelayLabel;
+        private System.Windows.Forms.NumericUpDown SpectroRefreshDelayUD;
         private System.Windows.Forms.ContextMenuStrip RightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmAbout;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -827,31 +930,40 @@
         private System.Windows.Forms.ToolStripMenuItem tsmStop;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmQuit;
-        private System.Windows.Forms.CheckBox LaunchCueCheck;
-        private System.Windows.Forms.Button colorBars;
-        private System.Windows.Forms.ComboBox BackgroundEffectComboBox;
-        private System.Windows.Forms.Button colorBackground;
+        private System.Windows.Forms.CheckBox SettingsLaunchCueCheck;
+        private System.Windows.Forms.Button SpectroColorBars;
+        private System.Windows.Forms.ComboBox SpectroBgEffectCB;
+        private System.Windows.Forms.Button SpectroColorBg;
         private System.Windows.Forms.PictureBox GraphicsPictureBox;
-        private System.Windows.Forms.CheckBox USB3ModeCheck;
-        private System.Windows.Forms.CheckBox ShowGraphicsCheck;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown EffectWidth;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown EffectSpeed;
-        private System.Windows.Forms.Button ShowSettings;
-        private System.Windows.Forms.Button ShowDebug;
-        private System.Windows.Forms.CheckBox StartMinimizedCheck;
-        private System.Windows.Forms.CheckBox EffectsOnStartCheck;
-        private System.Windows.Forms.ComboBox comboWasapiDevices;
-        private System.Windows.Forms.RadioButton radioButtonWasapiLoopback;
-        private System.Windows.Forms.RadioButton radioButtonWasapi;
-        private System.Windows.Forms.ComboBox BarEffectComboBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown BarBrightnessUD;
-        private System.Windows.Forms.NumericUpDown BarSpeed;
-        private System.Windows.Forms.NumericUpDown BarWidth;
-        private System.Windows.Forms.Button GetUpdateButton;
-        private System.Windows.Forms.CheckBox RestoreLightingCheck;
+        private System.Windows.Forms.CheckBox SettingsUSB3ModeCheck;
+        private System.Windows.Forms.CheckBox SpectroShowGraphicsCheck;
+        private System.Windows.Forms.Label SpectroWidthLabel;
+        private System.Windows.Forms.NumericUpDown SpectroBgWidth;
+        private System.Windows.Forms.Label SpectroSpeedLabel;
+        private System.Windows.Forms.NumericUpDown SpectroBgSpeed;
+        private System.Windows.Forms.CheckBox SettingsStartMinimizedCheck;
+        private System.Windows.Forms.CheckBox SettingsEffectsOnStartCheck;
+        private System.Windows.Forms.ComboBox SpectroWasapiDevicesCB;
+        private System.Windows.Forms.RadioButton SpectroWasapiLoopbackRadio;
+        private System.Windows.Forms.RadioButton SpectroWasapiRadio;
+        private System.Windows.Forms.ComboBox SpectroBarEffectCB;
+        private System.Windows.Forms.Label SpectroBrightnessLabel;
+        private System.Windows.Forms.NumericUpDown SpectroBarBrightnessUD;
+        private System.Windows.Forms.NumericUpDown SpectroBarSpeed;
+        private System.Windows.Forms.NumericUpDown SpectroBarWidth;
+        private System.Windows.Forms.Button SettingsGetUpdateButton;
+        private System.Windows.Forms.CheckBox SettingsRestoreLightingCheck;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabSpectro;
+        private System.Windows.Forms.TabPage tabEffects;
+        private System.Windows.Forms.TabPage tabStatic;
+        private System.Windows.Forms.TabPage tabSettings;
+        private System.Windows.Forms.Label SettingsCuePathLabel;
+        private System.Windows.Forms.Button SettingsBrowseCuePathButton;
+        private System.Windows.Forms.TextBox SettingsCuePathTextBox;
+        private System.Windows.Forms.RadioButton EffectRandomRadio;
+        private System.Windows.Forms.Button StaticGetKeyboardImage;
+        private System.Windows.Forms.PictureBox KeyboardImageBox;
 
     }
 }

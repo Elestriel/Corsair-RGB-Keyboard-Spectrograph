@@ -48,7 +48,6 @@ namespace RGBKeyboardSpectrograph
         {
             if (PerformFFT && FftCalculated != null)
             {
-                //fftBuffer[fftPos].Real = (float)(value * FastFourierTransformation.HammingWindow(fftPos, fftLength));
                 fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
                 fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
@@ -74,7 +73,7 @@ namespace RGBKeyboardSpectrograph
         public Complex[] Result { get; private set; }
     }
 
-    class KBControl
+    class SpectroControl
     {
         private static WasapiCapture capture;
         private static KeyboardWriter keyWriter;
@@ -112,7 +111,7 @@ namespace RGBKeyboardSpectrograph
             for (int index = 0; index < bytesRecorded; index += bufferIncrement)
             {
                 float sample32 = BitConverter.ToSingle(buffer, index);
-                if (sampleAggregator.Add(sample32 * Program.MyAmplitude * 50) == true)
+                if (sampleAggregator.Add(sample32 * Program.SpectroAmplitude * 50) == true)
                 {
                     break;
                 };

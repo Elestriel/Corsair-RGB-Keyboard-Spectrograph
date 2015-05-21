@@ -12,40 +12,29 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.5.3";
+        public static string VersionNumber = "0.6.0pre1";
 
         // Application Variables
-        public static int RunKeyboardThread = 3;
-        public static float MyAmplitude;
-        public static int MyBarsRed;
-        public static int MyBarsGreen;
-        public static int MyBarsBlue;
-        public static int MyBgRed;
-        public static int MyBgGreen;
-        public static int MyBgBlue;
         public static byte[] MyPositionMap;
         public static float[] MySizeMap;
-        public static string MyKeyboardName;
-        public static uint MyKeyboardID;
         public static int MyCanvasWidth;
-        public static bool MyShowGraphics;
-        public static Bitmap MyGraphicRender;
-        public static bool MyUsb3Mode;
-        public static bool MyViewSettings = false;
-        public static bool MyViewDebug = true;
-        public static bool MyRestoreOnExit = false;
+        public static int ColorModeDivisor = 32;
+        public static float ColorsPerChannel = 7;
 
-        public static string MyBackgroundMode;
-        public static float MyEffectWidth = 10f;
-        public static float MyEffectSpeed = 1f;
-        public static float MyEffectStep = 1f;
-        public static float MyBackgroundBrightness;
+        // Spectrograph
+        public static int RunKeyboardThread = 3;
+        public static float SpectroAmplitude;
+        public static bool SpectroShowGraphics;
+        public static Bitmap SpectroGraphicRender;
+        public static EffectSettings SpectroBg = new EffectSettings();
+        public static EffectSettings SpectroBars = new EffectSettings();
 
-        public static string MyBarsMode;
-        public static float MyBarsWidth = 10f;
-        public static float MyBarsSpeed = 1f;
-        public static float MyBarsStep = 1f;
-        public static float MyBarsBrightness;
+        // Settings
+        public static string SettingsKeyboardName;
+        public static uint SettingsKeyboardID;
+        public static bool SettingsUsb3Mode;
+        public static bool SettingsRestoreOnExit = false;
+        public static bool SettingLaunchCueOnExit = false;
 
         public static bool CSCore_FirstStart = true;
         public static bool CSCore_NewDevice = true;
@@ -59,17 +48,11 @@ namespace RGBKeyboardSpectrograph
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
         public static bool DevMode = false;
-        public static int ColorModeDivisor = 32;
-        public static float ColorsPerChannel = 7;
         public static string[] VersionCheckData = new string[4];
 
         // Worker Thread
         public static Thread newWorker = null;
-
-        // NAudio Capture
-//        public static IWaveIn NAudioWaveIn;
-        //public static WaveFileWriter NAudioWriter;
-
+        
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -77,7 +60,7 @@ namespace RGBKeyboardSpectrograph
         static void Main()
         {
             // Catch exceptions within the application a bit nicer
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+//            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
             // Launch the main form
             Application.EnableVisualStyles();
@@ -85,5 +68,60 @@ namespace RGBKeyboardSpectrograph
             Application.Run(new MainForm());
         }
 
+    }
+
+    // Settings Classes
+    public class ColorCollection {
+        public int Red;
+        public int Grn;
+        public int Blu;
+        public void Set(int r, int g, int b)
+        {
+            this.Red = r;
+            this.Grn = g;
+            this.Blu = b;
+        }
+        public void Set(Color c) {
+            this.Red = c.R;
+            this.Grn = c.G;
+            this.Blu = c.B;
+        }
+
+        public void SetD(int r, int g, int b)
+        {
+            this.Red = r / Program.ColorModeDivisor;
+            this.Grn = g / Program.ColorModeDivisor;
+            this.Blu = b / Program.ColorModeDivisor;
+        }
+        public void SetD(Color c)
+        {
+            this.Red = c.R / Program.ColorModeDivisor;
+            this.Grn = c.G / Program.ColorModeDivisor;
+            this.Blu = c.B / Program.ColorModeDivisor;
+        }
+    }
+
+    public class EffectSettings
+    {
+        public ColorCollection Color = new ColorCollection();
+        public string Mode;
+        public float Width;
+        public float Speed;
+        public float Step;
+        public float Brightness;
+
+        public void Set(string Mode, float Width, float Speed, float Step, float Brightness)
+        {
+            this.Mode = Mode;
+            this.Width = Width;
+            this.Speed = Speed;
+            this.Step = Step;
+            this.Brightness = Brightness;
+        }
+        public void StepIncrement(double max) 
+        {
+            this.Step += this.Speed;
+            if (this.Step >= max) { this.Step = 1; };
+        }
     }
 }
