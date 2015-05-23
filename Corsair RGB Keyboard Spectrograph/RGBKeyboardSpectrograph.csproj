@@ -45,11 +45,20 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorPicker">
+      <HintPath>..\..\..\..\References\ColorPicker\ColorPicker.dll</HintPath>
+    </Reference>
+    <Reference Include="ColorPickerControls">
+      <HintPath>..\..\..\..\References\ColorPicker\ColorPickerControls.dll</HintPath>
+    </Reference>
     <Reference Include="CSCore">
       <HintPath>..\..\..\..\References\CSCore\CSCore.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +67,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effects.cs" />

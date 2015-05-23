@@ -17,6 +17,10 @@ using System.Xml.Linq;
 using CSCore;
 using CSCore.CoreAudioAPI;
 
+using ColorPickerControls;
+using ColorPickerControls.Dialogs;
+using System.Xaml;
+
 namespace RGBKeyboardSpectrograph
 {
     public partial class MainForm : Form
@@ -26,6 +30,7 @@ namespace RGBKeyboardSpectrograph
         string[] keyboardPositionMaps;
         string[] keyboardSizeMaps;
         Image keyboardImage;
+        double keyboardImageScale = 0.6;
    
         Thread workerThread = Program.newWorker;
 
@@ -946,19 +951,20 @@ namespace RGBKeyboardSpectrograph
                                       ".jpg";
 
             keyboardImage = Image.FromFile(imagePath);
-            keyboardImage = ScaleImage(keyboardImage, 660, 222);
+            keyboardImage = ScaleImage(keyboardImage, keyboardImageScale);
             KeyboardImageBox.Image = keyboardImage;
             
             XmlToKeyMap xmlToKeyMap = new XmlToKeyMap();
-            KeyData[] keyData = xmlToKeyMap.LoadKeyLocations();
+            KeyData[] keyData = xmlToKeyMap.LoadKeyLocations(SettingsKeyboardModelCB.Text, keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex]);
+            RemoveKeysFromImage();
             DrawKeysOnImage(keyData);
         }
 
         public void DrawKeysOnImage(KeyData[] keyData)
         {
-            double ImageScale = 0.6;
+            double ImageScale = keyboardImageScale;
             int offsetX = 0;
-            int offsetY = 1;
+            int offsetY = 0;
 
             Button[] keyboardButtons = new Button[keyData.Length];
 
@@ -970,18 +976,38 @@ namespace RGBKeyboardSpectrograph
                                                         (int)(keyData[i].Coords[0].Y * ImageScale + offsetY));
                 keyboardButtons[i].Size = new Size((int)(keyData[i].Coords[1].X * ImageScale) - (int)(keyData[i].Coords[0].X * ImageScale),
                                                     (int)(keyData[i].Coords[2].Y * ImageScale) - (int)(keyData[i].Coords[0].Y * ImageScale));
-                keyboardButtons[i].Text = ""; // keyData[i].Name;
+                keyboardButtons[i].Text = "";
                 keyboardButtons[i].FlatStyle = FlatStyle.Flat;
                 keyboardButtons[i].FlatAppearance.BorderColor = Color.White;
                 keyboardButtons[i].FlatAppearance.BorderSize = 0;
                 keyboardButtons[i].Parent = KeyboardImageBox;
                 keyboardButtons[i].BackColor = Color.Transparent;
                 keyboardButtons[i].Tag = keyData[i].KeyID;
+                keyboardButtons[i].Name = "keyboardButtons" + i;
                 KeyboardImageBox.Controls.Add(keyboardButtons[i]);
                 keyboardButtons[i].Click += KeyboardButton_Click;
             }
 
             KeyboardImageBox.SendToBack();
+        }
+
+        public void RemoveKeysFromImage()
+        {
+            Control[] searchButton;
+            for (int i = 0; i < 144; i++)
+            {
+                searchButton = KeyboardImageBox.Controls.Find("keyboardButtons" + i, true);
+
+                if (searchButton.Count() > 0)
+                {
+                    if (KeyboardImageBox.Controls.Contains(searchButton[0]))
+                    {
+                        searchButton[0].Click -= KeyboardButton_Click;
+                        KeyboardImageBox.Controls.Remove(searchButton[0]);
+                        searchButton[0].Dispose();
+                    }
+                }
+            }
         }
 
         public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -997,23 +1023,37 @@ namespace RGBKeyboardSpectrograph
             Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
         }
+        public static Image ScaleImage(Image image, double scaleRatio)
+        {
+            var newWidth = (int)(image.Width * scaleRatio);
+            var newHeight = (int)(image.Height * scaleRatio);
+
+            var newImage = new Bitmap(newWidth, newHeight);
+            Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
+            return newImage;
+        }
 
         public void KeyboardButton_Click(object sender, EventArgs e)
         {
+            // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
             int buttonID = (int)((Button)sender).Tag;
-            Console.WriteLine("Button Pressed: " + buttonID);
+
+            System.Windows.Media.Color selectedMediaColor;
+            Color selectedColor = ((Button)sender).BackColor;
+            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(255, 128, 192); //set the initial color
+            if (dia.ShowDialog() == true)
+            {
+                selectedMediaColor = dia.SelectedColor; //do something with the selected color
+                selectedColor = Color.FromArgb(127, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+            }
+            ((Button)sender).BackColor = selectedColor;
         }
 
         #endregion Buttons
 
         private void KeyboardImageBox_Click(object sender, EventArgs e)
-        {
-            /*
-            MouseEventArgs me = (MouseEventArgs)e;
-            Point coordinates = me.Location;
-
-            Console.WriteLine("X: " + me.Location.X + "   Y: " + me.Location.Y);
-             * */
+        {            
         }
         #endregion Tab: Static Keys
 

@@ -48,7 +48,10 @@ namespace RGBKeyboardSpectrograph
         {
             if (PerformFFT && FftCalculated != null)
             {
-                fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
+                //fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
+                //fftBuffer[fftPos].Real = value * 0.5f * (float)Math.Cos((2 * Math.PI * fftPos) / (fftLength - 1)) * Program.SpectroAmplitude * 100;
+                //fftBuffer[fftPos].Real = (value - .5f) * Program.SpectroAmplitude * 100;
+                fftBuffer[fftPos].Real = fftPos;
                 fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
                 if (fftPos >= fftLength)
@@ -61,6 +64,17 @@ namespace RGBKeyboardSpectrograph
             }
             return false;
         }
+
+        public Complex[] Hann(Complex[] iwv)
+        {
+            int N = iwv.Length;
+
+            for (int n = 0; n < N; n++)
+                iwv[n].Real = 0.5f * (float)Math.Cos((2 * Math.PI * n) / (N - 1));
+
+            return iwv;
+        }
+
     }
 
     public class FftEventArgs : EventArgs
@@ -111,7 +125,7 @@ namespace RGBKeyboardSpectrograph
             for (int index = 0; index < bytesRecorded; index += bufferIncrement)
             {
                 float sample32 = BitConverter.ToSingle(buffer, index);
-                if (sampleAggregator.Add(sample32 * Program.SpectroAmplitude * 50) == true)
+                if (sampleAggregator.Add(sample32) == true)
                 {
                     break;
                 };
@@ -143,8 +157,6 @@ namespace RGBKeyboardSpectrograph
 
             for (int i = 0; i < fftLength; i++)
             {
-                e.Result[i].Real = e.Result[i].Real;
-                e.Result[i].Imaginary = e.Result[i].Imaginary;
                 double fftmag = Math.Sqrt((e.Result[i].Real * e.Result[i].Real) + (e.Result[i].Imaginary * e.Result[i].Imaginary));
                 fftData[i] = (byte)(fftmag);
             }

@@ -11,11 +11,12 @@ namespace RGBKeyboardSpectrograph
 {
     class XmlToKeyMap
     {
-        public KeyData[] LoadKeyLocations()
+        public KeyData[] LoadKeyLocations(string keyboardModel, string KeyboardRegion)
         {
-
-            string xmlPath = Directory.GetCurrentDirectory() + "\\corsair_devices\\" +
-                                        "k95rgb\\k95_na.xml";
+            string kbdModel = GetModelCode(keyboardModel);
+            string kbdRegion = GetRegionCode(KeyboardRegion);
+            string xmlPath = Directory.GetCurrentDirectory() + "\\corsair_devices\\" + 
+                                    kbdModel + "\\" + kbdModel + "_" + kbdRegion + ".xml";
 
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlPath);
@@ -50,6 +51,58 @@ namespace RGBKeyboardSpectrograph
                 k++;
             }
             return keyData;
+        }
+
+        public string GetModelCode(string keyboardModel)
+        {
+            string modelCode = "";
+
+            switch (keyboardModel)
+            {
+                case "K65-RGB":
+                    modelCode = "cgk65rgb";
+                    break;
+                case "K70-RGB":
+                    modelCode = "k70rgb";
+                    break;
+                case "K95-RGB":
+                    modelCode = "k95rgb";
+                    break;
+            }
+            return modelCode;
+        }
+
+        public string GetRegionCode(string KeyboardRegion)
+        {
+            string modelRegion = "";
+
+            switch (KeyboardRegion)
+            {
+                case "cn":
+                case "na":
+                case "tw":
+                    modelRegion = "na";
+                    break;
+                case "be":
+                case "ch":
+                case "de":
+                case "es":
+                case "eu":
+                case "fr":
+                case "it":
+                case "mex":
+                case "nd":
+                case "ru":
+                case "uk":
+                    modelRegion = "uk";
+                    break;
+                case "br":
+                case "jp":
+                case "kr":
+                    modelRegion = KeyboardRegion;
+                    break;
+            }
+            return modelRegion;
         }
     }
 
