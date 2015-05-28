@@ -160,7 +160,7 @@ namespace RGBKeyboardSpectrograph
                 double fftmag = Math.Sqrt((e.Result[i].Real * e.Result[i].Real) + (e.Result[i].Imaginary * e.Result[i].Imaginary));
                 fftData[i] = (byte)(fftmag);
             }
-            keyWriter.Write(1, fftData, CanvasWidth);
+            keyWriter.Write(1, fftData, Program.StaticKeyColorsBytes, CanvasWidth);
             if (Program.LogLevel == 5)
             {
                 UpdateStatusMessage.ShowStatusMessage(10, "Loop Time: " + sw.ElapsedMilliseconds);
@@ -175,7 +175,7 @@ namespace RGBKeyboardSpectrograph
             {
                 keyWriter = new KeyboardWriter();
                 while (Program.RunKeyboardThread == 4) {
-                    keyWriter.Write(-1, null, Program.TestLed);
+                    keyWriter.Write(-1, null, Program.StaticKeyColorsBytes, Program.TestLed);
                     Thread.Sleep(20);
                 }
             }

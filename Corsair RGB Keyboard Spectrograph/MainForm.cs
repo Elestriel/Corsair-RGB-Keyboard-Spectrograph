@@ -101,7 +101,9 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.userUsb3Mode = SettingsUSB3ModeCheck.Checked;
             Properties.Settings.Default.userShowGraphics = SpectroShowGraphicsCheck.Checked;
             Properties.Settings.Default.userStartMinimized = SettingsStartMinimizedCheck.Checked;
+            Properties.Settings.Default.userSpectroOnStart = SettingsSpectroOnStartCheck.Checked;
             Properties.Settings.Default.userEffectsOnStart = SettingsEffectsOnStartCheck.Checked;
+            Properties.Settings.Default.userStaticOnStart = SettingsStaticOnStartCheck.Checked;
             Properties.Settings.Default.userRestoreLighting = SettingsRestoreLightingCheck.Checked;
             Properties.Settings.Default.userLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
 
@@ -115,6 +117,9 @@ namespace RGBKeyboardSpectrograph
             // Capture Settings
             Properties.Settings.Default.userCaptureMode = Program.CSCore_DeviceType;
             Properties.Settings.Default.userCaptureDevice = SpectroWasapiDevicesCB.Text;
+
+            // Profiles
+            Properties.Settings.Default.userLastUsedProfile = Program.SettingsLastUsedProfile;
 
             // Save Settings
             Properties.Settings.Default.Save();
@@ -239,7 +244,9 @@ namespace RGBKeyboardSpectrograph
             SpectroShowGraphicsCheck.Checked = Properties.Settings.Default.userShowGraphics;
             SpectroShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
             SettingsStartMinimizedCheck.Checked = Properties.Settings.Default.userStartMinimized;
+            SettingsSpectroOnStartCheck.Checked = Properties.Settings.Default.userSpectroOnStart;
             SettingsEffectsOnStartCheck.Checked = Properties.Settings.Default.userEffectsOnStart;
+            SettingsStaticOnStartCheck.Checked = Properties.Settings.Default.userStaticOnStart;
             SettingsRestoreLightingCheck.Checked = Properties.Settings.Default.userRestoreLighting;
             SettingsLaunchCueCheck.Checked = Properties.Settings.Default.userLaunchCueOnExit;
 
@@ -275,9 +282,44 @@ namespace RGBKeyboardSpectrograph
             // Automatically minimize
             if (Properties.Settings.Default.userStartMinimized == true) { this.WindowState = FormWindowState.Minimized; };
 
-            // Automatically start effects
-            if (Properties.Settings.Default.userEffectsOnStart == true) { StartSpectrograph_Click(null, null); };
+            // Profiles
+            Program.SettingsLastUsedProfile = Properties.Settings.Default.userLastUsedProfile;
 
+            // Start up automatic tasks if the selected keyboard is valid
+            if (SettingsKeyboardLayoutCB.Text != "" && SettingsKeyboardModelCB.Text != "")
+            {
+                // Automatically start spectro
+                if (Properties.Settings.Default.userSpectroOnStart == true) { StartSpectrograph_Click(null, null); };
+
+                // Automatically start effects
+                if (Properties.Settings.Default.userEffectsOnStart == true) { /* START EFFECTS ROUTINE */ };
+
+                // Load static key map
+                for (int i = 0; i < Program.StaticKeyColors.Length; i++)
+                { Program.StaticKeyColors[i] = Color.Transparent; };
+                StaticGetKeyboardImage_Click(null, null);
+
+                // Automatically apply static keys
+                if (Properties.Settings.Default.userStaticOnStart == true && Program.SettingsLastUsedProfile != "") 
+                {
+                    Color[] keyData = new Color[144];
+                    KeyColors keyColors = new KeyColors();
+                    XmlProfileIO xmlProfileIO = new XmlProfileIO();
+
+                    keyColors = xmlProfileIO.LoadProfile(Program.SettingsLastUsedProfile);
+                    if (keyColors.Success == true)
+                    {
+                        for (int i = 0; i < 144; i++)
+                        {
+                            Program.StaticKeyColors[i] = keyColors.Colors[i];
+                        }
+                        RefreshKeyColors();
+                        SendStaticKeysToKeyboard(true); 
+                    }
+                };
+
+                
+            }
             // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
@@ -407,54 +449,8 @@ namespace RGBKeyboardSpectrograph
                 return false;
             };
 
-            // Load position and size maps
-            string positionMaps = keyboardPositionMaps[SettingsKeyboardLayoutCB.SelectedIndex];
-            string sizeMaps = keyboardSizeMaps[SettingsKeyboardLayoutCB.SelectedIndex];
-
-            // Replace the '.' decimals by whatever the system decimal separator may be, if it's not a period
-            char DecimalSep = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            if (DecimalSep != '.') {
-                positionMaps = positionMaps.Replace('.', DecimalSep);
-                sizeMaps = sizeMaps.Replace('.', DecimalSep);
-            }
-
-            // Verify the loaded maps
-            if (positionMaps.Length > 0 && 
-                sizeMaps.Length > 0) 
-            {
-                bool MapFail = false;
-                try
-                {
-                    Program.MyPositionMap = Array.ConvertAll(positionMaps.Split(';'), byte.Parse);
-                }
-                catch
-                {
-                    var result = MessageBox.Show("Splitting the position map failed.\n\n" + 
-                        "Selected index: " + SettingsKeyboardLayoutCB.SelectedIndex + 
-                        "\nPosition Map:\n[" + positionMaps +"]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    UpdateStatusMessage.ShowStatusMessage(3, "Position Map loading failed.");
-                    MapFail = true;
-                }
-
-                try
-                {
-                    Program.MySizeMap = Array.ConvertAll(sizeMaps.Split(';'), float.Parse);
-                }
-                catch
-                {
-                    var result = MessageBox.Show("Splitting the size maps failed.\n\n" +
-                        "Selected index: " + SettingsKeyboardLayoutCB.SelectedIndex +
-                        "\nSize Map:\n[" + sizeMaps + "]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    UpdateStatusMessage.ShowStatusMessage(3, "Size Map loading failed.");
-                    MapFail = true;
-                }
-                if (MapFail == true) { return false; };
-            }
-            else
-            {
-                UpdateStatusMessage.ShowStatusMessage(3, "The selected layout is empty");
-                return false;
-            }
+            // Load keyboard size and position maps
+            if (LoadSizePositionMaps() == false) { return false; };
 
             int captureType;
             MMDevice captureDevice;
@@ -491,6 +487,60 @@ namespace RGBKeyboardSpectrograph
             // Set Program-wide current keyboard name
             Program.SettingsKeyboardName = SettingsKeyboardModelCB.Text;
             Program.RunKeyboardThread = RunType;
+            return true;
+        }
+
+        private bool LoadSizePositionMaps()
+        {
+            // Load position and size maps
+            string positionMaps = keyboardPositionMaps[SettingsKeyboardLayoutCB.SelectedIndex];
+            string sizeMaps = keyboardSizeMaps[SettingsKeyboardLayoutCB.SelectedIndex];
+
+            // Replace the '.' decimals by whatever the system decimal separator may be, if it's not a period
+            char DecimalSep = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            if (DecimalSep != '.')
+            {
+                positionMaps = positionMaps.Replace('.', DecimalSep);
+                sizeMaps = sizeMaps.Replace('.', DecimalSep);
+            }
+
+            // Verify the loaded maps
+            if (positionMaps.Length > 0 &&
+                sizeMaps.Length > 0)
+            {
+                bool MapFail = false;
+                try
+                {
+                    Program.MyPositionMap = Array.ConvertAll(positionMaps.Split(';'), byte.Parse);
+                }
+                catch
+                {
+                    var result = MessageBox.Show("Splitting the position map failed.\n\n" +
+                        "Selected index: " + SettingsKeyboardLayoutCB.SelectedIndex +
+                        "\nPosition Map:\n[" + positionMaps + "]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    UpdateStatusMessage.ShowStatusMessage(3, "Position Map loading failed.");
+                    MapFail = true;
+                }
+
+                try
+                {
+                    Program.MySizeMap = Array.ConvertAll(sizeMaps.Split(';'), float.Parse);
+                }
+                catch
+                {
+                    var result = MessageBox.Show("Splitting the size maps failed.\n\n" +
+                        "Selected index: " + SettingsKeyboardLayoutCB.SelectedIndex +
+                        "\nSize Map:\n[" + sizeMaps + "]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    UpdateStatusMessage.ShowStatusMessage(3, "Size Map loading failed.");
+                    MapFail = true;
+                }
+                if (MapFail == true) { return false; };
+            }
+            else
+            {
+                UpdateStatusMessage.ShowStatusMessage(3, "The selected layout is empty");
+                return false;
+            }
             return true;
         }
 
@@ -592,7 +642,7 @@ namespace RGBKeyboardSpectrograph
 
         #region Tab: Spectro
 
-        #region Buttons
+        #region [Spectro] Buttons
         private void StartSpectrograph_Click(object sender, EventArgs e)
         {
             if (Program.RunKeyboardThread == 1) { StopSpectrograph(); };
@@ -628,9 +678,9 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion Buttons
+        #endregion [Spectro] Buttons
 
-        #region ListBoxes
+        #region [Spectro] ListBoxes
         private void SpectroBackgroundEffectCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             Program.SpectroBg.Mode = SpectroBgEffectCB.Text;
@@ -758,9 +808,9 @@ namespace RGBKeyboardSpectrograph
 
         }
 
-        #endregion ListBoxes
+        #endregion [Spectro] ListBoxes
 
-        #region UpDowns
+        #region [Spectro] UpDowns
         private void SpectroBackgroundBrightnessUD_ValueChanged(object sender, EventArgs e)
         {
             if (SpectroBgBrightnessUD.Value < 10 && SpectroBgBrightnessUD.Value > 5)
@@ -833,9 +883,9 @@ namespace RGBKeyboardSpectrograph
             Program.SpectroBars.Speed = (float)SpectroBarSpeed.Value;
         }
 
-        #endregion UpDowns
+        #endregion [Spectro] UpDowns
 
-        #region CheckBoxes
+        #region [Spectro] CheckBoxes
         private void SpectroShowGraphicsCheck_CheckedChanged(object sender, EventArgs e)
         {
             Program.SpectroShowGraphics = SpectroShowGraphicsCheck.Checked;
@@ -846,9 +896,9 @@ namespace RGBKeyboardSpectrograph
                 GraphicsPictureBox.Visible = false;
         }
 
-        #endregion CheckBoxes
+        #endregion [Spectro] CheckBoxes
 
-        #region Colours
+        #region [Spectro] Colours
         private void SpectroColorBars_Click(object sender, EventArgs e)
         {
             ColorDialog ColorPicker = new ColorDialog();
@@ -879,9 +929,9 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion Colours
+        #endregion [Spectro] Colours
 
-        #region CSCore
+        #region [Spectro] CSCore
         private void SpectroWasapiLoopbackRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (Program.CSCore_NewDevice == false)
@@ -919,7 +969,7 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion CSCore
+        #endregion [Spectro] CSCore
 
         #endregion Tab: Spectro
 
@@ -929,37 +979,7 @@ namespace RGBKeyboardSpectrograph
 
         #region Tab: Static Keys
 
-        #region Buttons
-        private void StaticGetKeyboardImage_Click(object sender, EventArgs e)
-        {
-            string keyboardDirectoryName = "";
-
-            switch (SettingsKeyboardModelCB.Text)
-            {
-                case "K65-RGB":
-                    keyboardDirectoryName = "cgk65rgb";
-                    break;
-                case "K70-RGB":
-                    keyboardDirectoryName = "k70rgb";
-                    break;
-                case "K95-RGB":
-                    keyboardDirectoryName = "k95rgb";
-                    break;
-            }
-            string imagePath = Directory.GetCurrentDirectory() + "\\corsair_devices\\" +
-                                      keyboardDirectoryName + "\\image\\" + keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex] +
-                                      ".jpg";
-
-            keyboardImage = Image.FromFile(imagePath);
-            keyboardImage = ScaleImage(keyboardImage, keyboardImageScale);
-            KeyboardImageBox.Image = keyboardImage;
-            
-            XmlToKeyMap xmlToKeyMap = new XmlToKeyMap();
-            KeyData[] keyData = xmlToKeyMap.LoadKeyLocations(SettingsKeyboardModelCB.Text, keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex]);
-            RemoveKeysFromImage();
-            DrawKeysOnImage(keyData);
-        }
-
+        #region [Static Keys] Functions
         public void DrawKeysOnImage(KeyData[] keyData)
         {
             double ImageScale = keyboardImageScale;
@@ -968,11 +988,11 @@ namespace RGBKeyboardSpectrograph
 
             Button[] keyboardButtons = new Button[keyData.Length];
 
-            for (int i = 0; i < keyData.Length ; i++)
+            for (int i = 0; i < keyData.Length; i++)
             {
 
                 keyboardButtons[i] = new Button();
-                keyboardButtons[i].Location = new Point((int)(keyData[i].Coords[0].X * ImageScale + offsetX), 
+                keyboardButtons[i].Location = new Point((int)(keyData[i].Coords[0].X * ImageScale + offsetX),
                                                         (int)(keyData[i].Coords[0].Y * ImageScale + offsetY));
                 keyboardButtons[i].Size = new Size((int)(keyData[i].Coords[1].X * ImageScale) - (int)(keyData[i].Coords[0].X * ImageScale),
                                                     (int)(keyData[i].Coords[2].Y * ImageScale) - (int)(keyData[i].Coords[0].Y * ImageScale));
@@ -1010,6 +1030,27 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        private void RefreshKeyColors()
+        {
+            foreach (Control c in KeyboardImageBox.Controls)
+            {
+                c.BackColor = Program.StaticKeyColors[(int)c.Tag];
+            }
+
+            for (int i = 0; i < 144; i++)
+            {
+                Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
+                Program.StaticKeyColorsBytes[i].SetD(Program.StaticKeyColors[i]);
+            }
+        }
+        
+        private void SendStaticKeysToKeyboard(bool UseLastProfile)
+        {
+            if (LoadSizePositionMaps() == false) { return; };
+            KeyboardWriter keyWriter = new KeyboardWriter();
+            keyWriter.Write(Program.StaticKeyColorsBytes, true);
+        }
+
         public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / image.Width;
@@ -1023,6 +1064,7 @@ namespace RGBKeyboardSpectrograph
             Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
         }
+
         public static Image ScaleImage(Image image, double scaleRatio)
         {
             var newWidth = (int)(image.Width * scaleRatio);
@@ -1033,6 +1075,40 @@ namespace RGBKeyboardSpectrograph
             return newImage;
         }
 
+        #endregion [Static Keys] Functions
+
+        #region [Static Keys] Buttons
+
+        private void StaticGetKeyboardImage_Click(object sender, EventArgs e)
+        {
+            string keyboardDirectoryName = "";
+
+            switch (SettingsKeyboardModelCB.Text)
+            {
+                case "K65-RGB":
+                    keyboardDirectoryName = "cgk65rgb";
+                    break;
+                case "K70-RGB":
+                    keyboardDirectoryName = "k70rgb";
+                    break;
+                case "K95-RGB":
+                    keyboardDirectoryName = "k95rgb";
+                    break;
+            }
+            string imagePath = Directory.GetCurrentDirectory() + "\\corsair_devices\\" +
+                                      keyboardDirectoryName + "\\image\\" + keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex] +
+                                      ".jpg";
+
+            keyboardImage = Image.FromFile(imagePath);
+            keyboardImage = ScaleImage(keyboardImage, keyboardImageScale);
+            KeyboardImageBox.Image = keyboardImage;
+            
+            XmlToKeyMap xmlToKeyMap = new XmlToKeyMap();
+            KeyData[] keyData = xmlToKeyMap.LoadKeyLocations(SettingsKeyboardModelCB.Text, keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex]);
+            RemoveKeysFromImage();
+            DrawKeysOnImage(keyData);
+        }
+        
         public void KeyboardButton_Click(object sender, EventArgs e)
         {
             // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
@@ -1041,25 +1117,89 @@ namespace RGBKeyboardSpectrograph
             System.Windows.Media.Color selectedMediaColor;
             Color selectedColor = ((Button)sender).BackColor;
             ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-            dia.InitialColor = System.Windows.Media.Color.FromRgb(255, 128, 192); //set the initial color
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(255, 0, 0); //set the initial color
             if (dia.ShowDialog() == true)
             {
                 selectedMediaColor = dia.SelectedColor; //do something with the selected color
                 selectedColor = Color.FromArgb(127, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
             }
-            ((Button)sender).BackColor = selectedColor;
+            Program.StaticKeyColors[(int)(((Button)sender).Tag)] = selectedColor;
+            RefreshKeyColors();
         }
 
-        #endregion Buttons
+        private void LoadProfileButton_Click(object sender, EventArgs e)
+        {
+            Color[] keyData = new Color[144];
 
-        private void KeyboardImageBox_Click(object sender, EventArgs e)
-        {            
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            ofd.FilterIndex = 1;
+            ofd.Multiselect = false;
+
+            DialogResult ofdResult = ofd.ShowDialog();
+
+            if (ofdResult == DialogResult.OK)
+            {
+                XmlProfileIO xmlProfileIO = new XmlProfileIO();
+                KeyColors keyColors = new KeyColors();
+                string xmlPath = ofd.FileName;
+                keyColors = xmlProfileIO.LoadProfile(xmlPath);
+                if (keyColors.Success == true)
+                {
+                    Program.SettingsLastUsedProfile = ofd.FileName;
+                    for (int i = 0; i < 144; i++)
+                    {
+                        Program.StaticKeyColors[i] = keyColors.Colors[i];
+                    }
+                    RefreshKeyColors();
+                }
+            }
         }
+
+        private void SaveProfileButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            sfd.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            sfd.FilterIndex = 1;
+            sfd.RestoreDirectory = true;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                XmlProfileIO xmlProfileIO = new XmlProfileIO();
+                string xmlFile = sfd.FileName;
+                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, xmlFile);
+                Program.SettingsLastUsedProfile = sfd.FileName;
+            }
+        }
+
+        private void NewProfileButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 144; i++)
+            {
+                Program.StaticKeyColors[i] = Color.Transparent;
+            }
+            RefreshKeyColors();
+        }
+
+        private void DeleteKeys_Click(object sender, EventArgs e)
+        {
+            RemoveKeysFromImage();
+        }
+
+        private void UpdateKeyboardButton_Click(object sender, EventArgs e)
+        {
+            SendStaticKeysToKeyboard(false);
+        }
+
+        #endregion [Static Keys] Buttons
+
         #endregion Tab: Static Keys
 
         #region Tab: Settings
 
-        #region Buttons
+        #region [Settings] Buttons
         private void SettingsGetUpdateButton_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("There is a new version of Keyboard Spectro available.\nWould you like to get it now?",
@@ -1070,9 +1210,24 @@ namespace RGBKeyboardSpectrograph
 
         }
 
-        #endregion Buttons
+        private void SettingsBrowseCuePathButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
 
-        #region ListBoxes
+            openFileDialog.InitialDirectory = "C:\\";
+            openFileDialog.Filter = "CUE (CorsairHID.exe)|CorsairHID.exe|Executable Files (*.exe)|*.exe|All Files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                SettingsCuePathTextBox.Text = openFileDialog.FileName;
+            }
+        }
+
+        #endregion [Settings] Buttons
+
+        #region [Settings] ListBoxes
         private void SettingsKeyboardModelCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             string PreviousLayout = SettingsKeyboardLayoutCB.Text;
@@ -1107,27 +1262,9 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion ListBoxes
-
-        #region Buttons
-        private void SettingsBrowseCuePathButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = "C:\\";
-            openFileDialog.Filter = "CUE (CorsairHID.exe)|CorsairHID.exe|Executable Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                SettingsCuePathTextBox.Text = openFileDialog.FileName;
-            }
-        }
-
-        #endregion Buttons
-
-        #region CheckBoxes
+        #endregion [Settings] ListBoxes
+        
+        #region [Settings] CheckBoxes
         private void SettingsUSB3Mode_CheckedChanged(object sender, EventArgs e)
         {
             Program.SettingsUsb3Mode = SettingsUSB3ModeCheck.Checked;
@@ -1143,22 +1280,32 @@ namespace RGBKeyboardSpectrograph
             Program.SettingLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
         }
 
-        #endregion CheckBoxes
+        private void SettingsSpectroOnStartCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SettingsSpectroOnStartCheck.Checked == true) { SettingsEffectsOnStartCheck.Checked = false; };
+        }
 
-        #region TextBoxes
+        private void SettingsEffectsOnStartCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SettingsEffectsOnStartCheck.Checked == true) { SettingsSpectroOnStartCheck.Checked = false; };
+        }
+
+        #endregion [Settings] CheckBoxes
+
+        #region [Settings] TextBoxes
         private void SettingsCuePathTextBox_TextChanged(object sender, EventArgs e)
         {
             if (SettingsCuePathTextBox.Text != "" && SettingsLaunchCueCheck.Checked == true) { Program.SettingLaunchCueOnExit = true; }
             else { Program.SettingLaunchCueOnExit = false; };
         }
 
-        #endregion
+        #endregion [Settings] TextBoxes
 
         #endregion Tab: Settings
 
         #region Program: Debug
 
-        #region Buttons
+        #region [Debug] Buttons
         private void DebugTestModeButton_Click(object sender, EventArgs e)
         {
             if (Program.RunKeyboardThread == 3 || Program.RunKeyboardThread == 0)
@@ -1168,9 +1315,9 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        #endregion Buttons
+        #endregion [Debug] Buttons
 
-        #region UpDowns
+        #region [Debug] UpDowns
         private void DebugTesterUD_ValueChanged(object sender, EventArgs e)
         {
             Program.TestLed = (int)DebugTesterUD.Value;
@@ -1181,7 +1328,7 @@ namespace RGBKeyboardSpectrograph
             Program.LogLevel = (int)DebugLogLevelUD.Value;
         }
 
-        #endregion UpDowns
+        #endregion [Debug] UpDowns
 
         #endregion Tab: Debug
 
@@ -1226,9 +1373,9 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion Program
-
-
+                   
         #endregion Controls
+
 
     } //MainForm
 

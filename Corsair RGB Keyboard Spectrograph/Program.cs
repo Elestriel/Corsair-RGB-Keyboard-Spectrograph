@@ -12,11 +12,13 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.0pre2";
+        public static string VersionNumber = "0.6.0pre3";
 
         // Application Variables
         public static byte[] MyPositionMap;
         public static float[] MySizeMap;
+        public static Color[] StaticKeyColors = new Color[144];
+        public static StaticColorCollection[] StaticKeyColorsBytes = new StaticColorCollection[144];
         public static int MyCanvasWidth;
         public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
@@ -35,6 +37,7 @@ namespace RGBKeyboardSpectrograph
         public static bool SettingsUsb3Mode;
         public static bool SettingsRestoreOnExit = false;
         public static bool SettingLaunchCueOnExit = false;
+        public static string SettingsLastUsedProfile;
 
         public static bool CSCore_FirstStart = true;
         public static bool CSCore_NewDevice = true;
@@ -122,6 +125,29 @@ namespace RGBKeyboardSpectrograph
         {
             this.Step += this.Speed;
             if (this.Step >= max) { this.Step = 1; };
+        }
+    }
+
+    public class StaticColorCollection
+    {
+        public bool Transparent;
+        public int Red;
+        public int Grn;
+        public int Blu;
+
+        public void SetD(Color c)
+        {
+            if (c == Color.Transparent)
+            {
+                this.Transparent = true;
+            }
+            else
+            {
+                this.Transparent = false;
+                this.Red = c.R / Program.ColorModeDivisor;
+                this.Grn = c.G / Program.ColorModeDivisor;
+                this.Blu = c.B / Program.ColorModeDivisor;
+            }
         }
     }
 }

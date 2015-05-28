@@ -217,7 +217,7 @@ namespace RGBKeyboardSpectrograph
             return;
         }
 
-        public void Write(int iter, byte[] fftData, int CanvasWidth)
+        public void Write(int iter, byte[] fftData, StaticColorCollection[] staticColors, int CanvasWidth)
         {
             if (iter == -1)
             {
@@ -242,7 +242,7 @@ namespace RGBKeyboardSpectrograph
                 }
             }
 
-            // FFT Data to key lights;
+            // FFT Data to key lights
             byte[] compData = CompressFftToKeyboard(fftData, cWidth1);
 
             // Foreground Rendering
@@ -263,8 +263,27 @@ namespace RGBKeyboardSpectrograph
                 }
             }
 
+            // Static Keys to lights
+            Write(staticColors, false);
+
             UpdateKeyboard();
             if (Program.SpectroShowGraphics == true) WriteGraphics();
+        }
+
+        public void Write(StaticColorCollection[] staticColors, bool DoUpdate)
+        {
+            for (int i = 0; i < 144; i++)
+            {
+                if (staticColors[i].Transparent == false) 
+                {
+                    this.SetLed(i, staticColors[i].Red, staticColors[i].Grn, staticColors[i].Blu);
+                }
+                else
+                {
+                    if (DoUpdate == true) { this.SetLed(i, 0, 0, 0); };
+                }
+            }
+            if (DoUpdate == true) { UpdateKeyboard(); };
         }
 
         private byte[] CompressFftToKeyboard(byte[] fftData, int kWidth)
@@ -307,6 +326,7 @@ namespace RGBKeyboardSpectrograph
 
             UpdateKeyboard();
         }
+
         private void SetLed(int x, int y, int r, int g, int b)
         {
             int led = this.ledMatrix[y, x];
@@ -341,6 +361,39 @@ namespace RGBKeyboardSpectrograph
             this.greenValues[led] = (byte)g;
             this.blueValues[led] = (byte)b;
         }
+
+        private void SetLed(int led, int r, int g, int b)
+        {
+            if (led >= 144)
+            {
+                return;
+            }
+
+            if (r > 7) r = 7;
+            if (g > 7) g = 7;
+            if (b > 7) b = 7;
+
+            /* The keyboard considers 7 as off, and 0 as maximum brightness, so invert values.
+             * The selected M key, however, ignores this rule. Led 23 is M1, so apply this rule
+             * to all keys but that one, and make sure that you have M1 selected during operation. */
+
+            if (led != 23)
+            {
+                r = 7 - r;
+                g = 7 - g;
+                b = 7 - b;
+            }
+
+            if (r > 7 || r < 0 ||
+                g > 7 || g < 0 ||
+                b > 7 || g < 0) 
+            { UpdateStatusMessage.ShowStatusMessage(3, "RGB Incorrect! (" + r + ", " + g + ", " + b + ")"); }
+
+            this.redValues[led] = (byte)r;
+            this.greenValues[led] = (byte)g;
+            this.blueValues[led] = (byte)b;
+        }
+
 
         private int InitKeyboard(uint KeyboardID, string KeyboardName)
         {

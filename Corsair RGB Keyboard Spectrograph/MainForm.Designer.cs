@@ -92,9 +92,16 @@
             this.tabEffects = new System.Windows.Forms.TabPage();
             this.EffectRandomRadio = new System.Windows.Forms.RadioButton();
             this.tabStatic = new System.Windows.Forms.TabPage();
+            this.NewProfileButton = new System.Windows.Forms.Button();
+            this.UpdateKeyboardButton = new System.Windows.Forms.Button();
+            this.DeleteKeysButton = new System.Windows.Forms.Button();
+            this.SaveProfileButton = new System.Windows.Forms.Button();
+            this.LoadProfileButton = new System.Windows.Forms.Button();
             this.KeyboardImageBox = new System.Windows.Forms.PictureBox();
             this.StaticGetKeyboardImage = new System.Windows.Forms.Button();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.SettingsStaticOnStartCheck = new System.Windows.Forms.CheckBox();
+            this.SettingsSpectroOnStartCheck = new System.Windows.Forms.CheckBox();
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
@@ -400,7 +407,7 @@
             // SettingsLaunchCueCheck
             // 
             this.SettingsLaunchCueCheck.AutoSize = true;
-            this.SettingsLaunchCueCheck.Location = new System.Drawing.Point(13, 154);
+            this.SettingsLaunchCueCheck.Location = new System.Drawing.Point(13, 145);
             this.SettingsLaunchCueCheck.Name = "SettingsLaunchCueCheck";
             this.SettingsLaunchCueCheck.Size = new System.Drawing.Size(122, 17);
             this.SettingsLaunchCueCheck.TabIndex = 28;
@@ -452,7 +459,7 @@
             // SettingsUSB3ModeCheck
             // 
             this.SettingsUSB3ModeCheck.AutoSize = true;
-            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(13, 209);
+            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(13, 214);
             this.SettingsUSB3ModeCheck.Name = "SettingsUSB3ModeCheck";
             this.SettingsUSB3ModeCheck.Size = new System.Drawing.Size(66, 17);
             this.SettingsUSB3ModeCheck.TabIndex = 33;
@@ -554,12 +561,13 @@
             // SettingsEffectsOnStartCheck
             // 
             this.SettingsEffectsOnStartCheck.AutoSize = true;
-            this.SettingsEffectsOnStartCheck.Location = new System.Drawing.Point(13, 122);
+            this.SettingsEffectsOnStartCheck.Location = new System.Drawing.Point(188, 99);
             this.SettingsEffectsOnStartCheck.Name = "SettingsEffectsOnStartCheck";
             this.SettingsEffectsOnStartCheck.Size = new System.Drawing.Size(99, 17);
             this.SettingsEffectsOnStartCheck.TabIndex = 42;
             this.SettingsEffectsOnStartCheck.Text = "Effects on Start";
             this.SettingsEffectsOnStartCheck.UseVisualStyleBackColor = true;
+            this.SettingsEffectsOnStartCheck.CheckedChanged += new System.EventHandler(this.SettingsEffectsOnStartCheck_CheckedChanged);
             // 
             // SpectroWasapiDevicesCB
             // 
@@ -698,7 +706,7 @@
             // SettingsRestoreLightingCheck
             // 
             this.SettingsRestoreLightingCheck.AutoSize = true;
-            this.SettingsRestoreLightingCheck.Location = new System.Drawing.Point(13, 177);
+            this.SettingsRestoreLightingCheck.Location = new System.Drawing.Point(13, 168);
             this.SettingsRestoreLightingCheck.Name = "SettingsRestoreLightingCheck";
             this.SettingsRestoreLightingCheck.Size = new System.Drawing.Size(138, 17);
             this.SettingsRestoreLightingCheck.TabIndex = 52;
@@ -777,6 +785,11 @@
             // 
             // tabStatic
             // 
+            this.tabStatic.Controls.Add(this.NewProfileButton);
+            this.tabStatic.Controls.Add(this.UpdateKeyboardButton);
+            this.tabStatic.Controls.Add(this.DeleteKeysButton);
+            this.tabStatic.Controls.Add(this.SaveProfileButton);
+            this.tabStatic.Controls.Add(this.LoadProfileButton);
             this.tabStatic.Controls.Add(this.KeyboardImageBox);
             this.tabStatic.Controls.Add(this.StaticGetKeyboardImage);
             this.tabStatic.Location = new System.Drawing.Point(4, 22);
@@ -786,6 +799,57 @@
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
             // 
+            // NewProfileButton
+            // 
+            this.NewProfileButton.Location = new System.Drawing.Point(15, 241);
+            this.NewProfileButton.Name = "NewProfileButton";
+            this.NewProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.NewProfileButton.TabIndex = 7;
+            this.NewProfileButton.Text = "New Profile";
+            this.NewProfileButton.UseVisualStyleBackColor = true;
+            this.NewProfileButton.Click += new System.EventHandler(this.NewProfileButton_Click);
+            // 
+            // UpdateKeyboardButton
+            // 
+            this.UpdateKeyboardButton.Location = new System.Drawing.Point(177, 270);
+            this.UpdateKeyboardButton.Name = "UpdateKeyboardButton";
+            this.UpdateKeyboardButton.Size = new System.Drawing.Size(75, 23);
+            this.UpdateKeyboardButton.TabIndex = 6;
+            this.UpdateKeyboardButton.Text = "Update Out";
+            this.UpdateKeyboardButton.UseVisualStyleBackColor = true;
+            this.UpdateKeyboardButton.Click += new System.EventHandler(this.UpdateKeyboardButton_Click);
+            // 
+            // DeleteKeysButton
+            // 
+            this.DeleteKeysButton.Location = new System.Drawing.Point(96, 270);
+            this.DeleteKeysButton.Name = "DeleteKeysButton";
+            this.DeleteKeysButton.Size = new System.Drawing.Size(75, 23);
+            this.DeleteKeysButton.TabIndex = 5;
+            this.DeleteKeysButton.Text = "Delete Keys";
+            this.DeleteKeysButton.UseVisualStyleBackColor = true;
+            this.DeleteKeysButton.Visible = false;
+            this.DeleteKeysButton.Click += new System.EventHandler(this.DeleteKeys_Click);
+            // 
+            // SaveProfileButton
+            // 
+            this.SaveProfileButton.Location = new System.Drawing.Point(177, 241);
+            this.SaveProfileButton.Name = "SaveProfileButton";
+            this.SaveProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.SaveProfileButton.TabIndex = 4;
+            this.SaveProfileButton.Text = "Save Profile";
+            this.SaveProfileButton.UseVisualStyleBackColor = true;
+            this.SaveProfileButton.Click += new System.EventHandler(this.SaveProfileButton_Click);
+            // 
+            // LoadProfileButton
+            // 
+            this.LoadProfileButton.Location = new System.Drawing.Point(96, 241);
+            this.LoadProfileButton.Name = "LoadProfileButton";
+            this.LoadProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadProfileButton.TabIndex = 3;
+            this.LoadProfileButton.Text = "Load Profile";
+            this.LoadProfileButton.UseVisualStyleBackColor = true;
+            this.LoadProfileButton.Click += new System.EventHandler(this.LoadProfileButton_Click);
+            // 
             // KeyboardImageBox
             // 
             this.KeyboardImageBox.Location = new System.Drawing.Point(15, 13);
@@ -793,20 +857,22 @@
             this.KeyboardImageBox.Size = new System.Drawing.Size(660, 222);
             this.KeyboardImageBox.TabIndex = 2;
             this.KeyboardImageBox.TabStop = false;
-            this.KeyboardImageBox.Click += new System.EventHandler(this.KeyboardImageBox_Click);
             // 
             // StaticGetKeyboardImage
             // 
-            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(15, 241);
+            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(15, 270);
             this.StaticGetKeyboardImage.Name = "StaticGetKeyboardImage";
             this.StaticGetKeyboardImage.Size = new System.Drawing.Size(75, 23);
             this.StaticGetKeyboardImage.TabIndex = 1;
             this.StaticGetKeyboardImage.Text = "Get Image";
             this.StaticGetKeyboardImage.UseVisualStyleBackColor = true;
+            this.StaticGetKeyboardImage.Visible = false;
             this.StaticGetKeyboardImage.Click += new System.EventHandler(this.StaticGetKeyboardImage_Click);
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.SettingsStaticOnStartCheck);
+            this.tabSettings.Controls.Add(this.SettingsSpectroOnStartCheck);
             this.tabSettings.Controls.Add(this.SettingsBrowseCuePathButton);
             this.tabSettings.Controls.Add(this.SettingsCuePathTextBox);
             this.tabSettings.Controls.Add(this.SettingsCuePathLabel);
@@ -825,6 +891,27 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // SettingsStaticOnStartCheck
+            // 
+            this.SettingsStaticOnStartCheck.AutoSize = true;
+            this.SettingsStaticOnStartCheck.Location = new System.Drawing.Point(188, 122);
+            this.SettingsStaticOnStartCheck.Name = "SettingsStaticOnStartCheck";
+            this.SettingsStaticOnStartCheck.Size = new System.Drawing.Size(119, 17);
+            this.SettingsStaticOnStartCheck.TabIndex = 57;
+            this.SettingsStaticOnStartCheck.Text = "Static Keys on Start";
+            this.SettingsStaticOnStartCheck.UseVisualStyleBackColor = true;
+            // 
+            // SettingsSpectroOnStartCheck
+            // 
+            this.SettingsSpectroOnStartCheck.AutoSize = true;
+            this.SettingsSpectroOnStartCheck.Location = new System.Drawing.Point(188, 76);
+            this.SettingsSpectroOnStartCheck.Name = "SettingsSpectroOnStartCheck";
+            this.SettingsSpectroOnStartCheck.Size = new System.Drawing.Size(103, 17);
+            this.SettingsSpectroOnStartCheck.TabIndex = 56;
+            this.SettingsSpectroOnStartCheck.Text = "Spectro on Start";
+            this.SettingsSpectroOnStartCheck.UseVisualStyleBackColor = true;
+            this.SettingsSpectroOnStartCheck.CheckedChanged += new System.EventHandler(this.SettingsSpectroOnStartCheck_CheckedChanged);
             // 
             // SettingsBrowseCuePathButton
             // 
@@ -964,6 +1051,13 @@
         private System.Windows.Forms.RadioButton EffectRandomRadio;
         private System.Windows.Forms.Button StaticGetKeyboardImage;
         private System.Windows.Forms.PictureBox KeyboardImageBox;
+        private System.Windows.Forms.Button LoadProfileButton;
+        private System.Windows.Forms.Button SaveProfileButton;
+        private System.Windows.Forms.Button DeleteKeysButton;
+        private System.Windows.Forms.Button UpdateKeyboardButton;
+        private System.Windows.Forms.Button NewProfileButton;
+        private System.Windows.Forms.CheckBox SettingsStaticOnStartCheck;
+        private System.Windows.Forms.CheckBox SettingsSpectroOnStartCheck;
 
     }
 }
