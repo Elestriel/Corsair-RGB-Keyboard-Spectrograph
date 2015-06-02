@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace RGBKeyboardSpectrograph
 {
-    class Effects
+    class SpectroEffects
     {
         public byte Red;
         public byte Grn;
         public byte Blu;
 
-        public Effects(string EffectType, string EffectName, int column, int row) {
+        public SpectroEffects(string EffectType, string EffectName, int column, int row) {
             switch (EffectType) {
                 case "Background":
                     Background(EffectName, column, row);

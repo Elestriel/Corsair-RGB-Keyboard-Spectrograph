@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.0pre3";
+        public static string VersionNumber = "0.6.0pre4";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -22,22 +22,29 @@ namespace RGBKeyboardSpectrograph
         public static int MyCanvasWidth;
         public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
+        public static int RunKeyboardThread = -1;
 
         // Spectrograph
-        public static int RunKeyboardThread = 3;
         public static float SpectroAmplitude;
         public static bool SpectroShowGraphics;
         public static Bitmap SpectroGraphicRender;
-        public static EffectSettings SpectroBg = new EffectSettings();
-        public static EffectSettings SpectroBars = new EffectSettings();
+        public static SpectroSettings SpectroBg = new SpectroSettings();
+        public static SpectroSettings SpectroBars = new SpectroSettings();
+
+        // Effects
+        public static EffectSettings EfSettings = new EffectSettings();
+        public static EffectColorSettings EfColors = new EffectColorSettings();
+        public static bool EffectsUseStaticKeys = false;
 
         // Settings
-        public static string SettingsKeyboardName;
+        public static string SettingsKeyboardModel;
+        public static string SettingsKeyboardLayout;
         public static uint SettingsKeyboardID;
         public static bool SettingsUsb3Mode;
         public static bool SettingsRestoreOnExit = false;
         public static bool SettingLaunchCueOnExit = false;
         public static string SettingsLastUsedProfile;
+        public static bool StaticKeysNeedRedraw = false;
 
         public static bool CSCore_FirstStart = true;
         public static bool CSCore_NewDevice = true;
@@ -46,8 +53,8 @@ namespace RGBKeyboardSpectrograph
 
         // Debug Stuff
         public static int TestLed;
-        public static int LogLevel = 4;
-        public static int RefreshDelay = 20;
+        public static int LogLevel = 3;
+        public static int RefreshDelay = 10;
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
         public static bool DevMode = false;
@@ -62,8 +69,11 @@ namespace RGBKeyboardSpectrograph
         [STAThread]
         static void Main()
         {
-            // Catch exceptions within the application a bit nicer
-//            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            // Catch exceptions within the application a bit nicer, disabled for dev mode
+            if (DevMode == false)
+            {
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            }
 
             // Launch the main form
             Application.EnableVisualStyles();
@@ -104,7 +114,7 @@ namespace RGBKeyboardSpectrograph
         }
     }
 
-    public class EffectSettings
+    public class SpectroSettings
     {
         public ColorCollection Color = new ColorCollection();
         public string Mode;
@@ -134,6 +144,28 @@ namespace RGBKeyboardSpectrograph
         public int Red;
         public int Grn;
         public int Blu;
+        public Color KeyColor
+        {
+            get
+            {
+                return Color.FromArgb(255, Red, Grn, Blu);
+            }
+        }
+
+        public void Set(Color c)
+        {
+            if (c == Color.Transparent)
+            {
+                this.Transparent = true;
+            }
+            else
+            {
+                this.Transparent = false;
+                this.Red = c.R;
+                this.Grn = c.G;
+                this.Blu = c.B;
+            }
+        }
 
         public void SetD(Color c)
         {
@@ -148,6 +180,68 @@ namespace RGBKeyboardSpectrograph
                 this.Grn = c.G / Program.ColorModeDivisor;
                 this.Blu = c.B / Program.ColorModeDivisor;
             }
+        }
+    }
+
+    public class EffectSettings {
+        public int Duration;
+        public int Frequency;
+        public int Speed;
+
+        public void Set(int duration, int frequency, int speed)
+        {
+            this.Speed = speed;
+            this.Duration = duration;
+            this.Frequency = frequency;
+        }
+    }
+
+    public class EffectColorSettings
+    {
+        public int Mode;
+        public byte StartR, StartG, StartB;
+        public byte EndR, EndG, EndB;
+        public int SRandRLow, SRandRHigh;
+        public int SRandGLow, SRandGHigh;
+        public int SRandBLow, SRandBHigh;
+        public int ERandRLow, ERandRHigh;
+        public int ERandGLow, ERandGHigh;
+        public int ERandBLow, ERandBHigh;
+
+        public void SetStart(byte sR, byte sG, byte sB,
+                        int mode)
+        {
+            this.Mode = mode;
+            this.StartR = sR; this.StartG = sG; this.StartB = sB;
+        }
+
+        public void SetStart(int SrrLow, int SrrHigh,
+                int SrgLow, int SrgHigh,
+                int SrbLow, int SrbHigh,
+                int mode)
+        {
+            this.Mode = mode;
+            this.SRandRLow = SrrLow; this.SRandRHigh = SrrHigh;
+            this.SRandGLow = SrgLow; this.SRandGHigh = SrgHigh;
+            this.SRandBLow = SrbLow; this.SRandBHigh = SrbHigh;
+        }
+
+        public void SetEnd(byte eR, byte eG, byte eB,
+                        int mode)
+        {
+            this.Mode = mode;
+            this.EndR = eR; this.EndG = eG; this.EndB = eB;
+        }
+
+        public void SetEnd(int ErrLow, int ErrHigh,
+                int ErgLow, int ErgHigh,
+                int ErbLow, int ErbHigh,
+                int mode)
+        {
+            this.Mode = mode;
+            this.ERandRLow = ErrLow; this.ERandRHigh = ErrHigh;
+            this.ERandGLow = ErgLow; this.ERandGHigh = ErgHigh;
+            this.ERandBLow = ErbLow; this.ERandBHigh = ErbHigh;
         }
     }
 }

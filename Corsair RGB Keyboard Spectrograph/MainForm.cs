@@ -31,6 +31,7 @@ namespace RGBKeyboardSpectrograph
         string[] keyboardSizeMaps;
         Image keyboardImage;
         double keyboardImageScale = 0.6;
+        int StaticCopyPasteMode = 0;
    
         Thread workerThread = Program.newWorker;
 
@@ -52,13 +53,16 @@ namespace RGBKeyboardSpectrograph
 
             Thread.Sleep(500);
 
-            if (Program.RunKeyboardThread != 3) { 
-                while (workerThread.IsAlive)
+            if (Program.RunKeyboardThread != -1) {
+                if (workerThread != null)
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(1000);
-                    UpdateStatusMessage.ShowStatusMessage(2, "Waiting for thread to quit...");
-                } 
+                    while (workerThread.IsAlive)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1000);
+                        UpdateStatusMessage.ShowStatusMessage(2, "Waiting for thread to quit...");
+                    }
+                }
             }
 
             if (Program.SettingsRestoreOnExit == true)
@@ -121,6 +125,32 @@ namespace RGBKeyboardSpectrograph
             // Profiles
             Properties.Settings.Default.userLastUsedProfile = Program.SettingsLastUsedProfile;
 
+            // Effects
+            if (Eff_RL_Start_Radio1.Checked == true) { Properties.Settings.Default.Eff_RL_S_Mode = 1; }
+            else { Properties.Settings.Default.Eff_RL_S_Mode = 2; }
+            Properties.Settings.Default.Eff_RL_S_DefinedColor = Eff_RL_Start_ColourButton.BackColor;
+            Properties.Settings.Default.Eff_RL_S_CLow_Red = Program.EfColors.SRandRLow;
+            Properties.Settings.Default.Eff_RL_S_CLow_Green = Program.EfColors.SRandGLow;
+            Properties.Settings.Default.Eff_RL_S_CLow_Blue = Program.EfColors.SRandBLow;
+            Properties.Settings.Default.Eff_RL_S_CHigh_Red = Program.EfColors.SRandRHigh;
+            Properties.Settings.Default.Eff_RL_S_CHigh_Green = Program.EfColors.SRandGHigh;
+            Properties.Settings.Default.Eff_RL_S_CHigh_Blue = Program.EfColors.SRandBHigh;
+
+            if (Eff_RL_End_Radio1.Checked == true) { Properties.Settings.Default.Eff_RL_E_Mode = 1; }
+            else { Properties.Settings.Default.Eff_RL_E_Mode = 2; }
+            Properties.Settings.Default.Eff_RL_E_DefinedColor = Eff_RL_End_ColourButton.BackColor;
+            Properties.Settings.Default.Eff_RL_E_CLow_Red = Program.EfColors.ERandRLow;
+            Properties.Settings.Default.Eff_RL_E_CLow_Green = Program.EfColors.ERandGLow;
+            Properties.Settings.Default.Eff_RL_E_CLow_Blue = Program.EfColors.ERandBLow;
+            Properties.Settings.Default.Eff_RL_E_CHigh_Red = Program.EfColors.ERandRHigh;
+            Properties.Settings.Default.Eff_RL_E_CHigh_Green = Program.EfColors.ERandGHigh;
+            Properties.Settings.Default.Eff_RL_E_CHigh_Blue = Program.EfColors.ERandBHigh;
+
+            Properties.Settings.Default.Eff_RL_Duration = (int)Eff_RL_DurationUD.Value;
+            Properties.Settings.Default.Eff_RL_Delay = (int)Eff_RL_FrequencyUD.Value;
+
+            Properties.Settings.Default.EffectUseStaticKeys = Program.EffectsUseStaticKeys;
+
             // Save Settings
             Properties.Settings.Default.Save();
         }
@@ -135,20 +165,14 @@ namespace RGBKeyboardSpectrograph
                 this.Visible = false;
             }
         }
-        
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             UpdateStatusMessage.ShowStatusMessage(0, "Version " + Program.VersionNumber);
 
             // Check for updates
-            if (CheckForUpdates() == true)
-            {
-                if (Program.VersionCheckData[0] != Program.VersionNumber)
-                {
-                    UpdateStatusMessage.ShowStatusMessage(0, "Latest Version: " + Program.VersionCheckData[0]);
-                    SettingsGetUpdateButton.Visible = true;
-                }
-            }
+            Thread UpdateChecker = new Thread(this.CheckForUpdates);
+            UpdateChecker.Start();
 
             // Start manipulating controls and loading saved values
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
@@ -285,6 +309,98 @@ namespace RGBKeyboardSpectrograph
             // Profiles
             Program.SettingsLastUsedProfile = Properties.Settings.Default.userLastUsedProfile;
 
+            // Load static key map
+            for (int i = 0; i < Program.StaticKeyColors.Length; i++)
+            { Program.StaticKeyColors[i] = Color.Transparent; };
+            for (int i = 0; i < Program.StaticKeyColorsBytes.Length; i++)
+            { 
+                Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
+                Program.StaticKeyColorsBytes[i].Set(Color.Transparent); 
+            };
+
+            StaticGetKeyboardImage_Click(null, null);
+            Program.StaticKeysNeedRedraw = false;
+
+        #region Effects
+
+        #region Effects - Random Lights - Start
+            int setting_Eff_RL_S_Mode = Properties.Settings.Default.Eff_RL_S_Mode;
+            if (setting_Eff_RL_S_Mode == 1) { Eff_RL_Start_Radio1.Checked = true; }
+            else {Eff_RL_Start_Radio2.Checked = true; }
+
+            Eff_RL_Start_ColourButton.BackColor = Properties.Settings.Default.Eff_RL_S_DefinedColor;
+
+            int setting_Eff_RL_S_CLow_Red = Properties.Settings.Default.Eff_RL_S_CLow_Red;
+            if (setting_Eff_RL_S_CLow_Red < 0 || setting_Eff_RL_S_CLow_Red > 255) { setting_Eff_RL_S_CLow_Red = 0; };
+            Eff_RL_Start_Red_LowUD.Value = setting_Eff_RL_S_CLow_Red;
+
+            int setting_Eff_RL_S_CLow_Green = Properties.Settings.Default.Eff_RL_S_CLow_Green;
+            if (setting_Eff_RL_S_CLow_Green < 0 || setting_Eff_RL_S_CLow_Green > 255) { setting_Eff_RL_S_CLow_Green = 0; };
+            Eff_RL_Start_Green_LowUD.Value = setting_Eff_RL_S_CLow_Green;
+
+            int setting_Eff_RL_S_CLow_Blue = Properties.Settings.Default.Eff_RL_S_CLow_Blue;
+            if (setting_Eff_RL_S_CLow_Blue < 0 || setting_Eff_RL_S_CLow_Blue > 255) { setting_Eff_RL_S_CLow_Blue = 0; };
+            Eff_RL_Start_Blue_LowUD.Value = setting_Eff_RL_S_CLow_Blue;
+
+            int setting_Eff_RL_S_CHigh_Red = Properties.Settings.Default.Eff_RL_S_CHigh_Red;
+            if (setting_Eff_RL_S_CHigh_Red < 0 || setting_Eff_RL_S_CHigh_Red > 255) { setting_Eff_RL_S_CHigh_Red = 255; };
+            Eff_RL_Start_Red_HighUD.Value = setting_Eff_RL_S_CHigh_Red;
+
+            int setting_Eff_RL_S_CHigh_Green = Properties.Settings.Default.Eff_RL_S_CHigh_Green;
+            if (setting_Eff_RL_S_CHigh_Green < 0 || setting_Eff_RL_S_CHigh_Green > 255) { setting_Eff_RL_S_CHigh_Green = 255; };
+            Eff_RL_Start_Green_HighUD.Value = setting_Eff_RL_S_CHigh_Green;
+
+            int setting_Eff_RL_S_CHigh_Blue = Properties.Settings.Default.Eff_RL_S_CHigh_Blue;
+            if (setting_Eff_RL_S_CHigh_Blue < 0 || setting_Eff_RL_S_CHigh_Blue > 255) { setting_Eff_RL_S_CHigh_Blue = 255; };
+            Eff_RL_Start_Blue_HighUD.Value = setting_Eff_RL_S_CHigh_Blue;
+
+        #endregion Effects - Random Lights - Start
+
+        #region Effects - Random Lights - End
+            int setting_Eff_RL_E_Mode = Properties.Settings.Default.Eff_RL_E_Mode;
+            if (setting_Eff_RL_E_Mode == 2) { Eff_RL_End_Radio2.Checked = true; }
+            else { Eff_RL_End_Radio1.Checked = true; }
+
+            Eff_RL_End_ColourButton.BackColor = Properties.Settings.Default.Eff_RL_E_DefinedColor;
+
+            int setting_Eff_RL_E_CLow_Red = Properties.Settings.Default.Eff_RL_E_CLow_Red;
+            if (setting_Eff_RL_E_CLow_Red < 0 || setting_Eff_RL_E_CLow_Red > 255) { setting_Eff_RL_E_CLow_Red = 0; };
+            Eff_RL_End_Red_LowUD.Value = setting_Eff_RL_E_CLow_Red;
+
+            int setting_Eff_RL_E_CLow_Green = Properties.Settings.Default.Eff_RL_E_CLow_Green;
+            if (setting_Eff_RL_E_CLow_Green < 0 || setting_Eff_RL_E_CLow_Green > 255) { setting_Eff_RL_E_CLow_Green = 0; };
+            Eff_RL_End_Green_LowUD.Value = setting_Eff_RL_E_CLow_Green;
+
+            int setting_Eff_RL_E_CLow_Blue = Properties.Settings.Default.Eff_RL_E_CLow_Blue;
+            if (setting_Eff_RL_E_CLow_Blue < 0 || setting_Eff_RL_E_CLow_Blue > 255) { setting_Eff_RL_E_CLow_Blue = 0; };
+            Eff_RL_End_Blue_LowUD.Value = setting_Eff_RL_E_CLow_Blue;
+
+            int setting_Eff_RL_E_CHigh_Red = Properties.Settings.Default.Eff_RL_E_CHigh_Red;
+            if (setting_Eff_RL_E_CHigh_Red < 0 || setting_Eff_RL_E_CHigh_Red > 255) { setting_Eff_RL_E_CHigh_Red = 255; };
+            Eff_RL_End_Red_HighUD.Value = setting_Eff_RL_E_CHigh_Red;
+
+            int setting_Eff_RL_E_CHigh_Green = Properties.Settings.Default.Eff_RL_E_CHigh_Green;
+            if (setting_Eff_RL_E_CHigh_Green < 0 || setting_Eff_RL_E_CHigh_Green > 255) { setting_Eff_RL_E_CHigh_Green = 255; };
+            Eff_RL_End_Green_HighUD.Value = setting_Eff_RL_E_CHigh_Green;
+
+            int setting_Eff_RL_E_CHigh_Blue = Properties.Settings.Default.Eff_RL_E_CHigh_Blue;
+            if (setting_Eff_RL_E_CHigh_Blue < 0 || setting_Eff_RL_E_CHigh_Blue > 255) { setting_Eff_RL_E_CHigh_Blue = 255; };
+            Eff_RL_End_Blue_HighUD.Value = setting_Eff_RL_E_CHigh_Blue;
+
+        #endregion Effects - Random Lights - End
+
+            Eff_RL_DurationUD.Value = Properties.Settings.Default.Eff_RL_Duration;
+            Eff_RL_FrequencyUD.Value = Properties.Settings.Default.Eff_RL_Delay;
+
+            Eff_RL_Start_UpdateColorBoxes(null, null);
+            Eff_RL_End_UpdateColorBoxes(null, null);
+            Eff_RL_Start_RadioCheckedChanged(null, null);
+            Eff_RL_End_RadioCheckedChanged(null, null);
+
+            Program.EffectsUseStaticKeys = Properties.Settings.Default.EffectUseStaticKeys;
+
+        #endregion Effects
+
             // Start up automatic tasks if the selected keyboard is valid
             if (SettingsKeyboardLayoutCB.Text != "" && SettingsKeyboardModelCB.Text != "")
             {
@@ -292,13 +408,8 @@ namespace RGBKeyboardSpectrograph
                 if (Properties.Settings.Default.userSpectroOnStart == true) { StartSpectrograph_Click(null, null); };
 
                 // Automatically start effects
-                if (Properties.Settings.Default.userEffectsOnStart == true) { /* START EFFECTS ROUTINE */ };
-
-                // Load static key map
-                for (int i = 0; i < Program.StaticKeyColors.Length; i++)
-                { Program.StaticKeyColors[i] = Color.Transparent; };
-                StaticGetKeyboardImage_Click(null, null);
-
+                if (Properties.Settings.Default.userEffectsOnStart == true) { EffectsStartButton_Click(null, null); };
+                
                 // Automatically apply static keys
                 if (Properties.Settings.Default.userStaticOnStart == true && Program.SettingsLastUsedProfile != "") 
                 {
@@ -314,12 +425,25 @@ namespace RGBKeyboardSpectrograph
                             Program.StaticKeyColors[i] = keyColors.Colors[i];
                         }
                         RefreshKeyColors();
-                        SendStaticKeysToKeyboard(true); 
                     }
                 };
-
-                
             }
+
+            // Show hidden developer controls if in dev mode
+            if (Program.DevMode == true)
+            {
+                StaticGetKeyboardImage.Visible = true;
+                StaticDeleteKeysButton.Visible = true;
+                StaticUpdateKeyboardButton.Visible = true;
+                SpectroShowGraphicsCheck.Visible = true;
+                GraphicsPictureBox.Visible = true;
+            }
+            else
+            {
+                SpectroShowGraphicsCheck.Checked = false;
+                Program.SpectroShowGraphics = false;
+            }
+
             // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
@@ -387,8 +511,11 @@ namespace RGBKeyboardSpectrograph
             return Color.FromArgb(d, d, d);
         }
 
-        private bool CheckForUpdates()
+        private void CheckForUpdates()
         {
+            bool updateIsAvailable = false;
+
+
             String URLString = "http://elestriel.cf/pages/keyboardspectro/version.xml";
             try
             {
@@ -405,17 +532,26 @@ namespace RGBKeyboardSpectrograph
                             break;
                     }
                 }
-                return true;
+                updateIsAvailable = true;
             }
             catch
             {
-                return false;
+                updateIsAvailable = false;
+            }
+
+            if (updateIsAvailable == true)
+            {
+                if (Program.VersionCheckData[0] != Program.VersionNumber)
+                {
+                    UpdateStatusMessage.ShowStatusMessage(0, "Latest Version: " + Program.VersionCheckData[0]);
+                    SettingsGetUpdateButton.Visible = true;
+                }
             }
         }
 
         #endregion Form Stuff
 
-        #region Thread Start/Stop
+        #region Spectro Start/Stop
         private bool StartSpectrograph(int RunType)
         {
             // Check if CUE is still running
@@ -455,7 +591,7 @@ namespace RGBKeyboardSpectrograph
             int captureType;
             MMDevice captureDevice;
 
-            if (RunType == 4) // Test Mode
+            if (RunType == 1) // Test Mode
             {
                 captureType = 0;
                 captureDevice = null;
@@ -484,8 +620,9 @@ namespace RGBKeyboardSpectrograph
             workerThread = new Thread(() => SpectroControl.KeyboardControl(captureType, captureDevice));
             workerThread.Start();
 
-            // Set Program-wide current keyboard name
-            Program.SettingsKeyboardName = SettingsKeyboardModelCB.Text;
+            // Set Program-wide current keyboard model and layout
+            Program.SettingsKeyboardModel = SettingsKeyboardModelCB.Text;
+            Program.SettingsKeyboardLayout = SettingsKeyboardLayoutCB.Text;
             Program.RunKeyboardThread = RunType;
             return true;
         }
@@ -547,9 +684,8 @@ namespace RGBKeyboardSpectrograph
         private void StopSpectrograph()
         {
             // Don't run the Stop procedure if the thread was never started in the first place
-            if (Program.RunKeyboardThread == 3) { return; };
+            if (Program.RunKeyboardThread == -1) { return; };
 
-            UpdateStatusMessage.ShowStatusMessage(2, "Stopping Capture");
             Program.RunKeyboardThread = 0;
         }
         #endregion
@@ -645,7 +781,7 @@ namespace RGBKeyboardSpectrograph
         #region [Spectro] Buttons
         private void StartSpectrograph_Click(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 1) { StopSpectrograph(); };
+            if (Program.RunKeyboardThread == -2) { StopSpectrograph(); };
             if (Program.RunKeyboardThread == 2) { return; };
             if (StartSpectrograph(2) == true)
             {
@@ -662,20 +798,17 @@ namespace RGBKeyboardSpectrograph
                         break;
                 }
                 Program.SpectroGraphicRender = new Bitmap(Program.MyCanvasWidth, 7);
-                tabEffects.Enabled = false;
                 StatusTimer.Start();
                 DebugTestModeButton.Enabled = false;
             }
         }
+
         private void StopSpectrograph_Click(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 1 || Program.RunKeyboardThread == 2 || Program.RunKeyboardThread == 4)
-            {
                 StopSpectrograph();
                 StartSpectrographButton.Enabled = true;
                 DebugTestModeButton.Enabled = true;
                 tabEffects.Enabled = true;
-            }
         }
 
         #endregion [Spectro] Buttons
@@ -975,6 +1108,214 @@ namespace RGBKeyboardSpectrograph
 
         #region Tab: Effects
 
+        private void EffectsStartButton_Click(object sender, EventArgs e)
+        {
+            if (Program.RunKeyboardThread == 3) { return; };
+            Program.EfSettings.Set((int)Eff_RL_DurationUD.Value, (int)Eff_RL_FrequencyUD.Value, 0);
+            Program.EffectsUseStaticKeys = EffectsUseStaticLights.Checked;
+
+            Program.RunKeyboardThread = 3;
+            workerThread = new Thread(() => SpecialEffects.KeyboardControl("thing"));
+            workerThread.Start();
+        }
+
+        private void EffectsStopButton_Click(object sender, EventArgs e)
+        {
+            Program.RunKeyboardThread = 0;
+        }
+
+        private void EffectsUseStaticLights_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.EffectsUseStaticKeys = EffectsUseStaticLights.Checked;
+        }
+
+        #region Tab: Effects: Random Lights
+        private void Eff_RL_UpdateColorConfig(int mode)
+        {
+            switch (mode) { 
+                case 1:
+                    Program.EfColors.SetStart(
+                        (byte)Eff_RL_Start_ColourButton.BackColor.R,
+                        (byte)Eff_RL_Start_ColourButton.BackColor.G,
+                        (byte)Eff_RL_Start_ColourButton.BackColor.B,
+                        Eff_RL_End_GetMode());
+                    break;
+                case 2:
+                    Program.EfColors.SetStart(
+                        (int)Eff_RL_Start_Red_LowUD.Value,
+                        (int)Eff_RL_Start_Red_HighUD.Value,
+                        (int)Eff_RL_Start_Green_LowUD.Value,
+                        (int)Eff_RL_Start_Green_HighUD.Value,
+                        (int)Eff_RL_Start_Blue_LowUD.Value,
+                        (int)Eff_RL_Start_Blue_HighUD.Value,
+                        Eff_RL_End_GetMode());
+                    break;
+                case 3:
+                    Program.EfColors.SetEnd(
+                        (int)Eff_RL_End_Red_LowUD.Value,
+                        (int)Eff_RL_End_Red_HighUD.Value,
+                        (int)Eff_RL_End_Green_LowUD.Value,
+                        (int)Eff_RL_End_Green_HighUD.Value,
+                        (int)Eff_RL_End_Blue_LowUD.Value,
+                        (int)Eff_RL_End_Blue_HighUD.Value,
+                        Eff_RL_End_GetMode());
+                    break;
+                case 4:
+                    Program.EfColors.SetEnd(
+                        (byte)Eff_RL_End_ColourButton.BackColor.R,
+                        (byte)Eff_RL_End_ColourButton.BackColor.G,
+                        (byte)Eff_RL_End_ColourButton.BackColor.B,
+                        Eff_RL_End_GetMode());
+                    break;
+        }
+        }
+
+        private void Eff_RL_Start_UpdateColorBoxes(object sender, EventArgs e)
+        {
+            Eff_RL_Start_Red_LowButton.BackColor = Color.FromArgb(255, (int)Eff_RL_Start_Red_LowUD.Value, 0, 0);
+            Eff_RL_Start_Red_HighButton.BackColor = Color.FromArgb(255, (int)Eff_RL_Start_Red_HighUD.Value, 0, 0);
+
+            Eff_RL_Start_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_Start_Green_LowUD.Value, 0);
+            Eff_RL_Start_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_Start_Green_HighUD.Value, 0);
+
+            Eff_RL_Start_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_Start_Blue_LowUD.Value);
+            Eff_RL_Start_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_Start_Blue_HighUD.Value);
+
+            Eff_RL_Start_Red_LowUD.Maximum = Eff_RL_Start_Red_HighUD.Value;
+            Eff_RL_Start_Green_LowUD.Maximum = Eff_RL_Start_Green_HighUD.Value;
+            Eff_RL_Start_Blue_LowUD.Maximum = Eff_RL_Start_Blue_HighUD.Value;
+
+            Eff_RL_UpdateColorConfig(2);
+        }
+
+        private void Eff_RL_End_UpdateColorBoxes(object sender, EventArgs e)
+        {
+            Eff_RL_End_Red_LowButton.BackColor = Color.FromArgb(255, (int)Eff_RL_End_Red_LowUD.Value, 0, 0);
+            Eff_RL_End_Red_HighButton.BackColor = Color.FromArgb(255, (int)Eff_RL_End_Red_HighUD.Value, 0, 0);
+
+            Eff_RL_End_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_End_Green_LowUD.Value, 0);
+            Eff_RL_End_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_End_Green_HighUD.Value, 0);
+
+            Eff_RL_End_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_End_Blue_LowUD.Value);
+            Eff_RL_End_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_End_Blue_HighUD.Value);
+
+            Eff_RL_End_Red_LowUD.Maximum = Eff_RL_End_Red_HighUD.Value;
+            Eff_RL_End_Green_LowUD.Maximum = Eff_RL_End_Green_HighUD.Value;
+            Eff_RL_End_Blue_LowUD.Maximum = Eff_RL_Start_Blue_HighUD.Value;
+
+            Eff_RL_UpdateColorConfig(3);
+        }
+
+        private int Eff_RL_End_GetMode()
+        {
+            /* Modes
+             * 1: Defined + Defined
+             * 2: Random + Defined
+             * 3: Defined + Random
+             * 4: Random + Random
+             */
+            int newMode = 0;
+
+            if (Eff_RL_Start_Radio1.Checked && Eff_RL_End_Radio1.Checked)
+            {
+                newMode = 1;
+            }
+            else if (Eff_RL_Start_Radio2.Checked && Eff_RL_End_Radio1.Checked)
+            {
+                newMode = 2;
+            }
+            else if (Eff_RL_Start_Radio1.Checked && Eff_RL_End_Radio2.Checked)
+            {
+                newMode = 3;
+            }
+            else if (Eff_RL_Start_Radio2.Checked && Eff_RL_End_Radio2.Checked)
+            {
+                newMode = 4;
+            }
+
+            return newMode;
+        }
+
+        private void Eff_RL_ColourButton_Click(object sender, EventArgs e)
+        {
+            System.Windows.Media.Color selectedMediaColor;
+            Color selectedColor = ((Button)sender).BackColor;
+            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+            if (dia.ShowDialog() == true)
+            {
+                selectedMediaColor = dia.SelectedColor;
+                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+            }
+            ((Button)sender).BackColor = selectedColor;
+
+            if (((Button)sender).Name.ToString() == "Eff_RL_Start_ColourButton")
+            { Eff_RL_UpdateColorConfig(1); }
+
+            if (((Button)sender).Name.ToString() == "Eff_RL_End_ColourButton")
+            { Eff_RL_UpdateColorConfig(4); }
+        }
+
+        private void Eff_RL_Start_RadioCheckedChanged(object sender, EventArgs e)
+        {
+            if (Eff_RL_Start_Radio1.Checked == true)
+            {
+                /*
+                Eff_RL_Start_RedGB.Enabled = false;
+                Eff_RL_Start_GreenGB.Enabled = false;
+                Eff_RL_Start_BlueGB.Enabled = false;
+                Eff_RL_Start_ColourButton.Enabled = true;
+                */ 
+                Eff_RL_UpdateColorConfig(1);
+            }
+            else if (Eff_RL_Start_Radio2.Checked == true)
+            {
+                /*
+                Eff_RL_Start_RedGB.Enabled = true;
+                Eff_RL_Start_GreenGB.Enabled = true;
+                Eff_RL_Start_BlueGB.Enabled = true;
+                Eff_RL_Start_ColourButton.Enabled = false;
+                */
+                Eff_RL_UpdateColorConfig(2);
+            }
+        }
+
+        private void Eff_RL_End_RadioCheckedChanged(object sender, EventArgs e)
+        {
+            if (Eff_RL_End_Radio1.Checked == true)
+            {
+                /*
+                Eff_RL_End_RedGB.Enabled = false;
+                Eff_RL_End_GreenGB.Enabled = false;
+                Eff_RL_End_BlueGB.Enabled = false;
+                Eff_RL_End_ColourButton.Enabled = true;
+                */
+                Eff_RL_UpdateColorConfig(4);
+            }
+            else if (Eff_RL_End_Radio2.Checked == true)
+            {
+                /*
+                Eff_RL_End_RedGB.Enabled = true;
+                Eff_RL_End_GreenGB.Enabled = true;
+                Eff_RL_End_BlueGB.Enabled = true;
+                Eff_RL_End_ColourButton.Enabled = false;
+                */
+                Eff_RL_UpdateColorConfig(3);
+            }
+        }
+
+        private void Eff_RL_DurationUD_ValueChanged(object sender, EventArgs e)
+        {
+            Program.EfSettings.Duration = (int)Eff_RL_DurationUD.Value;
+        }
+
+        private void Eff_RL_FrequencyUD_ValueChanged(object sender, EventArgs e)
+        {
+            Program.EfSettings.Frequency = (int)Eff_RL_FrequencyUD.Value;
+        }
+
+        #endregion Tab: Effects: Random Lights
+
         #endregion Tab: Effects
 
         #region Tab: Static Keys
@@ -983,14 +1324,13 @@ namespace RGBKeyboardSpectrograph
         public void DrawKeysOnImage(KeyData[] keyData)
         {
             double ImageScale = keyboardImageScale;
-            int offsetX = 0;
+            int offsetX = 1;
             int offsetY = 0;
 
             Button[] keyboardButtons = new Button[keyData.Length];
 
             for (int i = 0; i < keyData.Length; i++)
             {
-
                 keyboardButtons[i] = new Button();
                 keyboardButtons[i].Location = new Point((int)(keyData[i].Coords[0].X * ImageScale + offsetX),
                                                         (int)(keyData[i].Coords[0].Y * ImageScale + offsetY));
@@ -1030,11 +1370,11 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        private void RefreshKeyColors()
+        private void RefreshKeyColors(bool SuppressMessages = false)
         {
             foreach (Control c in KeyboardImageBox.Controls)
             {
-                c.BackColor = Program.StaticKeyColors[(int)c.Tag];
+                if ((int)c.Tag >= 0) { c.BackColor = Program.StaticKeyColors[(int)c.Tag]; };
             }
 
             for (int i = 0; i < 144; i++)
@@ -1042,13 +1382,21 @@ namespace RGBKeyboardSpectrograph
                 Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
                 Program.StaticKeyColorsBytes[i].SetD(Program.StaticKeyColors[i]);
             }
+            SendStaticKeysToKeyboard(false, true);
         }
         
-        private void SendStaticKeysToKeyboard(bool UseLastProfile)
+        private void SendStaticKeysToKeyboard(bool UseLastProfile, bool SuppressMessages = false)
         {
             if (LoadSizePositionMaps() == false) { return; };
-            KeyboardWriter keyWriter = new KeyboardWriter();
-            keyWriter.Write(Program.StaticKeyColorsBytes, true);
+            KeyboardWriter keyWriter = new KeyboardWriter(SuppressMessages: SuppressMessages);
+            try
+            {
+                keyWriter.Write(Program.StaticKeyColorsBytes, true);
+            }
+            catch
+            {
+                UpdateStatusMessage.ShowStatusMessage(3, "Send Keys Failed");
+            }
         }
 
         public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -1094,6 +1442,8 @@ namespace RGBKeyboardSpectrograph
                 case "K95-RGB":
                     keyboardDirectoryName = "k95rgb";
                     break;
+                default:
+                    return;
             }
             string imagePath = Directory.GetCurrentDirectory() + "\\corsair_devices\\" +
                                       keyboardDirectoryName + "\\image\\" + keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex] +
@@ -1111,20 +1461,60 @@ namespace RGBKeyboardSpectrograph
         
         public void KeyboardButton_Click(object sender, EventArgs e)
         {
-            // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
-            int buttonID = (int)((Button)sender).Tag;
+            if (StaticCopyPasteMode == 0) // Open the color picker
+            {
+                // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
+                int buttonID = (int)((Button)sender).Tag;
 
+                System.Windows.Media.Color selectedMediaColor;
+                Color selectedColor = ((Button)sender).BackColor;
+                ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+                dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+                if (dia.ShowDialog() == true)
+                {
+                    selectedMediaColor = dia.SelectedColor; //do something with the selected color
+                    selectedColor = Color.FromArgb(127, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+                }
+                Program.StaticKeyColors[(int)(((Button)sender).Tag)] = selectedColor;
+                RefreshKeyColors();
+            }
+            else if (StaticCopyPasteMode == 1) // Copy color
+            {
+                StaticCopyPasteColor.BackColor = Color.FromArgb(255, ((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+                StaticCopyPasteMode = 0;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            }
+            else if (StaticCopyPasteMode == 2) // Paste color
+            {
+                
+                Color copiedColor;
+                if (StaticCopyPasteColor.BackColor == Color.Transparent)
+                {
+                    copiedColor = Color.Transparent;
+                }
+                else
+                {
+                    copiedColor = Color.FromArgb(127, StaticCopyPasteColor.BackColor.R, StaticCopyPasteColor.BackColor.G, StaticCopyPasteColor.BackColor.B);
+                }
+
+                ((Button)sender).BackColor = copiedColor;
+                Program.StaticKeyColors[(int)(((Button)sender).Tag)] = copiedColor;
+                RefreshKeyColors();
+            }
+        }
+        
+        private void StaticCopyPasteColor_Click(object sender, EventArgs e)
+        {
             System.Windows.Media.Color selectedMediaColor;
             Color selectedColor = ((Button)sender).BackColor;
             ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-            dia.InitialColor = System.Windows.Media.Color.FromRgb(255, 0, 0); //set the initial color
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R,((Button)sender).BackColor.G,((Button)sender).BackColor.B);
             if (dia.ShowDialog() == true)
             {
                 selectedMediaColor = dia.SelectedColor; //do something with the selected color
-                selectedColor = Color.FromArgb(127, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
             }
-            Program.StaticKeyColors[(int)(((Button)sender).Tag)] = selectedColor;
-            RefreshKeyColors();
+            ((Button)sender).BackColor = selectedColor;
         }
 
         private void LoadProfileButton_Click(object sender, EventArgs e)
@@ -1193,8 +1583,46 @@ namespace RGBKeyboardSpectrograph
             SendStaticKeysToKeyboard(false);
         }
 
-        #endregion [Static Keys] Buttons
+        private void StaticCopyButton_Click(object sender, EventArgs e)
+        {
+            if (StaticCopyPasteMode == 0 || StaticCopyPasteMode == 2)
+            {
+                StaticCopyPasteMode = 1;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Green;
+                StaticPasteButton.FlatAppearance.BorderColor = Color.Black;
+            }
+            else if (StaticCopyPasteMode == 1)
+            {
+                StaticCopyPasteMode = 0;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            }
+        }
 
+        private void StaticPasteButton_Click(object sender, EventArgs e)
+        {
+            if (StaticCopyPasteMode == 0 || StaticCopyPasteMode == 1)
+            {
+                StaticCopyPasteMode = 2;
+                StaticPasteButton.FlatAppearance.BorderColor = Color.Green;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            }
+            else if (StaticCopyPasteMode == 2)
+            {
+                StaticCopyPasteMode = 0;
+                StaticPasteButton.FlatAppearance.BorderColor = Color.Black;
+            }
+        }
+
+        private void StaticClearButton_Click(object sender, EventArgs e)
+        {
+            StaticCopyPasteMode = 0;
+            StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            StaticPasteButton.FlatAppearance.BorderColor = Color.Black;
+            StaticCopyPasteColor.BackColor = Color.Transparent;
+        }
+
+        #endregion [Static Keys] Buttons
+        
         #endregion Tab: Static Keys
 
         #region Tab: Settings
@@ -1252,6 +1680,11 @@ namespace RGBKeyboardSpectrograph
             }
             SpectroEffectWidth_ValueChanged(null, null);
             SpectroBarWidth_ValueChanged(null, null);
+            if (SettingsKeyboardModelCB.Text != Program.SettingsKeyboardModel)
+            {
+                Program.SettingsKeyboardModel = SettingsKeyboardModelCB.Text;
+                Program.StaticKeysNeedRedraw = true;
+            }
         }
 
         private void SettingsKeyboardLayoutCB_SelectedIndexChanged(object sender, EventArgs e)
@@ -1259,6 +1692,11 @@ namespace RGBKeyboardSpectrograph
             if (Program.RunKeyboardThread == 2)
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Please stop and start anew to apply new layout.");
+            }
+            if (SettingsKeyboardLayoutCB.Text != Program.SettingsKeyboardLayout)
+            {
+                Program.SettingsKeyboardLayout = SettingsKeyboardLayoutCB.Text;
+                Program.StaticKeysNeedRedraw = true;
             }
         }
 
@@ -1308,10 +1746,10 @@ namespace RGBKeyboardSpectrograph
         #region [Debug] Buttons
         private void DebugTestModeButton_Click(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 3 || Program.RunKeyboardThread == 0)
+            if (Program.RunKeyboardThread == -1 || Program.RunKeyboardThread == 0)
             {
                 UpdateStatusMessage.ShowStatusMessage(4, "Starting Test Mode");
-                if (StartSpectrograph(4) == true) { StartSpectrographButton.Enabled = false; }
+                if (StartSpectrograph(1) == true) { StartSpectrographButton.Enabled = false; }
             }
         }
 
@@ -1333,16 +1771,29 @@ namespace RGBKeyboardSpectrograph
         #endregion Tab: Debug
 
         #region Program
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void MainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Show debug info (log, test mode) when Static Keys tab isn't selected.
             bool ShowDebugControls = true;
-            if (tabControl1.SelectedIndex == 2) { ShowDebugControls = false; };
+            if (MainTabControl.SelectedIndex == 2) { ShowDebugControls = false; };
 
             DebugStatusLog.Visible = ShowDebugControls;
             DebugTestModeButton.Visible = ShowDebugControls;
             DebugTesterUD.Visible = ShowDebugControls;
             DebugLogLevelLabel.Visible = ShowDebugControls;
             DebugLogLevelUD.Visible = ShowDebugControls;
+
+            // See if keyboard image needs to be redrawn
+            if (MainTabControl.SelectedIndex == 2 && Program.StaticKeysNeedRedraw == true)
+            {
+                Program.StaticKeysNeedRedraw = false;
+                // Load static key map
+                for (int i = 0; i < Program.StaticKeyColors.Length; i++)
+                { Program.StaticKeyColors[i] = Color.Transparent; };
+                StaticGetKeyboardImage_Click(null, null);
+                // Clear profile
+                //NewProfileButton_Click(null, null);
+            }
         }
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1372,11 +1823,26 @@ namespace RGBKeyboardSpectrograph
             this.Close();
         }
 
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            // Handle the escape key
+            // Currently this is only used in Static Keys to exit copy/paste mode
+            if (e.KeyCode == Keys.Escape)
+            {
+                // If we're in the Static Keys page
+                if (MainTabControl.SelectedIndex == 2)
+                {
+                    StaticCopyPasteMode = 0;
+                    StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+                    StaticPasteButton.FlatAppearance.BorderColor = Color.Black;
+                }
+            }
+        }
+
         #endregion Program
-                   
+        
         #endregion Controls
-
-
+        
     } //MainForm
 
     #region Helper Classes

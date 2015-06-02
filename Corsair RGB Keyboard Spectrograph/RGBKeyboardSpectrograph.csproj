@@ -39,7 +39,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>CorsairLogoTransparent.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\CorsairLogoTransparent.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -70,7 +70,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effects.cs" />
+    <Compile Include="SpecialEffects.cs" />
+    <Compile Include="SpectroEffects.cs" />
     <Compile Include="SpectroControl.cs" />
     <Compile Include="KeyboardWriter.cs" />
     <Compile Include="MainForm.cs">
@@ -110,8 +111,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CorsairLogo.ico" />
-    <Content Include="CorsairLogoTransparent.ico" />
+    <Content Include="Resources\CorsairLogo.ico" />
+    <Content Include="Resources\CorsairLogoTransparent.ico" />
     <Content Include="corsair_devices\cgk65rgb\image\be.jpg" />
     <Content Include="corsair_devices\cgk65rgb\image\br.jpg" />
     <Content Include="corsair_devices\cgk65rgb\image\ch.jpg" />
@@ -171,24 +172,30 @@
     <Content Include="corsair_devices\sabre2\image\sabre2-lighting.png" />
     <Content Include="corsair_devices\sabre2\image\sabre2.png" />
     <Content Include="corsair_devices\sabre2\profile_sabre2.xml" />
-    <Content Include="Corsair_Sails_Small.ico" />
-    <Content Include="K65-RGB.xml">
+    <Content Include="Resources\Corsair_Sails_Small.ico" />
+    <Content Include="Resources\K65-RGB.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="K70-RGB.xml">
+    <Content Include="Resources\K70-RGB.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="K95-RGB.xml">
+    <Content Include="Resources\K95-RGB.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Notes.txt" />
+    <None Include="Resources\paintbucket.png" />
+    <None Include="Resources\eyedropper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(ProjectDir)K65-RGB.xml" "$(ProjectDir)$(OutDir)"
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>xcopy /Y "$(ProjectDir)K65-RGB.xml" "$(ProjectDir)$(OutDir)"
 xcopy /Y "$(ProjectDir)K70-RGB.xml" "$(ProjectDir)$(OutDir)"
 xcopy /Y "$(ProjectDir)K95-RGB.xml" "$(ProjectDir)$(OutDir)"
-xcopy /S /I /Y "$(ProjectDir)corsair_devices\*" "$(ProjectDir)$(OutDir)corsair_devices\*"</PostBuildEvent>
+xcopy /S /I /Y "$(ProjectDir)corsair_devices\*" "$(ProjectDir)$(OutDir)corsair_devices\*"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -49,9 +49,9 @@ namespace RGBKeyboardSpectrograph
             if (PerformFFT && FftCalculated != null)
             {
                 //fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
-                //fftBuffer[fftPos].Real = value * 0.5f * (float)Math.Cos((2 * Math.PI * fftPos) / (fftLength - 1)) * Program.SpectroAmplitude * 100;
+                fftBuffer[fftPos].Real = value * 0.5f * (float)Math.Cos((2 * Math.PI) / (fftLength - 1)) * Program.SpectroAmplitude * 100;
                 //fftBuffer[fftPos].Real = (value - .5f) * Program.SpectroAmplitude * 100;
-                fftBuffer[fftPos].Real = fftPos;
+                //fftBuffer[fftPos].Real = fftPos;
                 fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
                 if (fftPos >= fftLength)
@@ -134,6 +134,7 @@ namespace RGBKeyboardSpectrograph
 
         private static void CSCore_StopCapture()
         {
+            UpdateStatusMessage.ShowStatusMessage(2, "Stopping Capture");
             try { capture.Stop(); }
             catch { }
             CSCore_Cleanup();
@@ -146,6 +147,7 @@ namespace RGBKeyboardSpectrograph
                 capture.Dispose();
                 capture = null;
             }
+            UpdateStatusMessage.ShowStatusMessage(2, "Capture Destroyed");
         }
 
         private static void FftCalculated(object sender, FftEventArgs e)
@@ -171,10 +173,10 @@ namespace RGBKeyboardSpectrograph
         
         public static void KeyboardControl(int captureType, MMDevice captureDevice)
         {
-            if (Program.RunKeyboardThread == 4)
+            if (Program.RunKeyboardThread == 1)
             {
                 keyWriter = new KeyboardWriter();
-                while (Program.RunKeyboardThread == 4) {
+                while (Program.RunKeyboardThread == 1) {
                     keyWriter.Write(-1, null, Program.StaticKeyColorsBytes, Program.TestLed);
                     Thread.Sleep(20);
                 }
@@ -232,7 +234,6 @@ namespace RGBKeyboardSpectrograph
                 }
                 Program.CSCore_FirstStart = false;
 
-
                 while (Program.CSCore_CaptureStarted == false)
                 {
                     if (Program.RunKeyboardThread != 2)
@@ -247,9 +248,10 @@ namespace RGBKeyboardSpectrograph
 }
 
 /* Thread Status Index
- * 0: Destroyed
- * 1: Initiation Failed
- * 2: Running
- * 3: Not yet created
- * 4: Test Mode
+-2: Initiation Failed
+-1: Not yet created
+ 0: Destroyed
+ 1: Test Mode
+ 2: Spectro Running
+ 3: Effects Running
  */

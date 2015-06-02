@@ -185,25 +185,25 @@ namespace RGBKeyboardSpectrograph
                                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-        private static Effects Foreground;
-        private static Effects Background;
+        private static SpectroEffects Foreground;
+        private static SpectroEffects Background;
 
         /* // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
         [DllImport("kernel32.dll", SetLastError = true)]
         static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr lpOverlapped); 
         */
-        public KeyboardWriter(bool restoreLighting = false)
+        public KeyboardWriter(bool restoreLighting = false, bool SuppressMessages = false)
         {
             if (restoreLighting == true)
             {
                 isRestoringLighting = true;
-                InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardName);
+                InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardModel);
                 bool packet1success = SendUsbMessage(RestorePacket1);
                 bool packet2success = SendUsbMessage(RestorePacket2);
                 return;
             }
 
-            if (InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardName) == 1)
+            if (InitKeyboard(Program.SettingsKeyboardID, Program.SettingsKeyboardModel, SuppressMessages) == 1)
             {
                 Program.RunKeyboardThread = 0;
                 return;
@@ -237,7 +237,7 @@ namespace RGBKeyboardSpectrograph
             {
                 for (int k = 0; k < 7; k++)
                 {
-                    Background = new Effects("Background", Program.SpectroBg.Mode, i, k);
+                    Background = new SpectroEffects("Background", Program.SpectroBg.Mode, i, k);
                     this.SetLed(i, k, Background.Red, Background.Grn, Background.Blu);
                 }
             }
@@ -257,7 +257,7 @@ namespace RGBKeyboardSpectrograph
                     if ((int)compData[i] > ((32 / (1 + (i * .95))) * (7 - k)))
                     //if ((int)compData[i] > (-Math.Log10(i)+2.2) * (7-k))
                     {
-                        Foreground = new Effects("SpectroForeground", Program.SpectroBars.Mode, i, k);
+                        Foreground = new SpectroEffects("SpectroForeground", Program.SpectroBars.Mode, i, k);
                         this.SetLed(i, k, Foreground.Red, Foreground.Grn, Foreground.Blu);
                     }
                 }
@@ -393,11 +393,10 @@ namespace RGBKeyboardSpectrograph
             this.greenValues[led] = (byte)g;
             this.blueValues[led] = (byte)b;
         }
-
-
-        private int InitKeyboard(uint KeyboardID, string KeyboardName)
+        
+        private int InitKeyboard(uint KeyboardID, string KeyboardName, bool SuppressMessages = false)
         {
-            UpdateStatusMessage.ShowStatusMessage(4, "Searching for " + KeyboardName + " (" + KeyboardID.ToString("X") + ")");
+            if (SuppressMessages == false) { UpdateStatusMessage.ShowStatusMessage(4, "Searching for " + KeyboardName + " (" + KeyboardID.ToString("X") + ")"); };
 
             this.keyboardUsbDevice = this.GetDeviceHandle(0x1B1C, KeyboardID, 0x3);
 
@@ -406,22 +405,23 @@ namespace RGBKeyboardSpectrograph
                 UpdateStatusMessage.ShowStatusMessage(3, KeyboardName + " not found");
                 return 1;
             }
-            
-            UpdateStatusMessage.ShowStatusMessage(4, KeyboardName + " Found");
+
+            if (SuppressMessages == false) { UpdateStatusMessage.ShowStatusMessage(4, KeyboardName + " Found"); };
             if (isRestoringLighting == false)
             {
+
                 // Construct XY lookup table
-                if (InitiateLookupTable() == false)
+                if (InitiateLookupTable(SuppressMessages) == false)
                 {
                     UpdateStatusMessage.ShowStatusMessage(3, "An error occurred when attempting to initiate the keyboard");
                     return 1;
                 }
-                InitiateDrawTable();
+                InitiateDrawTable(SuppressMessages);
             }
             return 0;
         }
 
-        private bool InitiateLookupTable()
+        private bool InitiateLookupTable(bool SuppressMessages = false)
         {
             var keys = Program.MyPositionMap.GetEnumerator();
             keys.MoveNext();
@@ -476,11 +476,11 @@ namespace RGBKeyboardSpectrograph
                 keys.MoveNext();
                 sizes.MoveNext();
             }
-            UpdateStatusMessage.ShowStatusMessage(4, "InitializeLookupTable Done");
+            if (SuppressMessages == false) { UpdateStatusMessage.ShowStatusMessage(4, "InitializeLookupTable Done"); };
             return true;
         }
 
-        private void InitiateDrawTable()
+        private void InitiateDrawTable(bool SuppressMessages = false)
         {
             int PreviousKey = 0;
             int CurrentKey = 0;
@@ -503,7 +503,7 @@ namespace RGBKeyboardSpectrograph
                 }
             }
 
-            UpdateStatusMessage.ShowStatusMessage(4, "InitializeDrawTable Done");
+            if (SuppressMessages == false) { UpdateStatusMessage.ShowStatusMessage(4, "InitializeDrawTable Done"); };
             return;
         }
 

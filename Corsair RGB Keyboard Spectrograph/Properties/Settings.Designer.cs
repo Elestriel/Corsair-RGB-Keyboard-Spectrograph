@@ -97,7 +97,7 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int userRefreshDelay {
             get {
                 return ((int)(this["userRefreshDelay"]));
@@ -356,6 +356,234 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["userLastUsedProfile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int Eff_RL_S_Mode {
+            get {
+                return ((int)(this["Eff_RL_S_Mode"]));
+            }
+            set {
+                this["Eff_RL_S_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color Eff_RL_S_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Eff_RL_S_DefinedColor"]));
+            }
+            set {
+                this["Eff_RL_S_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_S_CLow_Red {
+            get {
+                return ((int)(this["Eff_RL_S_CLow_Red"]));
+            }
+            set {
+                this["Eff_RL_S_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_S_CLow_Green {
+            get {
+                return ((int)(this["Eff_RL_S_CLow_Green"]));
+            }
+            set {
+                this["Eff_RL_S_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_S_CLow_Blue {
+            get {
+                return ((int)(this["Eff_RL_S_CLow_Blue"]));
+            }
+            set {
+                this["Eff_RL_S_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_S_CHigh_Red {
+            get {
+                return ((int)(this["Eff_RL_S_CHigh_Red"]));
+            }
+            set {
+                this["Eff_RL_S_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_S_CHigh_Green {
+            get {
+                return ((int)(this["Eff_RL_S_CHigh_Green"]));
+            }
+            set {
+                this["Eff_RL_S_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_S_CHigh_Blue {
+            get {
+                return ((int)(this["Eff_RL_S_CHigh_Blue"]));
+            }
+            set {
+                this["Eff_RL_S_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_E_Mode {
+            get {
+                return ((int)(this["Eff_RL_E_Mode"]));
+            }
+            set {
+                this["Eff_RL_E_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color Eff_RL_E_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Eff_RL_E_DefinedColor"]));
+            }
+            set {
+                this["Eff_RL_E_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_E_CLow_Red {
+            get {
+                return ((int)(this["Eff_RL_E_CLow_Red"]));
+            }
+            set {
+                this["Eff_RL_E_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_E_CLow_Green {
+            get {
+                return ((int)(this["Eff_RL_E_CLow_Green"]));
+            }
+            set {
+                this["Eff_RL_E_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_E_CLow_Blue {
+            get {
+                return ((int)(this["Eff_RL_E_CLow_Blue"]));
+            }
+            set {
+                this["Eff_RL_E_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_E_CHigh_Red {
+            get {
+                return ((int)(this["Eff_RL_E_CHigh_Red"]));
+            }
+            set {
+                this["Eff_RL_E_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_E_CHigh_Green {
+            get {
+                return ((int)(this["Eff_RL_E_CHigh_Green"]));
+            }
+            set {
+                this["Eff_RL_E_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Eff_RL_E_CHigh_Blue {
+            get {
+                return ((int)(this["Eff_RL_E_CHigh_Blue"]));
+            }
+            set {
+                this["Eff_RL_E_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int Eff_RL_Duration {
+            get {
+                return ((int)(this["Eff_RL_Duration"]));
+            }
+            set {
+                this["Eff_RL_Duration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Eff_RL_Delay {
+            get {
+                return ((int)(this["Eff_RL_Delay"]));
+            }
+            set {
+                this["Eff_RL_Delay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EffectUseStaticKeys {
+            get {
+                return ((bool)(this["EffectUseStaticKeys"]));
+            }
+            set {
+                this["EffectUseStaticKeys"] = value;
             }
         }
     }
