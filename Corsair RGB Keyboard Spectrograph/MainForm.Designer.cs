@@ -56,9 +56,12 @@
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmStart = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmShowStatic = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingsMinimizeToTrayCheck = new System.Windows.Forms.CheckBox();
             this.StatusTimer = new System.Windows.Forms.Timer(this.components);
@@ -90,7 +93,6 @@
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.tabSpectro = new System.Windows.Forms.TabPage();
             this.tabEffects = new System.Windows.Forms.TabPage();
-            this.EffectsUseStaticLights = new System.Windows.Forms.CheckBox();
             this.EffectsStopButton = new System.Windows.Forms.Button();
             this.EffectsStartButton = new System.Windows.Forms.Button();
             this.EffectTabControl = new System.Windows.Forms.TabControl();
@@ -138,6 +140,7 @@
             this.Eff_RL_FrequencyUD = new System.Windows.Forms.NumericUpDown();
             this.Eff_RL_DurationUD = new System.Windows.Forms.NumericUpDown();
             this.tabStatic = new System.Windows.Forms.TabPage();
+            this.AnimationsUseStaticLights = new System.Windows.Forms.CheckBox();
             this.StaticClearButton = new System.Windows.Forms.Button();
             this.StaticCopyPasteColor = new System.Windows.Forms.Button();
             this.StaticPasteButton = new System.Windows.Forms.Button();
@@ -155,6 +158,7 @@
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
+            this.tsmRefreshStatic = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -390,50 +394,73 @@
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmAbout,
             this.toolStripSeparator1,
-            this.tsmStart,
-            this.tsmStop,
+            this.tsmShowStatic,
+            this.tsmRefreshStatic,
             this.toolStripSeparator2,
+            this.tsmStartSpectro,
+            this.tsmStartEffects,
+            this.tsmStop,
+            this.toolStripSeparator3,
             this.tsmQuit});
             this.RightClickMenu.Name = "contextMenuStrip1";
             this.RightClickMenu.ShowCheckMargin = true;
             this.RightClickMenu.ShowImageMargin = false;
-            this.RightClickMenu.Size = new System.Drawing.Size(171, 104);
+            this.RightClickMenu.Size = new System.Drawing.Size(173, 198);
             // 
             // tsmAbout
             // 
             this.tsmAbout.Enabled = false;
             this.tsmAbout.Name = "tsmAbout";
-            this.tsmAbout.Size = new System.Drawing.Size(170, 22);
+            this.tsmAbout.Size = new System.Drawing.Size(172, 22);
             this.tsmAbout.Text = "RGB Spectrograph";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(167, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(169, 6);
             // 
-            // tsmStart
+            // tsmShowStatic
             // 
-            this.tsmStart.Name = "tsmStart";
-            this.tsmStart.Size = new System.Drawing.Size(170, 22);
-            this.tsmStart.Text = "Start";
-            this.tsmStart.Click += new System.EventHandler(this.StartSpectrograph_Click);
-            // 
-            // tsmStop
-            // 
-            this.tsmStop.Name = "tsmStop";
-            this.tsmStop.Size = new System.Drawing.Size(170, 22);
-            this.tsmStop.Text = "Stop";
-            this.tsmStop.Click += new System.EventHandler(this.StopSpectrograph_Click);
+            this.tsmShowStatic.Name = "tsmShowStatic";
+            this.tsmShowStatic.Size = new System.Drawing.Size(172, 22);
+            this.tsmShowStatic.Text = "Show Static Keys";
+            this.tsmShowStatic.Click += new System.EventHandler(this.tsmShowStatic_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(167, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(169, 6);
+            // 
+            // tsmStartSpectro
+            // 
+            this.tsmStartSpectro.Name = "tsmStartSpectro";
+            this.tsmStartSpectro.Size = new System.Drawing.Size(172, 22);
+            this.tsmStartSpectro.Text = "Start Spectro";
+            this.tsmStartSpectro.Click += new System.EventHandler(this.StartSpectrograph_Click);
+            // 
+            // tsmStartEffects
+            // 
+            this.tsmStartEffects.Name = "tsmStartEffects";
+            this.tsmStartEffects.Size = new System.Drawing.Size(172, 22);
+            this.tsmStartEffects.Text = "Start Effects";
+            this.tsmStartEffects.Click += new System.EventHandler(this.EffectsStartButton_Click);
+            // 
+            // tsmStop
+            // 
+            this.tsmStop.Name = "tsmStop";
+            this.tsmStop.Size = new System.Drawing.Size(172, 22);
+            this.tsmStop.Text = "Stop Animation";
+            this.tsmStop.Click += new System.EventHandler(this.StopSpectrograph_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(169, 6);
             // 
             // tsmQuit
             // 
             this.tsmQuit.Name = "tsmQuit";
-            this.tsmQuit.Size = new System.Drawing.Size(170, 22);
+            this.tsmQuit.Size = new System.Drawing.Size(172, 22);
             this.tsmQuit.Text = "Quit";
             this.tsmQuit.Click += new System.EventHandler(this.tsmQuit_Click);
             // 
@@ -540,6 +567,7 @@
             this.SettingsUSB3ModeCheck.TabIndex = 33;
             this.SettingsUSB3ModeCheck.Text = "USB 3.0";
             this.SettingsUSB3ModeCheck.UseVisualStyleBackColor = true;
+            this.SettingsUSB3ModeCheck.Visible = false;
             this.SettingsUSB3ModeCheck.CheckedChanged += new System.EventHandler(this.SettingsUSB3Mode_CheckedChanged);
             // 
             // SpectroShowGraphicsCheck
@@ -710,7 +738,7 @@
             this.SpectroBarBrightnessUD.Size = new System.Drawing.Size(47, 20);
             this.SpectroBarBrightnessUD.TabIndex = 47;
             this.SpectroBarBrightnessUD.Value = new decimal(new int[] {
-            15,
+            40,
             0,
             0,
             0});
@@ -839,7 +867,6 @@
             // 
             // tabEffects
             // 
-            this.tabEffects.Controls.Add(this.EffectsUseStaticLights);
             this.tabEffects.Controls.Add(this.EffectsStopButton);
             this.tabEffects.Controls.Add(this.EffectsStartButton);
             this.tabEffects.Controls.Add(this.EffectTabControl);
@@ -849,17 +876,6 @@
             this.tabEffects.TabIndex = 3;
             this.tabEffects.Text = "Effects";
             this.tabEffects.UseVisualStyleBackColor = true;
-            // 
-            // EffectsUseStaticLights
-            // 
-            this.EffectsUseStaticLights.AutoSize = true;
-            this.EffectsUseStaticLights.Location = new System.Drawing.Point(157, 308);
-            this.EffectsUseStaticLights.Name = "EffectsUseStaticLights";
-            this.EffectsUseStaticLights.Size = new System.Drawing.Size(101, 17);
-            this.EffectsUseStaticLights.TabIndex = 17;
-            this.EffectsUseStaticLights.Text = "Use Static Keys";
-            this.EffectsUseStaticLights.UseVisualStyleBackColor = true;
-            this.EffectsUseStaticLights.CheckedChanged += new System.EventHandler(this.EffectsUseStaticLights_CheckedChanged);
             // 
             // EffectsStopButton
             // 
@@ -1451,6 +1467,7 @@
             // 
             // tabStatic
             // 
+            this.tabStatic.Controls.Add(this.AnimationsUseStaticLights);
             this.tabStatic.Controls.Add(this.StaticClearButton);
             this.tabStatic.Controls.Add(this.StaticCopyPasteColor);
             this.tabStatic.Controls.Add(this.StaticPasteButton);
@@ -1468,6 +1485,17 @@
             this.tabStatic.TabIndex = 4;
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
+            // 
+            // AnimationsUseStaticLights
+            // 
+            this.AnimationsUseStaticLights.AutoSize = true;
+            this.AnimationsUseStaticLights.Location = new System.Drawing.Point(15, 305);
+            this.AnimationsUseStaticLights.Name = "AnimationsUseStaticLights";
+            this.AnimationsUseStaticLights.Size = new System.Drawing.Size(174, 17);
+            this.AnimationsUseStaticLights.TabIndex = 59;
+            this.AnimationsUseStaticLights.Text = "Show Static Keys in Animations";
+            this.AnimationsUseStaticLights.UseVisualStyleBackColor = true;
+            this.AnimationsUseStaticLights.CheckedChanged += new System.EventHandler(this.AnimationsUseStaticLights_CheckedChanged);
             // 
             // StaticClearButton
             // 
@@ -1655,6 +1683,13 @@
             this.SettingsCuePathLabel.TabIndex = 53;
             this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
+            // tsmRefreshStatic
+            // 
+            this.tsmRefreshStatic.Name = "tsmRefreshStatic";
+            this.tsmRefreshStatic.Size = new System.Drawing.Size(172, 22);
+            this.tsmRefreshStatic.Text = "Refresh Static Keys";
+            this.tsmRefreshStatic.Click += new System.EventHandler(this.UpdateKeyboardButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1695,7 +1730,6 @@
             this.tabSpectro.ResumeLayout(false);
             this.tabSpectro.PerformLayout();
             this.tabEffects.ResumeLayout(false);
-            this.tabEffects.PerformLayout();
             this.EffectTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -1724,6 +1758,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_FrequencyUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_DurationUD)).EndInit();
             this.tabStatic.ResumeLayout(false);
+            this.tabStatic.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.KeyboardImageBox)).EndInit();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
@@ -1757,7 +1792,7 @@
         private System.Windows.Forms.ContextMenuStrip RightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmAbout;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem tsmStart;
+        private System.Windows.Forms.ToolStripMenuItem tsmStartSpectro;
         private System.Windows.Forms.ToolStripMenuItem tsmStop;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmQuit;
@@ -1851,7 +1886,11 @@
         private System.Windows.Forms.RadioButton Eff_RL_End_Radio2;
         private System.Windows.Forms.RadioButton Eff_RL_End_Radio1;
         private System.Windows.Forms.Button EffectsStopButton;
-        private System.Windows.Forms.CheckBox EffectsUseStaticLights;
+        private System.Windows.Forms.ToolStripMenuItem tsmShowStatic;
+        private System.Windows.Forms.ToolStripMenuItem tsmStartEffects;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.CheckBox AnimationsUseStaticLights;
+        private System.Windows.Forms.ToolStripMenuItem tsmRefreshStatic;
 
     }
 }

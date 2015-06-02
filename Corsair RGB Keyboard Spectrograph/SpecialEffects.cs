@@ -72,12 +72,13 @@ namespace RGBKeyboardSpectrograph
                                     (byte)rnd.Next(Program.EfColors.ERandBLow, Program.EfColors.ERandBHigh));
                                 break;
                         }
+                        break;
                     }
                 }
 
                 for (int i = 0; i < 144; i++)
                 {
-                    if (Program.EffectsUseStaticKeys == true && Program.StaticKeyColorsBytes[i].Transparent == false)
+                    if (Program.AnimationsUseStaticKeys == true && Program.StaticKeyColorsBytes[i].Transparent == false)
                     {
                         sendMatrix[i].Set(Program.StaticKeyColorsBytes[i].KeyColor);
                     }

@@ -149,7 +149,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.Eff_RL_Duration = (int)Eff_RL_DurationUD.Value;
             Properties.Settings.Default.Eff_RL_Delay = (int)Eff_RL_FrequencyUD.Value;
 
-            Properties.Settings.Default.EffectUseStaticKeys = Program.EffectsUseStaticKeys;
+            Properties.Settings.Default.EffectUseStaticKeys = Program.AnimationsUseStaticKeys;
 
             // Save Settings
             Properties.Settings.Default.Save();
@@ -397,7 +397,7 @@ namespace RGBKeyboardSpectrograph
             Eff_RL_Start_RadioCheckedChanged(null, null);
             Eff_RL_End_RadioCheckedChanged(null, null);
 
-            Program.EffectsUseStaticKeys = Properties.Settings.Default.EffectUseStaticKeys;
+            AnimationsUseStaticLights.Checked = Properties.Settings.Default.EffectUseStaticKeys;
 
         #endregion Effects
 
@@ -443,7 +443,13 @@ namespace RGBKeyboardSpectrograph
                 SpectroShowGraphicsCheck.Checked = false;
                 Program.SpectroShowGraphics = false;
             }
-
+            
+            // Show Settings tab if there's no layout selected
+            if (SettingsKeyboardLayoutCB.SelectedIndex < 0)
+            {
+                MainTabControl.SelectTab(3);
+            };
+            
             // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
@@ -543,8 +549,7 @@ namespace RGBKeyboardSpectrograph
             {
                 if (Program.VersionCheckData[0] != Program.VersionNumber)
                 {
-                    UpdateStatusMessage.ShowStatusMessage(0, "Latest Version: " + Program.VersionCheckData[0]);
-                    SettingsGetUpdateButton.Visible = true;
+                    UpdateStatusMessage.ShowStatusMessage(9, "Latest Version: " + Program.VersionCheckData[0]);
                 }
             }
         }
@@ -577,13 +582,6 @@ namespace RGBKeyboardSpectrograph
             // Get audio device info
             if (SpectroWasapiLoopbackRadio.Checked == true) { Program.CSCore_DeviceType = 0; };
             if (SpectroWasapiRadio.Checked == true) { Program.CSCore_DeviceType = 1; };
-
-            // Break if there's no keyboard layout selected
-            if (SettingsKeyboardLayoutCB.SelectedIndex < 0) {
-                MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                UpdateStatusMessage.ShowStatusMessage(3, "No layout selected.");
-                return false;
-            };
 
             // Load keyboard size and position maps
             if (LoadSizePositionMaps() == false) { return false; };
@@ -629,6 +627,14 @@ namespace RGBKeyboardSpectrograph
 
         private bool LoadSizePositionMaps()
         {
+            // Break if there's no keyboard layout selected
+            if (SettingsKeyboardLayoutCB.SelectedIndex < 0)
+            {
+                MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                UpdateStatusMessage.ShowStatusMessage(3, "No layout selected.");
+                return false;
+            };
+
             // Load position and size maps
             string positionMaps = keyboardPositionMaps[SettingsKeyboardLayoutCB.SelectedIndex];
             string sizeMaps = keyboardSizeMaps[SettingsKeyboardLayoutCB.SelectedIndex];
@@ -691,6 +697,7 @@ namespace RGBKeyboardSpectrograph
         #endregion
 
         #region Thread Safe Delegate Functions
+
         public void UpdateStatusMessage_NewMsg(int messageType, string messageText)
         {
             string messagePrefix;
@@ -729,6 +736,11 @@ namespace RGBKeyboardSpectrograph
                     messageColour = ConsoleColor.Magenta;
                     logColour = Color.FromArgb(255, 128, 192);
                     break;
+                case 9:
+                    messagePrefix = "Update: ";
+                    messageColour = ConsoleColor.White;
+                    logColour = Color.FromArgb(255, 255, 255);
+                    break;
                 case 10:
                     messagePrefix = "Hidden: ";
                     messageColour = ConsoleColor.Gray;
@@ -749,6 +761,17 @@ namespace RGBKeyboardSpectrograph
 
                 StatusLabel.Text = messageText;
                 this.Invoke((MethodInvoker)(() => DebugStatusLog.AppendText(messagePrefix + messageText + Environment.NewLine, logColour)));
+            }
+            if (messageType == 9)
+            {
+                Console.ForegroundColor = messageColour;
+                Console.WriteLine(messagePrefix + messageText);
+                Console.ResetColor();
+
+                StatusLabel.Text = "An update is available!";
+                this.Invoke((MethodInvoker)(() => DebugStatusLog.AppendText(messagePrefix + messageText + Environment.NewLine, logColour)));
+                MethodInvoker action = () => SettingsGetUpdateButton.Visible = true; 
+                SettingsGetUpdateButton.Invoke(action);
             }
             if (messageType == 10)
             {
@@ -1111,8 +1134,9 @@ namespace RGBKeyboardSpectrograph
         private void EffectsStartButton_Click(object sender, EventArgs e)
         {
             if (Program.RunKeyboardThread == 3) { return; };
+            if (LoadSizePositionMaps() == false) { return; };
             Program.EfSettings.Set((int)Eff_RL_DurationUD.Value, (int)Eff_RL_FrequencyUD.Value, 0);
-            Program.EffectsUseStaticKeys = EffectsUseStaticLights.Checked;
+            Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
 
             Program.RunKeyboardThread = 3;
             workerThread = new Thread(() => SpecialEffects.KeyboardControl("thing"));
@@ -1124,9 +1148,16 @@ namespace RGBKeyboardSpectrograph
             Program.RunKeyboardThread = 0;
         }
 
-        private void EffectsUseStaticLights_CheckedChanged(object sender, EventArgs e)
+        private void AnimationsUseStaticLights_CheckedChanged(object sender, EventArgs e)
         {
-            Program.EffectsUseStaticKeys = EffectsUseStaticLights.Checked;
+            Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
+            tsmShowStatic.Checked = AnimationsUseStaticLights.Checked;
+        }
+        private void tsmShowStatic_Click(object sender, EventArgs e)
+        {
+            tsmShowStatic.Checked = !tsmShowStatic.Checked;
+            Program.AnimationsUseStaticKeys = tsmShowStatic.Checked;
+            AnimationsUseStaticLights.Checked = tsmShowStatic.Checked;
         }
 
         #region Tab: Effects: Random Lights

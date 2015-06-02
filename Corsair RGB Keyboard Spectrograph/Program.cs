@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.0pre4";
+        public static string VersionNumber = "0.6.0";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -34,7 +34,7 @@ namespace RGBKeyboardSpectrograph
         // Effects
         public static EffectSettings EfSettings = new EffectSettings();
         public static EffectColorSettings EfColors = new EffectColorSettings();
-        public static bool EffectsUseStaticKeys = false;
+        public static bool AnimationsUseStaticKeys = false;
 
         // Settings
         public static string SettingsKeyboardModel;

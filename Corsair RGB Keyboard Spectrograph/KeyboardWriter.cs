@@ -139,6 +139,7 @@ namespace RGBKeyboardSpectrograph
 
         // Used for CreateFile
         public const short FILE_ATTRIBUTE_NORMAL = 0x80;
+
         //public const short INVALID_HANDLE_VALUE = -1;
         public const uint GENERIC_READ = 0x80000000;
         public const uint GENERIC_WRITE = 0x40000000;
@@ -188,10 +189,10 @@ namespace RGBKeyboardSpectrograph
         private static SpectroEffects Foreground;
         private static SpectroEffects Background;
 
-        /* // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
+        // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
         [DllImport("kernel32.dll", SetLastError = true)]
-        static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr lpOverlapped); 
-        */
+        static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr ipOverlapped); 
+        
         public KeyboardWriter(bool restoreLighting = false, bool SuppressMessages = false)
         {
             if (restoreLighting == true)
@@ -393,7 +394,7 @@ namespace RGBKeyboardSpectrograph
             this.greenValues[led] = (byte)g;
             this.blueValues[led] = (byte)b;
         }
-        
+
         private int InitKeyboard(uint KeyboardID, string KeyboardName, bool SuppressMessages = false)
         {
             if (SuppressMessages == false) { UpdateStatusMessage.ShowStatusMessage(4, "Searching for " + KeyboardName + " (" + KeyboardID.ToString("X") + ")"); };
@@ -563,13 +564,17 @@ namespace RGBKeyboardSpectrograph
                     break;
                 }
 
-                var deviceHandle = CreateFile(interfaceDetailData.DevicePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+                //var deviceHandle = CreateFile(interfaceDetailData.DevicePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+                var deviceHandle = CreateFile(interfaceDetailData.DevicePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, 0, IntPtr.Zero);
                 if (deviceHandle.ToInt64() == INVALID_HANDLE_VALUE)
                 {
                     break;
                 }
 
                 returnPointer = deviceHandle;
+                byte usb_pkt = new byte();
+                usb_pkt = 0;
+                bool res = HidD_SetFeature(returnPointer, ref usb_pkt, 65);
                 break;
             }
 
@@ -669,11 +674,22 @@ namespace RGBKeyboardSpectrograph
                 if (this.SendUsbMessage(dataPacket[p]) == false)
                 {
                     UpdateStatusMessage.ShowStatusMessage(3, "Packet " + p + " Failed");
-                    WritePacketToLog(dataPacket[p], dataPacket[p]);
                 };
-                if (Program.SettingsUsb3Mode == true) { Thread.Sleep(1); };
                 Program.ThreadStatus = 1;
             }
+        }
+
+        private bool SendUsbMessage(byte[] data_pkt)
+        {
+            byte[] usb_pkt = new byte[65];
+            for (int i = 1; i < 65; i++)
+            {
+                usb_pkt[i] = data_pkt[i - 1];
+            }
+            
+            //return HidD_SetFeature(this.keyboardUsbDevice, ref usb_pkt[0], 65);
+            uint written = 0;
+            return WriteFile(this.keyboardUsbDevice, usb_pkt, 65, ref written, IntPtr.Zero);
         }
 
         private void WritePacketToLog(byte[] CurrentPacket, byte[] PreviousPacket)
@@ -689,20 +705,6 @@ namespace RGBKeyboardSpectrograph
             string outputPath = Directory.GetCurrentDirectory() + "log-" + timeNow + ".txt";
             File.WriteAllText(outputPath, strOutput);
             Program.FailedPacketLogWritten = true;
-        }
-
-        private bool SendUsbMessage(byte[] data_pkt)
-        {
-            byte[] usb_pkt = new byte[65];
-            for (int i = 1; i < 65; i++)
-            {
-                usb_pkt[i] = data_pkt[i - 1];
-            }
-            
-            return HidD_SetFeature(this.keyboardUsbDevice, ref usb_pkt[0], 65);
-            // More stuff for new USB methods.
-            //uint written = 0;
-            //return WriteFile(this.keyboardUsbDevice, usb_pkt, 65, ref written, IntPtr.Zero);
         }
 
         private void WriteGraphics()
