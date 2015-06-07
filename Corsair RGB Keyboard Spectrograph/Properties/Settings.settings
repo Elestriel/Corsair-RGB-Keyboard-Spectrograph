@@ -2,88 +2,88 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RGBKeyboardSpectrograph.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="userKeyboardModel" Type="System.String" Scope="User">
+    <Setting Name="settingKeyboardModel" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userKeyboardLayout" Type="System.String" Scope="User">
+    <Setting Name="settingKeyboardLayout" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userAmplitude" Type="System.Int32" Scope="User">
+    <Setting Name="spectroAmplitude" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="userBackgroundBrightness" Type="System.Int32" Scope="User">
+    <Setting Name="spectroBackgroundBrightness" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
     </Setting>
-    <Setting Name="userLogLevel" Type="System.Int32" Scope="User">
+    <Setting Name="debugLogLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="userMinimizeToTray" Type="System.Boolean" Scope="User">
+    <Setting Name="settingMinimizeToTray" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="userRefreshDelay" Type="System.Int32" Scope="User">
+    <Setting Name="spectroRefreshDelay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="userColorBars" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="spectroColorBars" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">White</Value>
     </Setting>
-    <Setting Name="userColorBackground" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="spectroColorBackground" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Fuchsia</Value>
     </Setting>
-    <Setting Name="userColorBackgroundType" Type="System.String" Scope="User">
+    <Setting Name="spectroColorBackgroundType" Type="System.String" Scope="User">
       <Value Profile="(Default)">Rainbow</Value>
     </Setting>
-    <Setting Name="userUsb3Mode" Type="System.Boolean" Scope="User">
+    <Setting Name="settingUsb3Mode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userShowGraphics" Type="System.Boolean" Scope="User">
+    <Setting Name="settingShowGraphics" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userBackgroundEffectWidth" Type="System.Single" Scope="User">
+    <Setting Name="spectroBackgroundEffectWidth" Type="System.Single" Scope="User">
       <Value Profile="(Default)">104</Value>
     </Setting>
-    <Setting Name="userBackgroundEffectSpeed" Type="System.Single" Scope="User">
+    <Setting Name="spectroBackgroundEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="userStartMinimized" Type="System.Boolean" Scope="User">
+    <Setting Name="settingStartMinimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userEffectsOnStart" Type="System.Boolean" Scope="User">
+    <Setting Name="settingEffectsOnStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userBarEffectWidth" Type="System.Single" Scope="User">
+    <Setting Name="spectroBarEffectWidth" Type="System.Single" Scope="User">
       <Value Profile="(Default)">104</Value>
     </Setting>
-    <Setting Name="userBarEffectSpeed" Type="System.Single" Scope="User">
+    <Setting Name="spectroBarEffectSpeed" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="userCaptureMode" Type="System.Int32" Scope="User">
+    <Setting Name="spectroCaptureMode" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="userCaptureDevice" Type="System.String" Scope="User">
+    <Setting Name="spectroCaptureDevice" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userColorBarsType" Type="System.String" Scope="User">
+    <Setting Name="spectroColorBarsType" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userBarBrightness" Type="System.Int32" Scope="User">
+    <Setting Name="spectroBarBrightness" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">40</Value>
     </Setting>
-    <Setting Name="userRestoreLighting" Type="System.Boolean" Scope="User">
+    <Setting Name="settingRestoreLighting" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userCueLocation" Type="System.String" Scope="User">
+    <Setting Name="settingCueLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userLaunchCueOnExit" Type="System.Boolean" Scope="User">
+    <Setting Name="settingLaunchCueOnExit" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userSpectroOnStart" Type="System.Boolean" Scope="User">
+    <Setting Name="settingSpectroOnStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userStaticOnStart" Type="System.Boolean" Scope="User">
+    <Setting Name="settingStaticOnStart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="userLastUsedProfile" Type="System.String" Scope="User">
+    <Setting Name="appLastUsedProfile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Eff_RL_S_Mode" Type="System.Int32" Scope="User">
@@ -138,10 +138,22 @@
       <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="Eff_RL_Delay" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="EffectUseStaticKeys" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="idleTriggerTime" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="idleMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Random Lights</Value>
+    </Setting>
+    <Setting Name="idleProfile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="idleUseIdleWatcher" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

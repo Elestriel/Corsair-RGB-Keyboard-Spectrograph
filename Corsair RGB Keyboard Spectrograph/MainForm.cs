@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,8 +33,10 @@ namespace RGBKeyboardSpectrograph
         Image keyboardImage;
         double keyboardImageScale = 0.6;
         int StaticCopyPasteMode = 0;
+        bool StaticUnsavedChanges = false;
    
         Thread workerThread = Program.newWorker;
+        Thread idleWatcherThread = Program.idleThread;
 
         public MainForm()
         {
@@ -47,23 +50,26 @@ namespace RGBKeyboardSpectrograph
             UpdateStatusMessage.ShowStatusMessage(1, "Shutting Down...");
             Application.DoEvents();
 
-            if (Program.RunKeyboardThread != 0) { 
-                StopSpectrograph();
-            };
-
-            Thread.Sleep(500);
-
-            if (Program.RunKeyboardThread != -1) {
-                if (workerThread != null)
+            // Close background threads
+            UpdateStatusMessage.ShowStatusMessage(2, "Closing threads...");
+          
+            if (workerThread != null) {
+                Program.RunKeyboardThread = 0;
+                while (workerThread.IsAlive)
                 {
-                    while (workerThread.IsAlive)
-                    {
-                        Application.DoEvents();
-                        Thread.Sleep(1000);
-                        UpdateStatusMessage.ShowStatusMessage(2, "Waiting for thread to quit...");
-                    }
+                    Application.DoEvents();
+                    Thread.Sleep(100);
                 }
-            }
+            };
+            if (idleWatcherThread != null)
+            {
+                Program.WatchForInactivity = false;
+                while (idleWatcherThread.IsAlive)
+                {
+                    Application.DoEvents();
+                    Thread.Sleep(100);
+                }
+            };
 
             if (Program.SettingsRestoreOnExit == true)
             {
@@ -82,48 +88,35 @@ namespace RGBKeyboardSpectrograph
                 catch { }
             }
 
+            Application.DoEvents();
+
+            // Destroy custom handles
+            UpdateStatusMessage.NewMsg -= UpdateStatusMessage_NewMsg;
+            UpdateWorkerThread.NewAct -= UpdateWorker_NewAct;
+            UpdateGraphicOutput.NewOut -= UpdateGraphicOutput_NewOut;
+            InactivityStatusChanged.DoAction -= InactivityStatusChanged_Action;
+
             // Save application settings
-            // Listboxes
-            Properties.Settings.Default.userKeyboardModel = SettingsKeyboardModelCB.Text;
-            Properties.Settings.Default.userKeyboardLayout = SettingsKeyboardLayoutCB.Text;
-            Properties.Settings.Default.userColorBackgroundType = SpectroBgEffectCB.Text;
-            Properties.Settings.Default.userColorBarsType = SpectroBarEffectCB.Text;
+            // Spectro
+            Properties.Settings.Default.spectroColorBackgroundType = SpectroBgEffectCB.Text;
+            Properties.Settings.Default.spectroColorBarsType = SpectroBarEffectCB.Text;
 
-            // UpDowns
-            Properties.Settings.Default.userAmplitude = (int)SpectroAmplitudeUD.Value;
-            Properties.Settings.Default.userBackgroundBrightness = (int)SpectroBgBrightnessUD.Value;
-            Properties.Settings.Default.userBarBrightness = (int)SpectroBarBrightnessUD.Value;
-            Properties.Settings.Default.userLogLevel = (int)DebugLogLevelUD.Value;
-            Properties.Settings.Default.userRefreshDelay = (int)SpectroRefreshDelayUD.Value;
-            Properties.Settings.Default.userBackgroundEffectWidth = (float)SpectroBgWidth.Value;
-            Properties.Settings.Default.userBackgroundEffectSpeed = (float)SpectroBgSpeed.Value;
-            Properties.Settings.Default.userBarEffectWidth = (float)SpectroBarWidth.Value;
-            Properties.Settings.Default.userBarEffectSpeed = (float)SpectroBarSpeed.Value;
+            Properties.Settings.Default.spectroAmplitude = (int)SpectroAmplitudeUD.Value;
+            Properties.Settings.Default.spectroBackgroundBrightness = (int)SpectroBgBrightnessUD.Value;
+            Properties.Settings.Default.spectroBarBrightness = (int)SpectroBarBrightnessUD.Value;
+            Properties.Settings.Default.spectroRefreshDelay = (int)SpectroRefreshDelayUD.Value;
+            Properties.Settings.Default.spectroBackgroundEffectWidth = (float)SpectroBgWidth.Value;
+            Properties.Settings.Default.spectroBackgroundEffectSpeed = (float)SpectroBgSpeed.Value;
+            Properties.Settings.Default.spectroBarEffectWidth = (float)SpectroBarWidth.Value;
+            Properties.Settings.Default.spectroBarEffectSpeed = (float)SpectroBarSpeed.Value;
 
-            // CheckBoxes
-            Properties.Settings.Default.userMinimizeToTray = SettingsMinimizeToTrayCheck.Checked;
-            Properties.Settings.Default.userUsb3Mode = SettingsUSB3ModeCheck.Checked;
-            Properties.Settings.Default.userShowGraphics = SpectroShowGraphicsCheck.Checked;
-            Properties.Settings.Default.userStartMinimized = SettingsStartMinimizedCheck.Checked;
-            Properties.Settings.Default.userSpectroOnStart = SettingsSpectroOnStartCheck.Checked;
-            Properties.Settings.Default.userEffectsOnStart = SettingsEffectsOnStartCheck.Checked;
-            Properties.Settings.Default.userStaticOnStart = SettingsStaticOnStartCheck.Checked;
-            Properties.Settings.Default.userRestoreLighting = SettingsRestoreLightingCheck.Checked;
-            Properties.Settings.Default.userLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
+            Properties.Settings.Default.settingShowGraphics = SpectroShowGraphicsCheck.Checked;
 
-            // TextBoxes
-            Properties.Settings.Default.userCueLocation = SettingsCuePathTextBox.Text;
+            Properties.Settings.Default.spectroColorBars = SpectroColorBars.BackColor;
+            Properties.Settings.Default.spectroColorBackground = SpectroColorBg.BackColor;
 
-            // Colours
-            Properties.Settings.Default.userColorBars = SpectroColorBars.BackColor;
-            Properties.Settings.Default.userColorBackground = SpectroColorBg.BackColor;
-            
-            // Capture Settings
-            Properties.Settings.Default.userCaptureMode = Program.CSCore_DeviceType;
-            Properties.Settings.Default.userCaptureDevice = SpectroWasapiDevicesCB.Text;
-
-            // Profiles
-            Properties.Settings.Default.userLastUsedProfile = Program.SettingsLastUsedProfile;
+            Properties.Settings.Default.spectroCaptureMode = Program.CSCore_DeviceType;
+            Properties.Settings.Default.spectroCaptureDevice = SpectroWasapiDevicesCB.Text;
 
             // Effects
             if (Eff_RL_Start_Radio1.Checked == true) { Properties.Settings.Default.Eff_RL_S_Mode = 1; }
@@ -151,6 +144,31 @@ namespace RGBKeyboardSpectrograph
 
             Properties.Settings.Default.EffectUseStaticKeys = Program.AnimationsUseStaticKeys;
 
+            // Static
+            Properties.Settings.Default.appLastUsedProfile = Program.SettingsLastUsedProfile;
+
+            // Settings
+            Properties.Settings.Default.settingKeyboardModel = SettingsKeyboardModelCB.Text;
+            Properties.Settings.Default.settingKeyboardLayout = SettingsKeyboardLayoutCB.Text;
+
+            Properties.Settings.Default.debugLogLevel = (int)DebugLogLevelUD.Value;
+
+            Properties.Settings.Default.settingMinimizeToTray = SettingsMinimizeToTrayCheck.Checked;
+            Properties.Settings.Default.settingUsb3Mode = SettingsUSB3ModeCheck.Checked;
+            Properties.Settings.Default.settingStartMinimized = SettingsStartMinimizedCheck.Checked;
+            Properties.Settings.Default.settingSpectroOnStart = SettingsSpectroOnStartCheck.Checked;
+            Properties.Settings.Default.settingEffectsOnStart = SettingsEffectsOnStartCheck.Checked;
+            Properties.Settings.Default.settingStaticOnStart = SettingsStaticOnStartCheck.Checked;
+            Properties.Settings.Default.settingRestoreLighting = SettingsRestoreLightingCheck.Checked;
+            Properties.Settings.Default.settingLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
+
+            Properties.Settings.Default.settingCueLocation = SettingsCuePathTextBox.Text;
+
+            Properties.Settings.Default.idleMode = SettingsIdleModeCB.Text;
+            Properties.Settings.Default.idleProfile = SettingsIdleProfileCB.Text;
+            Properties.Settings.Default.idleTriggerTime = (int)SettingsIdleTimeUD.Value;
+            Properties.Settings.Default.idleUseIdleWatcher = SettingsIdleSwitcher.Checked;
+
             // Save Settings
             Properties.Settings.Default.Save();
         }
@@ -160,7 +178,7 @@ namespace RGBKeyboardSpectrograph
             if (this.WindowState == FormWindowState.Minimized && SettingsMinimizeToTrayCheck.Checked == true)
             {
                 notifyIcon.Visible = true;
-                notifyIcon.ShowBalloonTip(3000);
+                //notifyIcon.ShowBalloonTip(3000);
                 this.ShowInTaskbar = false;
                 this.Visible = false;
             }
@@ -176,9 +194,10 @@ namespace RGBKeyboardSpectrograph
 
             // Start manipulating controls and loading saved values
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
-            notifyIcon.Visible = false;
-            
-            // Populate Combo Boxes
+            if (!Program.DevMode) { notifyIcon.Visible = false; };
+
+            #region Populate Combo Boxes
+
             SettingsKeyboardModelCB.Items.Add("K65-RGB");
             SettingsKeyboardModelCB.Items.Add("K70-RGB");
             SettingsKeyboardModelCB.Items.Add("K95-RGB");
@@ -196,6 +215,12 @@ namespace RGBKeyboardSpectrograph
             SpectroBarEffectCB.Items.Add("Static Rainbow");
             SpectroBarEffectCB.Items.Add("Classic Bars");
 
+            SettingsIdleModeCB.Items.Add("Spectrograph");
+            SettingsIdleModeCB.Items.Add("Random Lights");
+            SettingsIdleModeCB.Items.Add("Static Profile");
+
+            #endregion Pupulate Combo Boxes
+
             // Get Input Device list
             var deviceEnum = new MMDeviceEnumerator();
             var devices = deviceEnum.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).ToList();
@@ -206,76 +231,54 @@ namespace RGBKeyboardSpectrograph
             // are first loaded to variables to help manipulate them.
             UpdateStatusMessage.ShowStatusMessage(1, "Loading Settings");
 
-            // ListBoxes
-            string settingKeyboardModel = Properties.Settings.Default.userKeyboardModel;
-            if (SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel) > -1) { SettingsKeyboardModelCB.SelectedIndex = SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel); };
+            #region Spectro
 
-            string settingKeyboardLayout = Properties.Settings.Default.userKeyboardLayout;
-            if (SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout) > -1) { SettingsKeyboardLayoutCB.SelectedIndex = SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout); };
-
-            string settingBackgroundColorType = Properties.Settings.Default.userColorBackgroundType;
+            string settingBackgroundColorType = Properties.Settings.Default.spectroColorBackgroundType;
             if (SpectroBgEffectCB.FindStringExact(settingBackgroundColorType) > -1) { SpectroBgEffectCB.SelectedIndex = SpectroBgEffectCB.FindStringExact(settingBackgroundColorType); }
-            else {SpectroBgEffectCB.SelectedIndex = 1; };
+            else { SpectroBgEffectCB.SelectedIndex = 1; };
 
-            string settingBarColorType = Properties.Settings.Default.userColorBarsType;
+            string settingBarColorType = Properties.Settings.Default.spectroColorBarsType;
             if (SpectroBarEffectCB.FindStringExact(settingBarColorType) > -1) { SpectroBarEffectCB.SelectedIndex = SpectroBarEffectCB.FindStringExact(settingBarColorType); }
             else { SpectroBarEffectCB.SelectedIndex = 1; };
 
-            string settingCaptureDeviceName = Properties.Settings.Default.userCaptureDevice;
+            string settingCaptureDeviceName = Properties.Settings.Default.spectroCaptureDevice;
             if (SpectroWasapiDevicesCB.FindStringExact(settingCaptureDeviceName) > -1) { SpectroWasapiDevicesCB.SelectedIndex = SpectroWasapiDevicesCB.FindStringExact(settingCaptureDeviceName); };
 
-            // UpDowns
-            int settingAmplitude = Properties.Settings.Default.userAmplitude;
-            if (settingAmplitude < 1 || settingAmplitude > 100) { settingAmplitude = 10; };
+
+            int settingAmplitude = Properties.Settings.Default.spectroAmplitude;
+            if (settingAmplitude < 0 || settingAmplitude > 100) { settingAmplitude = 10; };
             SpectroAmplitudeUD.Value = settingAmplitude;
 
-            int settingBackgroundBrightness = Properties.Settings.Default.userBackgroundBrightness;
+            int settingBackgroundBrightness = Properties.Settings.Default.spectroBackgroundBrightness;
             if (settingBackgroundBrightness < 0 || settingBackgroundBrightness > 70) { settingBackgroundBrightness = 15; };
             SpectroBgBrightnessUD.Value = settingBackgroundBrightness;
 
-            int settingBarBrightness = Properties.Settings.Default.userBarBrightness;
+            int settingBarBrightness = Properties.Settings.Default.spectroBarBrightness;
             if (settingBarBrightness < 0 || settingBarBrightness > 70) { settingBarBrightness = 15; };
             SpectroBarBrightnessUD.Value = settingBarBrightness;
 
-            int settingLogLevel = Properties.Settings.Default.userLogLevel;
-            if (settingLogLevel < 3) { settingLogLevel = 3; };
-            DebugLogLevelUD.Value = settingLogLevel;
-            Program.LogLevel = settingLogLevel;
-
-            int settingRefreshDelay = Properties.Settings.Default.userRefreshDelay;
+            int settingRefreshDelay = Properties.Settings.Default.spectroRefreshDelay;
             if (settingRefreshDelay < 0 || settingRefreshDelay > 1000) { settingRefreshDelay = 20; };
             SpectroRefreshDelayUD.Value = settingRefreshDelay;
 
-            float settingEffectWidth = Properties.Settings.Default.userBackgroundEffectWidth;
+            float settingEffectWidth = Properties.Settings.Default.spectroBackgroundEffectWidth;
             if (settingEffectWidth < 1 || settingEffectWidth > 1000) { settingEffectWidth = 104; };
             SpectroBgWidth.Value = (decimal)settingEffectWidth;
 
-            float settingEffectSpeed = Properties.Settings.Default.userBackgroundEffectSpeed;
+            float settingEffectSpeed = Properties.Settings.Default.spectroBackgroundEffectSpeed;
             if (settingEffectSpeed < 0.1 || settingEffectSpeed > 10) { settingEffectSpeed = 1; };
             SpectroBgSpeed.Value = (decimal)settingEffectSpeed;
 
-            float settingBarWidth = Properties.Settings.Default.userBarEffectWidth;
+            float settingBarWidth = Properties.Settings.Default.spectroBarEffectWidth;
             if (settingBarWidth < 1 || settingBarWidth > 1000) { settingBarWidth = 104; };
             SpectroBarWidth.Value = (decimal)settingBarWidth;
 
-            float settingBarSpeed = Properties.Settings.Default.userBarEffectSpeed;
+            float settingBarSpeed = Properties.Settings.Default.spectroBarEffectSpeed;
             if (settingBarSpeed < 1 || settingBarSpeed > 10) { settingBarSpeed = 1; };
             SpectroBarSpeed.Value = (decimal)settingBarSpeed;
 
-            // CheckBoxes
-            SettingsMinimizeToTrayCheck.Checked = Properties.Settings.Default.userMinimizeToTray;
-            SettingsUSB3ModeCheck.Checked = Properties.Settings.Default.userUsb3Mode;
-            SpectroShowGraphicsCheck.Checked = Properties.Settings.Default.userShowGraphics;
-            SpectroShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
-            SettingsStartMinimizedCheck.Checked = Properties.Settings.Default.userStartMinimized;
-            SettingsSpectroOnStartCheck.Checked = Properties.Settings.Default.userSpectroOnStart;
-            SettingsEffectsOnStartCheck.Checked = Properties.Settings.Default.userEffectsOnStart;
-            SettingsStaticOnStartCheck.Checked = Properties.Settings.Default.userStaticOnStart;
-            SettingsRestoreLightingCheck.Checked = Properties.Settings.Default.userRestoreLighting;
-            SettingsLaunchCueCheck.Checked = Properties.Settings.Default.userLaunchCueOnExit;
 
-            // RadioButtons
-            switch (Properties.Settings.Default.userCaptureMode)
+            switch (Properties.Settings.Default.spectroCaptureMode)
             {
                 case 0:
                     SpectroWasapiLoopbackRadio.Checked = true;
@@ -289,39 +292,28 @@ namespace RGBKeyboardSpectrograph
             }
             SpectroWasapiLoopbackRadio_CheckedChanged(null, null);
 
-            // TextBoxes
-            SettingsCuePathTextBox.Text = Properties.Settings.Default.userCueLocation;
 
-            // Colours
-            Color settingBarColor = Properties.Settings.Default.userColorBars;
-            SpectroColorBars.BackColor = settingBarColor; 
+            Color settingBarColor = Properties.Settings.Default.spectroColorBars;
+            SpectroColorBars.BackColor = settingBarColor;
             SpectroColorBars.ForeColor = ContrastColor(SpectroColorBars.BackColor);
             Program.SpectroBars.Color.Set(SpectroColorBars.BackColor);
 
-            Color settingBackgroundColor = Properties.Settings.Default.userColorBackground;
+            Color settingBackgroundColor = Properties.Settings.Default.spectroColorBackground;
             SpectroColorBg.BackColor = settingBackgroundColor;
             SpectroColorBg.ForeColor = ContrastColor(SpectroColorBg.BackColor);
             Program.SpectroBg.Color.Set(SpectroColorBg.BackColor);
-            
-            // Automatically minimize
-            if (Properties.Settings.Default.userStartMinimized == true) { this.WindowState = FormWindowState.Minimized; };
 
-            // Profiles
-            Program.SettingsLastUsedProfile = Properties.Settings.Default.userLastUsedProfile;
+            tsmSpectroAmplitudeSlider.Minimum = 0;
+            tsmSpectroAmplitudeSlider.Maximum = 100;
+            tsmSpectroAmplitudeSlider.Value = settingAmplitude;
+            tsmSpectroAmplitudeSlider.ValueChanged += new System.EventHandler(tsmSpectroAmplitudeSlider_ValueChanged);
+            tsmSpectroAmplitude.Text = "Amplitude: " + tsmSpectroAmplitudeSlider.Value;
 
-            // Load static key map
-            for (int i = 0; i < Program.StaticKeyColors.Length; i++)
-            { Program.StaticKeyColors[i] = Color.Transparent; };
-            for (int i = 0; i < Program.StaticKeyColorsBytes.Length; i++)
-            { 
-                Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
-                Program.StaticKeyColorsBytes[i].Set(Color.Transparent); 
-            };
+            tsmStartSpectro.DropDownItems.Add(tsmSpectroAmplitude);
 
-            StaticGetKeyboardImage_Click(null, null);
-            Program.StaticKeysNeedRedraw = false;
+            #endregion Spectro
 
-        #region Effects
+            #region Effects
 
         #region Effects - Random Lights - Start
             int setting_Eff_RL_S_Mode = Properties.Settings.Default.Eff_RL_S_Mode;
@@ -401,17 +393,85 @@ namespace RGBKeyboardSpectrograph
 
         #endregion Effects
 
+            #region Static
+
+            Program.SettingsLastUsedProfile = Properties.Settings.Default.appLastUsedProfile;
+            StaticKeysLoadProfileList();
+
+            #endregion Static
+
+            #region Settings
+
+            string settingKeyboardModel = Properties.Settings.Default.settingKeyboardModel;
+            if (SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel) > -1) { SettingsKeyboardModelCB.SelectedIndex = SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel); };
+
+            string settingKeyboardLayout = Properties.Settings.Default.settingKeyboardLayout;
+            if (SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout) > -1) { SettingsKeyboardLayoutCB.SelectedIndex = SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout); };
+
+
+            int settingLogLevel = Properties.Settings.Default.debugLogLevel;
+            if (settingLogLevel < 3) { settingLogLevel = 3; };
+            DebugLogLevelUD.Value = settingLogLevel;
+            Program.LogLevel = settingLogLevel;
+
+
+            SettingsMinimizeToTrayCheck.Checked = Properties.Settings.Default.settingMinimizeToTray;
+            SettingsUSB3ModeCheck.Checked = Properties.Settings.Default.settingUsb3Mode;
+            SpectroShowGraphicsCheck.Checked = Properties.Settings.Default.settingShowGraphics;
+            SpectroShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
+            SettingsStartMinimizedCheck.Checked = Properties.Settings.Default.settingStartMinimized;
+            SettingsSpectroOnStartCheck.Checked = Properties.Settings.Default.settingSpectroOnStart;
+            SettingsEffectsOnStartCheck.Checked = Properties.Settings.Default.settingEffectsOnStart;
+            SettingsStaticOnStartCheck.Checked = Properties.Settings.Default.settingStaticOnStart;
+            SettingsRestoreLightingCheck.Checked = Properties.Settings.Default.settingRestoreLighting;
+            SettingsLaunchCueCheck.Checked = Properties.Settings.Default.settingLaunchCueOnExit;
+
+
+            SettingsCuePathTextBox.Text = Properties.Settings.Default.settingCueLocation;
+
+            string settingIdleMode = Properties.Settings.Default.idleMode;
+            if (SettingsIdleModeCB.FindStringExact(settingIdleMode) > -1) { SettingsIdleModeCB.SelectedIndex = SettingsIdleModeCB.FindStringExact(settingIdleMode); };
+
+            string settingIdleProfile = Properties.Settings.Default.idleProfile;
+            if (SettingsIdleProfileCB.FindStringExact(settingIdleProfile) > -1) { SettingsIdleProfileCB.SelectedIndex = SettingsIdleProfileCB.FindStringExact(settingIdleProfile); };
+            
+            int settingIdleTime = Properties.Settings.Default.idleTriggerTime;
+            if (settingIdleTime < 0 || settingIdleTime > 1440) { settingIdleTime = 5; };
+            SettingsIdleTimeUD.Value = settingIdleTime;
+
+            SettingsIdleSwitcher.Checked = Properties.Settings.Default.idleUseIdleWatcher;
+
+            SettingsIdleSwitcher_CheckedChanged(null, null);
+
+            #endregion Settings
+
+            #region Post Load Tasks
+            // Automatically minimize
+            if (Properties.Settings.Default.settingStartMinimized == true) { this.WindowState = FormWindowState.Minimized; };
+
+            // Load static key map
+            for (int i = 0; i < Program.StaticKeyColors.Length; i++)
+            { Program.StaticKeyColors[i] = Color.Transparent; };
+            for (int i = 0; i < Program.StaticKeyColorsBytes.Length; i++)
+            { 
+                Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
+                Program.StaticKeyColorsBytes[i].Set(Color.Transparent); 
+            };
+
+            StaticGetKeyboardImage_Click(null, null);
+            Program.StaticKeysNeedRedraw = false;
+
             // Start up automatic tasks if the selected keyboard is valid
             if (SettingsKeyboardLayoutCB.Text != "" && SettingsKeyboardModelCB.Text != "")
             {
                 // Automatically start spectro
-                if (Properties.Settings.Default.userSpectroOnStart == true) { StartSpectrograph_Click(null, null); };
+                if (Properties.Settings.Default.settingSpectroOnStart == true) { StartSpectrograph_Click(null, null); };
 
                 // Automatically start effects
-                if (Properties.Settings.Default.userEffectsOnStart == true) { EffectsStartButton_Click(null, null); };
+                if (Properties.Settings.Default.settingEffectsOnStart == true) { EffectsStartButton_Click(null, null); };
                 
                 // Automatically apply static keys
-                if (Properties.Settings.Default.userStaticOnStart == true && Program.SettingsLastUsedProfile != "") 
+                if (Properties.Settings.Default.settingStaticOnStart == true && Program.SettingsLastUsedProfile != "") 
                 {
                     Color[] keyData = new Color[144];
                     KeyColors keyColors = new KeyColors();
@@ -449,22 +509,25 @@ namespace RGBKeyboardSpectrograph
             {
                 MainTabControl.SelectTab(3);
             };
-            
+
+            #endregion Post Load Tasks
+
             // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
-        
+
         public bool LoadFromConfig(string KeyboardID)
         {
-            if (File.Exists(KeyboardID + ".xml") == false) {
+            if (File.Exists("corsair_devices\\" + KeyboardID + ".xml") == false)
+            {
                 UpdateStatusMessage.ShowStatusMessage(3, "Keyboard Layout Not Found");
                 return false;
-            } 
+            }
             else
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Loading Keyboard Layouts");
 
-                var document = XDocument.Load(KeyboardID + ".xml");
+                var document = XDocument.Load("corsair_devices\\" + KeyboardID + ".xml");
                 keyboardIDs = document.Descendants("id").Select(element => element.Value).ToArray();
                 keyboardNames = document.Descendants("name").Select(element => element.Value).ToArray();
                 keyboardPositionMaps = document.Descendants("positionmap").Select(element => element.Value).ToArray();
@@ -500,6 +563,21 @@ namespace RGBKeyboardSpectrograph
 
                 return true;
             }
+        }
+
+        public string[] LoadStaticProfileList()
+        {
+            string path = Program.StaticProfilesPath;
+            string[] filePaths = Directory.GetFiles(@path, "*.xml");
+
+            string[] files = new string[filePaths.Length];
+
+            for (int i = 0; i < filePaths.Length; i++)
+            {
+                files[i] = Path.GetFileName(filePaths[i]);
+            }
+            
+            return files;
         }
 
         Color ContrastColor(Color color)
@@ -556,8 +634,32 @@ namespace RGBKeyboardSpectrograph
 
         #endregion Form Stuff
 
-        #region Spectro Start/Stop
-        private bool StartSpectrograph(int RunType)
+        #region Effects Start/Stop
+        private bool StartEffects(string Effect, bool isIdleLaunch = false)
+        {
+            if (!isIdleLaunch) { Program.InactivityResumeAction = Effect; };
+
+            switch (Effect)
+            {
+                case "Spectro":
+                    return StartSpectrograph(2);
+                case "Effect-RandomLights":
+                    if (Program.RunKeyboardThread == 3) { return false; };
+                    if (LoadSizePositionMaps() == false) { return false; };
+
+                    Program.EfSettings.Set((int)Eff_RL_DurationUD.Value, (int)Eff_RL_FrequencyUD.Value, 0);
+                    Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
+
+                    Program.RunKeyboardThread = 3;
+                    workerThread = new Thread(() => Effect_RandomLights.KeyboardControl());
+                    workerThread.Start();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private bool StartSpectrograph(int RunType = 0)
         {
             // Check if CUE is still running
             Process[] pname = Process.GetProcessesByName("CorsairHID");
@@ -686,14 +788,7 @@ namespace RGBKeyboardSpectrograph
             }
             return true;
         }
-
-        private void StopSpectrograph()
-        {
-            // Don't run the Stop procedure if the thread was never started in the first place
-            if (Program.RunKeyboardThread == -1) { return; };
-
-            Program.RunKeyboardThread = 0;
-        }
+        
         #endregion
 
         #region Thread Safe Delegate Functions
@@ -784,7 +879,7 @@ namespace RGBKeyboardSpectrograph
             switch (strAction)
             {
                 case "Stop":
-                    this.Invoke((MethodInvoker)(() => StopSpectrograph()));
+                    this.Invoke((MethodInvoker)(() => Program.RunKeyboardThread = 0));
                     break;
                 default:
                     break;
@@ -795,18 +890,87 @@ namespace RGBKeyboardSpectrograph
         {
             this.Invoke((MethodInvoker)(() => GraphicsPictureBox.Image = Program.SpectroGraphicRender));
         }
+
+        public void InactivityStatusChanged_Action(int isIdle)
+        {
+            if (SettingsIdleSwitcher.Enabled == false)
+            { 
+                this.Invoke((MethodInvoker)(() => SettingsIdleSwitcher.Enabled = true)); 
+            };
+
+            if (isIdle > 0)
+            {
+                string modelText = "";
+                string profileText = "";
+                if (isIdle == 1) 
+                { 
+                    this.Invoke((MethodInvoker)delegate()
+                    { 
+                        modelText = SettingsIdleModeCB.Text;
+                        profileText = Program.StaticProfilesPath + SettingsIdleProfileCB.Text;
+                    }
+                    ); 
+                }
+                else if (isIdle == 2)
+                { 
+                    modelText = Program.InactivityResumeAction;
+                    profileText = Program.SettingsLastUsedProfile;
+                }
+
+                if (workerThread != null)
+                {
+                    Program.RunKeyboardThread = 0;
+                    while (workerThread.IsAlive)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(100);
+                    }
+                };
+
+                switch (modelText)
+                {
+                    case "Spectro":
+                        this.Invoke((MethodInvoker)delegate() { StartEffects("Spectro", true); });
+                        break;
+                    case "Random Lights": case "Effect-RandomLights":
+                        this.Invoke((MethodInvoker)delegate() { StartEffects("Effect-RandomLights", true); });
+                        break;
+                    case "Static Profile":
+                        Program.IgnoreUpdateLastProfile = true;
+
+                        XmlProfileIO xmlProfileIO = new XmlProfileIO();
+                        KeyColors keyColors = new KeyColors();
+
+                        keyColors = xmlProfileIO.LoadProfile(profileText);
+                
+                        if (keyColors.Success == true)
+                        {
+                            for (int i = 0; i < 144; i++)
+                            {
+                                Program.StaticKeyColors[i] = keyColors.Colors[i];
+                            }
+                            this.Invoke((MethodInvoker)(() => RefreshKeyColors()));
+                            StaticUnsavedChanges = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         #endregion
 
-        #region Controls
+        #region Sections
 
         #region Tab: Spectro
 
         #region [Spectro] Buttons
         private void StartSpectrograph_Click(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == -2) { StopSpectrograph(); };
+            RightClickMenu.Hide();
+            if (Program.RunKeyboardThread == -2) { Program.RunKeyboardThread = 0; };
             if (Program.RunKeyboardThread == 2) { return; };
-            if (StartSpectrograph(2) == true)
+            if (StartEffects("Spectro") == true)
             {
                 switch (SettingsKeyboardModelCB.Text)
                 {
@@ -828,7 +992,7 @@ namespace RGBKeyboardSpectrograph
 
         private void StopSpectrograph_Click(object sender, EventArgs e)
         {
-                StopSpectrograph();
+            Program.RunKeyboardThread = 0;
                 StartSpectrographButton.Enabled = true;
                 DebugTestModeButton.Enabled = true;
                 tabEffects.Enabled = true;
@@ -1133,14 +1297,7 @@ namespace RGBKeyboardSpectrograph
 
         private void EffectsStartButton_Click(object sender, EventArgs e)
         {
-            if (Program.RunKeyboardThread == 3) { return; };
-            if (LoadSizePositionMaps() == false) { return; };
-            Program.EfSettings.Set((int)Eff_RL_DurationUD.Value, (int)Eff_RL_FrequencyUD.Value, 0);
-            Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
-
-            Program.RunKeyboardThread = 3;
-            workerThread = new Thread(() => SpecialEffects.KeyboardControl("thing"));
-            workerThread.Start();
+            StartEffects("Effect-RandomLights");
         }
 
         private void EffectsStopButton_Click(object sender, EventArgs e)
@@ -1290,49 +1447,19 @@ namespace RGBKeyboardSpectrograph
         private void Eff_RL_Start_RadioCheckedChanged(object sender, EventArgs e)
         {
             if (Eff_RL_Start_Radio1.Checked == true)
-            {
-                /*
-                Eff_RL_Start_RedGB.Enabled = false;
-                Eff_RL_Start_GreenGB.Enabled = false;
-                Eff_RL_Start_BlueGB.Enabled = false;
-                Eff_RL_Start_ColourButton.Enabled = true;
-                */ 
-                Eff_RL_UpdateColorConfig(1);
-            }
+            { Eff_RL_UpdateColorConfig(1); }
+
             else if (Eff_RL_Start_Radio2.Checked == true)
-            {
-                /*
-                Eff_RL_Start_RedGB.Enabled = true;
-                Eff_RL_Start_GreenGB.Enabled = true;
-                Eff_RL_Start_BlueGB.Enabled = true;
-                Eff_RL_Start_ColourButton.Enabled = false;
-                */
-                Eff_RL_UpdateColorConfig(2);
-            }
+            { Eff_RL_UpdateColorConfig(2); }
         }
 
         private void Eff_RL_End_RadioCheckedChanged(object sender, EventArgs e)
         {
             if (Eff_RL_End_Radio1.Checked == true)
-            {
-                /*
-                Eff_RL_End_RedGB.Enabled = false;
-                Eff_RL_End_GreenGB.Enabled = false;
-                Eff_RL_End_BlueGB.Enabled = false;
-                Eff_RL_End_ColourButton.Enabled = true;
-                */
-                Eff_RL_UpdateColorConfig(4);
-            }
+            { Eff_RL_UpdateColorConfig(4); }
+
             else if (Eff_RL_End_Radio2.Checked == true)
-            {
-                /*
-                Eff_RL_End_RedGB.Enabled = true;
-                Eff_RL_End_GreenGB.Enabled = true;
-                Eff_RL_End_BlueGB.Enabled = true;
-                Eff_RL_End_ColourButton.Enabled = false;
-                */
-                Eff_RL_UpdateColorConfig(3);
-            }
+            { Eff_RL_UpdateColorConfig(3); }
         }
 
         private void Eff_RL_DurationUD_ValueChanged(object sender, EventArgs e)
@@ -1371,15 +1498,15 @@ namespace RGBKeyboardSpectrograph
                 keyboardButtons[i].FlatStyle = FlatStyle.Flat;
                 keyboardButtons[i].FlatAppearance.BorderColor = Color.White;
                 keyboardButtons[i].FlatAppearance.BorderSize = 0;
-                keyboardButtons[i].Parent = KeyboardImageBox;
+                keyboardButtons[i].Parent = StaticKeyboardImageBox;
                 keyboardButtons[i].BackColor = Color.Transparent;
                 keyboardButtons[i].Tag = keyData[i].KeyID;
                 keyboardButtons[i].Name = "keyboardButtons" + i;
-                KeyboardImageBox.Controls.Add(keyboardButtons[i]);
+                StaticKeyboardImageBox.Controls.Add(keyboardButtons[i]);
                 keyboardButtons[i].Click += KeyboardButton_Click;
             }
 
-            KeyboardImageBox.SendToBack();
+            StaticKeyboardImageBox.SendToBack();
         }
 
         public void RemoveKeysFromImage()
@@ -1387,14 +1514,14 @@ namespace RGBKeyboardSpectrograph
             Control[] searchButton;
             for (int i = 0; i < 144; i++)
             {
-                searchButton = KeyboardImageBox.Controls.Find("keyboardButtons" + i, true);
+                searchButton = StaticKeyboardImageBox.Controls.Find("keyboardButtons" + i, true);
 
                 if (searchButton.Count() > 0)
                 {
-                    if (KeyboardImageBox.Controls.Contains(searchButton[0]))
+                    if (StaticKeyboardImageBox.Controls.Contains(searchButton[0]))
                     {
                         searchButton[0].Click -= KeyboardButton_Click;
-                        KeyboardImageBox.Controls.Remove(searchButton[0]);
+                        StaticKeyboardImageBox.Controls.Remove(searchButton[0]);
                         searchButton[0].Dispose();
                     }
                 }
@@ -1403,7 +1530,7 @@ namespace RGBKeyboardSpectrograph
 
         private void RefreshKeyColors(bool SuppressMessages = false)
         {
-            foreach (Control c in KeyboardImageBox.Controls)
+            foreach (Control c in StaticKeyboardImageBox.Controls)
             {
                 if ((int)c.Tag >= 0) { c.BackColor = Program.StaticKeyColors[(int)c.Tag]; };
             }
@@ -1454,6 +1581,28 @@ namespace RGBKeyboardSpectrograph
             return newImage;
         }
 
+        public void StaticKeysLoadProfileList()
+        {
+            string[] fileList = LoadStaticProfileList();
+            ToolStripMenuItem[] tsmProfileList = new ToolStripMenuItem[fileList.Length];
+
+            StaticProfileListCB.Items.Clear();
+            StaticProfileListCB.Items.Add("From External File...");
+
+            for (int f = 0; f < fileList.Length; f++)
+            { 
+                StaticProfileListCB.Items.Add(fileList[f]);
+
+                tsmProfileList[f] = new ToolStripMenuItem();
+                tsmProfileList[f].Name = "tsmProfile" + f.ToString();
+                tsmProfileList[f].Text = fileList[f];
+                tsmProfileList[f].Click += new System.EventHandler(tsmProfileList_Click);
+            }
+
+            this.tsmSwitchStaticProfile.DropDownItems.Clear();
+            this.tsmSwitchStaticProfile.DropDownItems.AddRange(tsmProfileList);
+        }
+
         #endregion [Static Keys] Functions
 
         #region [Static Keys] Buttons
@@ -1482,7 +1631,7 @@ namespace RGBKeyboardSpectrograph
 
             keyboardImage = Image.FromFile(imagePath);
             keyboardImage = ScaleImage(keyboardImage, keyboardImageScale);
-            KeyboardImageBox.Image = keyboardImage;
+            StaticKeyboardImageBox.Image = keyboardImage;
             
             XmlToKeyMap xmlToKeyMap = new XmlToKeyMap();
             KeyData[] keyData = xmlToKeyMap.LoadKeyLocations(SettingsKeyboardModelCB.Text, keyboardIDs[SettingsKeyboardLayoutCB.SelectedIndex]);
@@ -1532,6 +1681,7 @@ namespace RGBKeyboardSpectrograph
                 Program.StaticKeyColors[(int)(((Button)sender).Tag)] = copiedColor;
                 RefreshKeyColors();
             }
+            StaticUnsavedChanges = true;
         }
         
         private void StaticCopyPasteColor_Click(object sender, EventArgs e)
@@ -1551,34 +1701,102 @@ namespace RGBKeyboardSpectrograph
         private void LoadProfileButton_Click(object sender, EventArgs e)
         {
             Color[] keyData = new Color[144];
+            bool loadFromDialog = false;
+            string fileToLoad = "";
 
-            OpenFileDialog ofd = new OpenFileDialog();
+            bool DirectLoad = false;
+            if (sender is ToolStripMenuItem)
+            {
+                fileToLoad = Program.StaticProfilesPath + ((ToolStripMenuItem)sender).Text;
+                loadFromDialog = true;
+                DirectLoad = true;
+            }
 
-            ofd.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            ofd.FilterIndex = 1;
-            ofd.Multiselect = false;
+            if (!DirectLoad)
+            {
+                if (StaticProfileListCB.Text == "From External File...")
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
 
-            DialogResult ofdResult = ofd.ShowDialog();
+                    ofd.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
+                    ofd.FilterIndex = 1;
+                    ofd.Multiselect = false;
 
-            if (ofdResult == DialogResult.OK)
+                    DialogResult ofdResult = ofd.ShowDialog();
+
+                    if (ofdResult == DialogResult.OK)
+                    {
+                        fileToLoad = ofd.FileName;
+                        loadFromDialog = true;
+                    };
+                }
+                else
+                {
+                    if (StaticUnsavedChanges == true)
+                    {
+                        if (MessageBox.Show("You have unsaved changes. Are you sure you wish to load a new profile?",
+                            "Unsaved Changes", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            fileToLoad = Program.StaticProfilesPath + StaticProfileListCB.Text;
+                            if (File.Exists(fileToLoad)) { loadFromDialog = true; };
+                        };
+                    }
+                    else
+                    {
+                        fileToLoad = Program.StaticProfilesPath + StaticProfileListCB.Text;
+                        if (File.Exists(fileToLoad)) { loadFromDialog = true; };
+                    }
+                }
+            }
+
+            if (loadFromDialog)
             {
                 XmlProfileIO xmlProfileIO = new XmlProfileIO();
                 KeyColors keyColors = new KeyColors();
-                string xmlPath = ofd.FileName;
-                keyColors = xmlProfileIO.LoadProfile(xmlPath);
+
+                keyColors = xmlProfileIO.LoadProfile(fileToLoad);
+
+                Program.SettingsLastUsedProfile = fileToLoad;
+                Program.InactivityResumeAction = "Static Profile";
+
                 if (keyColors.Success == true)
                 {
-                    Program.SettingsLastUsedProfile = ofd.FileName;
                     for (int i = 0; i < 144; i++)
                     {
                         Program.StaticKeyColors[i] = keyColors.Colors[i];
                     }
                     RefreshKeyColors();
+                    StaticUnsavedChanges = false;
                 }
             }
         }
 
         private void SaveProfileButton_Click(object sender, EventArgs e)
+        {
+            if (StaticProfileListCB.Text == "" || StaticProfileListCB.Text == "From External File...") { return; };
+            XmlProfileIO xmlProfileIO = new XmlProfileIO();
+            bool doSave = false;
+
+            if (Path.GetFileName(Program.SettingsLastUsedProfile) != StaticProfileListCB.Text)
+            {
+                if (MessageBox.Show("Would you like to replace the profile " + StaticProfileListCB.Text + "?",
+                        "Unsaved Changes", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                { doSave = true; }
+            }
+            else
+            { doSave = true; }
+
+            if (doSave)
+            {
+                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, Program.StaticProfilesPath + StaticProfileListCB.Text);
+                Program.SettingsLastUsedProfile = Program.StaticProfilesPath + StaticProfileListCB.Text;
+                StaticUnsavedChanges = false;
+                StaticKeysLoadProfileList();
+                StaticProfileListCB.Text = Path.GetFileName(Program.SettingsLastUsedProfile);
+            }
+        }
+
+        private void StaticSaveProfileAsButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
 
@@ -1592,6 +1810,9 @@ namespace RGBKeyboardSpectrograph
                 string xmlFile = sfd.FileName;
                 xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, xmlFile);
                 Program.SettingsLastUsedProfile = sfd.FileName;
+                StaticUnsavedChanges = false;
+                StaticKeysLoadProfileList();
+                StaticProfileListCB.Text = Path.GetFileName(Program.SettingsLastUsedProfile);
             }
         }
 
@@ -1759,6 +1980,28 @@ namespace RGBKeyboardSpectrograph
             if (SettingsEffectsOnStartCheck.Checked == true) { SettingsSpectroOnStartCheck.Checked = false; };
         }
 
+        private void SettingsIdleSwitcher_CheckedChanged(object sender, EventArgs e)
+        {
+            bool showControls = SettingsIdleSwitcher.Checked;
+
+            SettingsIdleModeCB.Visible = showControls;
+            //SettingsIdleProfileCB.Visible = showControls;
+            SettingsIdleTimeUD.Visible = showControls;
+            SettingsIdleLabel1.Visible = showControls;
+            SettingsIdleLabel2.Visible = showControls;
+            //SettingsIdleLabel3.Visible = showControls;
+
+            Program.WatchForInactivity = showControls;
+            Program.InactivityTimeTrigger = (int)SettingsIdleTimeUD.Value;
+
+            if (showControls)
+            {
+                SettingsIdleSwitcher.Enabled = false;
+                idleWatcherThread = new Thread(() => InactivityWatcher.Watch());
+                idleWatcherThread.Start();
+            }
+        }
+
         #endregion [Settings] CheckBoxes
 
         #region [Settings] TextBoxes
@@ -1769,6 +2012,36 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion [Settings] TextBoxes
+
+        #region [Settings] Idle Controls
+
+        private void SettingsIdleTimeUD_ValueChanged(object sender, EventArgs e)
+        {
+            Program.InactivityTimeTrigger = (int)SettingsIdleTimeUD.Value;
+        }
+
+        private void SettingsIdleModeCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SettingsIdleModeCB.Text == "Static Profile")
+            {
+                string[] fileList = LoadStaticProfileList();
+
+                SettingsIdleProfileCB.Items.Clear();
+
+                for (int f = 0; f < fileList.Length; f++)
+                { SettingsIdleProfileCB.Items.Add(fileList[f]); }
+
+                SettingsIdleProfileCB.Visible = true;
+                SettingsIdleLabel3.Visible = true;
+            }
+            else
+            {
+                SettingsIdleProfileCB.Visible = false;
+                SettingsIdleLabel3.Visible = false;
+            }
+        }
+        
+        #endregion [Settings] Idle Controls
 
         #endregion Tab: Settings
 
@@ -1802,6 +2075,7 @@ namespace RGBKeyboardSpectrograph
         #endregion Tab: Debug
 
         #region Program
+
         private void MainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Show debug info (log, test mode) when Static Keys tab isn't selected.
@@ -1849,11 +2123,6 @@ namespace RGBKeyboardSpectrograph
                     }
         }
 
-        private void tsmQuit_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
             // Handle the escape key
@@ -1871,9 +2140,30 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion Program
-        
-        #endregion Controls
-        
+
+        #region ToolStrip
+
+        private void tsmQuit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        private void tsmProfileList_Click(object sender, EventArgs e)
+        {
+            LoadProfileButton_Click(sender, e);
+        }
+
+        private void tsmSpectroAmplitudeSlider_ValueChanged(object sender, EventArgs e)
+        {
+            tsmSpectroAmplitude.Text = "Amplitude: " + tsmSpectroAmplitudeSlider.Value;
+            SpectroAmplitudeUD.Value = ((TrackBar)sender).Value;
+        }
+
+        #endregion ToolStrip
+
+        #endregion Sections
+
     } //MainForm
 
     #region Helper Classes
@@ -1949,7 +2239,30 @@ namespace RGBKeyboardSpectrograph
                 NewOut(render);
             }
         }
+    }
 
+    public delegate void InactivityWatcherDelegate(int isIdle);
+    public static class InactivityStatusChanged
+    {
+        public static Form MainForm;
+        public static event InactivityWatcherDelegate DoAction;
+
+        public static void UpdateInactivity(int isIdle)
+        {
+            ThreadSafeUpdateInactivity(isIdle);
+        }
+
+        private static void ThreadSafeUpdateInactivity(int isIdle)
+        {
+            if (MainForm != null && MainForm.InvokeRequired)
+            {
+                MainForm.Invoke(new InactivityWatcherDelegate(ThreadSafeUpdateInactivity), new object[] { isIdle });
+            }
+            else
+            {
+                DoAction(isIdle);
+            }
+        }
     }
 
     public static class RichTextBoxExtensions

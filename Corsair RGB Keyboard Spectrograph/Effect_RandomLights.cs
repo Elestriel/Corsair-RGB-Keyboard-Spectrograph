@@ -4,9 +4,9 @@ using System.Threading;
 
 namespace RGBKeyboardSpectrograph
 {
-    public class SpecialEffects
+    public class Effect_RandomLights
     {
-        public static void KeyboardControl(string SelectedEffect = "none")
+        public static void KeyboardControl()
         {
             if (Program.RunKeyboardThread != 3) { return; };
 
@@ -25,7 +25,7 @@ namespace RGBKeyboardSpectrograph
 
             while (Program.RunKeyboardThread == 3)
             {
-                int keyToLight = rnd.Next(0, 143);
+                int keyToLight = rnd.Next(0, 144);
 
                 // Try 20 times to find a key that is finished its animation.
                 // If a key can't be found, give up and run another cycle.

@@ -23,6 +23,7 @@
         UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
         UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
         UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
+        InactivityStatusChanged.DoAction += InactivityStatusChanged_Action;
         */
         #region Windows Form Designer generated code
 
@@ -35,6 +36,7 @@
             UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
             UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
             UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
+            InactivityStatusChanged.DoAction += InactivityStatusChanged_Action;
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.StartSpectrographButton = new System.Windows.Forms.Button();
@@ -57,6 +59,8 @@
             this.tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmShowStatic = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmRefreshStatic = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSwitchStaticProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
@@ -140,25 +144,35 @@
             this.Eff_RL_FrequencyUD = new System.Windows.Forms.NumericUpDown();
             this.Eff_RL_DurationUD = new System.Windows.Forms.NumericUpDown();
             this.tabStatic = new System.Windows.Forms.TabPage();
+            this.StaticProfileListCB = new System.Windows.Forms.ComboBox();
+            this.StaticSaveProfileAsButton = new System.Windows.Forms.Button();
             this.AnimationsUseStaticLights = new System.Windows.Forms.CheckBox();
             this.StaticClearButton = new System.Windows.Forms.Button();
             this.StaticCopyPasteColor = new System.Windows.Forms.Button();
             this.StaticPasteButton = new System.Windows.Forms.Button();
             this.StaticCopyButton = new System.Windows.Forms.Button();
-            this.NewProfileButton = new System.Windows.Forms.Button();
+            this.StaticNewProfileButton = new System.Windows.Forms.Button();
             this.StaticUpdateKeyboardButton = new System.Windows.Forms.Button();
             this.StaticDeleteKeysButton = new System.Windows.Forms.Button();
-            this.SaveProfileButton = new System.Windows.Forms.Button();
-            this.LoadProfileButton = new System.Windows.Forms.Button();
-            this.KeyboardImageBox = new System.Windows.Forms.PictureBox();
+            this.StaticSaveProfileButton = new System.Windows.Forms.Button();
+            this.StaticLoadProfileButton = new System.Windows.Forms.Button();
+            this.StaticKeyboardImageBox = new System.Windows.Forms.PictureBox();
             this.StaticGetKeyboardImage = new System.Windows.Forms.Button();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.SettingsIdleSwitcher = new System.Windows.Forms.CheckBox();
+            this.SettingsIdleLabel3 = new System.Windows.Forms.Label();
+            this.SettingsIdleProfileCB = new System.Windows.Forms.ComboBox();
+            this.SettingsIdleModeCB = new System.Windows.Forms.ComboBox();
+            this.SettingsIdleLabel2 = new System.Windows.Forms.Label();
+            this.SettingsIdleTimeUD = new System.Windows.Forms.NumericUpDown();
+            this.SettingsIdleLabel1 = new System.Windows.Forms.Label();
             this.SettingsStaticOnStartCheck = new System.Windows.Forms.CheckBox();
             this.SettingsSpectroOnStartCheck = new System.Windows.Forms.CheckBox();
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
-            this.tsmRefreshStatic = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -200,8 +214,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_FrequencyUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_DurationUD)).BeginInit();
             this.tabStatic.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.KeyboardImageBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).BeginInit();
             this.tabSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SettingsIdleTimeUD)).BeginInit();
             this.SuspendLayout();
             // 
             // StartSpectrographButton
@@ -270,11 +285,6 @@
             // SpectroAmplitudeUD
             // 
             this.SpectroAmplitudeUD.Location = new System.Drawing.Point(231, 249);
-            this.SpectroAmplitudeUD.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.SpectroAmplitudeUD.Name = "SpectroAmplitudeUD";
             this.SpectroAmplitudeUD.Size = new System.Drawing.Size(47, 20);
             this.SpectroAmplitudeUD.TabIndex = 8;
@@ -396,6 +406,7 @@
             this.toolStripSeparator1,
             this.tsmShowStatic,
             this.tsmRefreshStatic,
+            this.tsmSwitchStaticProfile,
             this.toolStripSeparator2,
             this.tsmStartSpectro,
             this.tsmStartEffects,
@@ -405,7 +416,7 @@
             this.RightClickMenu.Name = "contextMenuStrip1";
             this.RightClickMenu.ShowCheckMargin = true;
             this.RightClickMenu.ShowImageMargin = false;
-            this.RightClickMenu.Size = new System.Drawing.Size(173, 198);
+            this.RightClickMenu.Size = new System.Drawing.Size(173, 220);
             // 
             // tsmAbout
             // 
@@ -426,6 +437,19 @@
             this.tsmShowStatic.Text = "Show Static Keys";
             this.tsmShowStatic.Click += new System.EventHandler(this.tsmShowStatic_Click);
             // 
+            // tsmRefreshStatic
+            // 
+            this.tsmRefreshStatic.Name = "tsmRefreshStatic";
+            this.tsmRefreshStatic.Size = new System.Drawing.Size(172, 22);
+            this.tsmRefreshStatic.Text = "Refresh Static Keys";
+            this.tsmRefreshStatic.Click += new System.EventHandler(this.UpdateKeyboardButton_Click);
+            // 
+            // tsmSwitchStaticProfile
+            // 
+            this.tsmSwitchStaticProfile.Name = "tsmSwitchStaticProfile";
+            this.tsmSwitchStaticProfile.Size = new System.Drawing.Size(172, 22);
+            this.tsmSwitchStaticProfile.Text = "Change Profile";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -433,6 +457,9 @@
             // 
             // tsmStartSpectro
             // 
+            this.tsmStartSpectro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmSpectroAmplitude,
+            this.tsmSpectroAmplitudeSlider});
             this.tsmStartSpectro.Name = "tsmStartSpectro";
             this.tsmStartSpectro.Size = new System.Drawing.Size(172, 22);
             this.tsmStartSpectro.Text = "Start Spectro";
@@ -561,7 +588,7 @@
             // SettingsUSB3ModeCheck
             // 
             this.SettingsUSB3ModeCheck.AutoSize = true;
-            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(13, 214);
+            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(188, 168);
             this.SettingsUSB3ModeCheck.Name = "SettingsUSB3ModeCheck";
             this.SettingsUSB3ModeCheck.Size = new System.Drawing.Size(66, 17);
             this.SettingsUSB3ModeCheck.TabIndex = 33;
@@ -798,7 +825,7 @@
             // 
             // SettingsGetUpdateButton
             // 
-            this.SettingsGetUpdateButton.Location = new System.Drawing.Point(13, 248);
+            this.SettingsGetUpdateButton.Location = new System.Drawing.Point(315, 24);
             this.SettingsGetUpdateButton.Name = "SettingsGetUpdateButton";
             this.SettingsGetUpdateButton.Size = new System.Drawing.Size(87, 23);
             this.SettingsGetUpdateButton.TabIndex = 51;
@@ -1467,17 +1494,19 @@
             // 
             // tabStatic
             // 
+            this.tabStatic.Controls.Add(this.StaticProfileListCB);
+            this.tabStatic.Controls.Add(this.StaticSaveProfileAsButton);
             this.tabStatic.Controls.Add(this.AnimationsUseStaticLights);
             this.tabStatic.Controls.Add(this.StaticClearButton);
             this.tabStatic.Controls.Add(this.StaticCopyPasteColor);
             this.tabStatic.Controls.Add(this.StaticPasteButton);
             this.tabStatic.Controls.Add(this.StaticCopyButton);
-            this.tabStatic.Controls.Add(this.NewProfileButton);
+            this.tabStatic.Controls.Add(this.StaticNewProfileButton);
             this.tabStatic.Controls.Add(this.StaticUpdateKeyboardButton);
             this.tabStatic.Controls.Add(this.StaticDeleteKeysButton);
-            this.tabStatic.Controls.Add(this.SaveProfileButton);
-            this.tabStatic.Controls.Add(this.LoadProfileButton);
-            this.tabStatic.Controls.Add(this.KeyboardImageBox);
+            this.tabStatic.Controls.Add(this.StaticSaveProfileButton);
+            this.tabStatic.Controls.Add(this.StaticLoadProfileButton);
+            this.tabStatic.Controls.Add(this.StaticKeyboardImageBox);
             this.tabStatic.Controls.Add(this.StaticGetKeyboardImage);
             this.tabStatic.Location = new System.Drawing.Point(4, 22);
             this.tabStatic.Name = "tabStatic";
@@ -1485,6 +1514,25 @@
             this.tabStatic.TabIndex = 4;
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
+            // 
+            // StaticProfileListCB
+            // 
+            this.StaticProfileListCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.StaticProfileListCB.FormattingEnabled = true;
+            this.StaticProfileListCB.Location = new System.Drawing.Point(15, 270);
+            this.StaticProfileListCB.Name = "StaticProfileListCB";
+            this.StaticProfileListCB.Size = new System.Drawing.Size(156, 21);
+            this.StaticProfileListCB.TabIndex = 63;
+            // 
+            // StaticSaveProfileAsButton
+            // 
+            this.StaticSaveProfileAsButton.Location = new System.Drawing.Point(177, 270);
+            this.StaticSaveProfileAsButton.Name = "StaticSaveProfileAsButton";
+            this.StaticSaveProfileAsButton.Size = new System.Drawing.Size(75, 23);
+            this.StaticSaveProfileAsButton.TabIndex = 60;
+            this.StaticSaveProfileAsButton.Text = "Save As...";
+            this.StaticSaveProfileAsButton.UseVisualStyleBackColor = true;
+            this.StaticSaveProfileAsButton.Click += new System.EventHandler(this.StaticSaveProfileAsButton_Click);
             // 
             // AnimationsUseStaticLights
             // 
@@ -1541,19 +1589,19 @@
             this.StaticCopyButton.UseVisualStyleBackColor = true;
             this.StaticCopyButton.Click += new System.EventHandler(this.StaticCopyButton_Click);
             // 
-            // NewProfileButton
+            // StaticNewProfileButton
             // 
-            this.NewProfileButton.Location = new System.Drawing.Point(15, 241);
-            this.NewProfileButton.Name = "NewProfileButton";
-            this.NewProfileButton.Size = new System.Drawing.Size(75, 23);
-            this.NewProfileButton.TabIndex = 7;
-            this.NewProfileButton.Text = "Clear Profile";
-            this.NewProfileButton.UseVisualStyleBackColor = true;
-            this.NewProfileButton.Click += new System.EventHandler(this.NewProfileButton_Click);
+            this.StaticNewProfileButton.Location = new System.Drawing.Point(15, 241);
+            this.StaticNewProfileButton.Name = "StaticNewProfileButton";
+            this.StaticNewProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.StaticNewProfileButton.TabIndex = 7;
+            this.StaticNewProfileButton.Text = "Clear Profile";
+            this.StaticNewProfileButton.UseVisualStyleBackColor = true;
+            this.StaticNewProfileButton.Click += new System.EventHandler(this.NewProfileButton_Click);
             // 
             // StaticUpdateKeyboardButton
             // 
-            this.StaticUpdateKeyboardButton.Location = new System.Drawing.Point(177, 270);
+            this.StaticUpdateKeyboardButton.Location = new System.Drawing.Point(610, 305);
             this.StaticUpdateKeyboardButton.Name = "StaticUpdateKeyboardButton";
             this.StaticUpdateKeyboardButton.Size = new System.Drawing.Size(75, 23);
             this.StaticUpdateKeyboardButton.TabIndex = 6;
@@ -1564,7 +1612,7 @@
             // 
             // StaticDeleteKeysButton
             // 
-            this.StaticDeleteKeysButton.Location = new System.Drawing.Point(96, 270);
+            this.StaticDeleteKeysButton.Location = new System.Drawing.Point(529, 305);
             this.StaticDeleteKeysButton.Name = "StaticDeleteKeysButton";
             this.StaticDeleteKeysButton.Size = new System.Drawing.Size(75, 23);
             this.StaticDeleteKeysButton.TabIndex = 5;
@@ -1573,37 +1621,37 @@
             this.StaticDeleteKeysButton.Visible = false;
             this.StaticDeleteKeysButton.Click += new System.EventHandler(this.DeleteKeys_Click);
             // 
-            // SaveProfileButton
+            // StaticSaveProfileButton
             // 
-            this.SaveProfileButton.Location = new System.Drawing.Point(177, 241);
-            this.SaveProfileButton.Name = "SaveProfileButton";
-            this.SaveProfileButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveProfileButton.TabIndex = 4;
-            this.SaveProfileButton.Text = "Save Profile";
-            this.SaveProfileButton.UseVisualStyleBackColor = true;
-            this.SaveProfileButton.Click += new System.EventHandler(this.SaveProfileButton_Click);
+            this.StaticSaveProfileButton.Location = new System.Drawing.Point(177, 241);
+            this.StaticSaveProfileButton.Name = "StaticSaveProfileButton";
+            this.StaticSaveProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.StaticSaveProfileButton.TabIndex = 4;
+            this.StaticSaveProfileButton.Text = "Save Profile";
+            this.StaticSaveProfileButton.UseVisualStyleBackColor = true;
+            this.StaticSaveProfileButton.Click += new System.EventHandler(this.SaveProfileButton_Click);
             // 
-            // LoadProfileButton
+            // StaticLoadProfileButton
             // 
-            this.LoadProfileButton.Location = new System.Drawing.Point(96, 241);
-            this.LoadProfileButton.Name = "LoadProfileButton";
-            this.LoadProfileButton.Size = new System.Drawing.Size(75, 23);
-            this.LoadProfileButton.TabIndex = 3;
-            this.LoadProfileButton.Text = "Load Profile";
-            this.LoadProfileButton.UseVisualStyleBackColor = true;
-            this.LoadProfileButton.Click += new System.EventHandler(this.LoadProfileButton_Click);
+            this.StaticLoadProfileButton.Location = new System.Drawing.Point(96, 241);
+            this.StaticLoadProfileButton.Name = "StaticLoadProfileButton";
+            this.StaticLoadProfileButton.Size = new System.Drawing.Size(75, 23);
+            this.StaticLoadProfileButton.TabIndex = 3;
+            this.StaticLoadProfileButton.Text = "Load Profile";
+            this.StaticLoadProfileButton.UseVisualStyleBackColor = true;
+            this.StaticLoadProfileButton.Click += new System.EventHandler(this.LoadProfileButton_Click);
             // 
-            // KeyboardImageBox
+            // StaticKeyboardImageBox
             // 
-            this.KeyboardImageBox.Location = new System.Drawing.Point(15, 13);
-            this.KeyboardImageBox.Name = "KeyboardImageBox";
-            this.KeyboardImageBox.Size = new System.Drawing.Size(660, 222);
-            this.KeyboardImageBox.TabIndex = 2;
-            this.KeyboardImageBox.TabStop = false;
+            this.StaticKeyboardImageBox.Location = new System.Drawing.Point(15, 13);
+            this.StaticKeyboardImageBox.Name = "StaticKeyboardImageBox";
+            this.StaticKeyboardImageBox.Size = new System.Drawing.Size(660, 222);
+            this.StaticKeyboardImageBox.TabIndex = 2;
+            this.StaticKeyboardImageBox.TabStop = false;
             // 
             // StaticGetKeyboardImage
             // 
-            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(15, 270);
+            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(448, 305);
             this.StaticGetKeyboardImage.Name = "StaticGetKeyboardImage";
             this.StaticGetKeyboardImage.Size = new System.Drawing.Size(75, 23);
             this.StaticGetKeyboardImage.TabIndex = 1;
@@ -1614,6 +1662,13 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.SettingsIdleSwitcher);
+            this.tabSettings.Controls.Add(this.SettingsIdleLabel3);
+            this.tabSettings.Controls.Add(this.SettingsIdleProfileCB);
+            this.tabSettings.Controls.Add(this.SettingsIdleModeCB);
+            this.tabSettings.Controls.Add(this.SettingsIdleLabel2);
+            this.tabSettings.Controls.Add(this.SettingsIdleTimeUD);
+            this.tabSettings.Controls.Add(this.SettingsIdleLabel1);
             this.tabSettings.Controls.Add(this.SettingsStaticOnStartCheck);
             this.tabSettings.Controls.Add(this.SettingsSpectroOnStartCheck);
             this.tabSettings.Controls.Add(this.SettingsBrowseCuePathButton);
@@ -1634,6 +1689,77 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // SettingsIdleSwitcher
+            // 
+            this.SettingsIdleSwitcher.AutoSize = true;
+            this.SettingsIdleSwitcher.Location = new System.Drawing.Point(13, 214);
+            this.SettingsIdleSwitcher.Name = "SettingsIdleSwitcher";
+            this.SettingsIdleSwitcher.Size = new System.Drawing.Size(153, 17);
+            this.SettingsIdleSwitcher.TabIndex = 64;
+            this.SettingsIdleSwitcher.Text = "Change Settings when Idle";
+            this.SettingsIdleSwitcher.UseVisualStyleBackColor = true;
+            this.SettingsIdleSwitcher.CheckedChanged += new System.EventHandler(this.SettingsIdleSwitcher_CheckedChanged);
+            // 
+            // SettingsIdleLabel3
+            // 
+            this.SettingsIdleLabel3.AutoSize = true;
+            this.SettingsIdleLabel3.Location = new System.Drawing.Point(209, 261);
+            this.SettingsIdleLabel3.Name = "SettingsIdleLabel3";
+            this.SettingsIdleLabel3.Size = new System.Drawing.Size(39, 13);
+            this.SettingsIdleLabel3.TabIndex = 63;
+            this.SettingsIdleLabel3.Text = "Profile:";
+            this.SettingsIdleLabel3.Visible = false;
+            // 
+            // SettingsIdleProfileCB
+            // 
+            this.SettingsIdleProfileCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SettingsIdleProfileCB.FormattingEnabled = true;
+            this.SettingsIdleProfileCB.Location = new System.Drawing.Point(254, 258);
+            this.SettingsIdleProfileCB.Name = "SettingsIdleProfileCB";
+            this.SettingsIdleProfileCB.Size = new System.Drawing.Size(148, 21);
+            this.SettingsIdleProfileCB.TabIndex = 62;
+            this.SettingsIdleProfileCB.Visible = false;
+            // 
+            // SettingsIdleModeCB
+            // 
+            this.SettingsIdleModeCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SettingsIdleModeCB.FormattingEnabled = true;
+            this.SettingsIdleModeCB.Location = new System.Drawing.Point(254, 231);
+            this.SettingsIdleModeCB.Name = "SettingsIdleModeCB";
+            this.SettingsIdleModeCB.Size = new System.Drawing.Size(148, 21);
+            this.SettingsIdleModeCB.TabIndex = 61;
+            this.SettingsIdleModeCB.Visible = false;
+            this.SettingsIdleModeCB.SelectedIndexChanged += new System.EventHandler(this.SettingsIdleModeCB_SelectedIndexChanged);
+            // 
+            // SettingsIdleLabel2
+            // 
+            this.SettingsIdleLabel2.AutoSize = true;
+            this.SettingsIdleLabel2.Location = new System.Drawing.Point(157, 234);
+            this.SettingsIdleLabel2.Name = "SettingsIdleLabel2";
+            this.SettingsIdleLabel2.Size = new System.Drawing.Size(91, 13);
+            this.SettingsIdleLabel2.TabIndex = 60;
+            this.SettingsIdleLabel2.Text = "minutes, switch to";
+            this.SettingsIdleLabel2.Visible = false;
+            // 
+            // SettingsIdleTimeUD
+            // 
+            this.SettingsIdleTimeUD.Location = new System.Drawing.Point(106, 232);
+            this.SettingsIdleTimeUD.Name = "SettingsIdleTimeUD";
+            this.SettingsIdleTimeUD.Size = new System.Drawing.Size(45, 20);
+            this.SettingsIdleTimeUD.TabIndex = 59;
+            this.SettingsIdleTimeUD.Visible = false;
+            this.SettingsIdleTimeUD.ValueChanged += new System.EventHandler(this.SettingsIdleTimeUD_ValueChanged);
+            // 
+            // SettingsIdleLabel1
+            // 
+            this.SettingsIdleLabel1.AutoSize = true;
+            this.SettingsIdleLabel1.Location = new System.Drawing.Point(10, 234);
+            this.SettingsIdleLabel1.Name = "SettingsIdleLabel1";
+            this.SettingsIdleLabel1.Size = new System.Drawing.Size(92, 13);
+            this.SettingsIdleLabel1.TabIndex = 58;
+            this.SettingsIdleLabel1.Text = "After being idle for";
+            this.SettingsIdleLabel1.Visible = false;
             // 
             // SettingsStaticOnStartCheck
             // 
@@ -1683,12 +1809,19 @@
             this.SettingsCuePathLabel.TabIndex = 53;
             this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
-            // tsmRefreshStatic
+            // tsmSpectroAmplitude
             // 
-            this.tsmRefreshStatic.Name = "tsmRefreshStatic";
-            this.tsmRefreshStatic.Size = new System.Drawing.Size(172, 22);
-            this.tsmRefreshStatic.Text = "Refresh Static Keys";
-            this.tsmRefreshStatic.Click += new System.EventHandler(this.UpdateKeyboardButton_Click);
+            this.tsmSpectroAmplitude.Name = "tsmSpectroAmplitude";
+            this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
+            this.tsmSpectroAmplitude.Text = "Amplitude: x";
+            // 
+            // tsmSpectroAmplitudeSlider
+            // 
+            this.tsmSpectroAmplitudeSlider.Maximum = 10;
+            this.tsmSpectroAmplitudeSlider.Minimum = 0;
+            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
+            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
+            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
             // 
             // MainForm
             // 
@@ -1703,6 +1836,7 @@
             this.Controls.Add(this.DebugLogLevelLabel);
             this.Controls.Add(this.MainTabControl);
             this.Controls.Add(this.statusStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
@@ -1759,9 +1893,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_DurationUD)).EndInit();
             this.tabStatic.ResumeLayout(false);
             this.tabStatic.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.KeyboardImageBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).EndInit();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SettingsIdleTimeUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1828,12 +1963,12 @@
         private System.Windows.Forms.Button SettingsBrowseCuePathButton;
         private System.Windows.Forms.TextBox SettingsCuePathTextBox;
         private System.Windows.Forms.Button StaticGetKeyboardImage;
-        private System.Windows.Forms.PictureBox KeyboardImageBox;
-        private System.Windows.Forms.Button LoadProfileButton;
-        private System.Windows.Forms.Button SaveProfileButton;
+        private System.Windows.Forms.PictureBox StaticKeyboardImageBox;
+        private System.Windows.Forms.Button StaticLoadProfileButton;
+        private System.Windows.Forms.Button StaticSaveProfileButton;
         private System.Windows.Forms.Button StaticDeleteKeysButton;
         private System.Windows.Forms.Button StaticUpdateKeyboardButton;
-        private System.Windows.Forms.Button NewProfileButton;
+        private System.Windows.Forms.Button StaticNewProfileButton;
         private System.Windows.Forms.CheckBox SettingsStaticOnStartCheck;
         private System.Windows.Forms.CheckBox SettingsSpectroOnStartCheck;
         private System.Windows.Forms.Button StaticPasteButton;
@@ -1891,6 +2026,18 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.CheckBox AnimationsUseStaticLights;
         private System.Windows.Forms.ToolStripMenuItem tsmRefreshStatic;
+        private System.Windows.Forms.Label SettingsIdleLabel3;
+        private System.Windows.Forms.ComboBox SettingsIdleProfileCB;
+        private System.Windows.Forms.ComboBox SettingsIdleModeCB;
+        private System.Windows.Forms.Label SettingsIdleLabel2;
+        private System.Windows.Forms.NumericUpDown SettingsIdleTimeUD;
+        private System.Windows.Forms.Label SettingsIdleLabel1;
+        private System.Windows.Forms.CheckBox SettingsIdleSwitcher;
+        private System.Windows.Forms.ComboBox StaticProfileListCB;
+        private System.Windows.Forms.Button StaticSaveProfileAsButton;
+        private System.Windows.Forms.ToolStripMenuItem tsmSwitchStaticProfile;
+        private System.Windows.Forms.ToolStripMenuItem tsmSpectroAmplitude;
+        private ToolStripTrackBar tsmSpectroAmplitudeSlider;
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -264,8 +265,11 @@ namespace RGBKeyboardSpectrograph
                 }
             }
 
-            // Static Keys to lights
-            Write(staticColors, false);
+            // Static Keys to lights                   
+            if (Program.AnimationsUseStaticKeys == true)
+            {
+                Write(staticColors, false);
+            }
 
             UpdateKeyboard();
             if (Program.SpectroShowGraphics == true) WriteGraphics();
@@ -691,7 +695,7 @@ namespace RGBKeyboardSpectrograph
             uint written = 0;
             return WriteFile(this.keyboardUsbDevice, usb_pkt, 65, ref written, IntPtr.Zero);
         }
-
+        
         private void WritePacketToLog(byte[] CurrentPacket, byte[] PreviousPacket)
         {
             if (Program.FailedPacketLogWritten == true) return;

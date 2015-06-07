@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.0";
+        public static string VersionNumber = "0.6.1";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -22,7 +22,14 @@ namespace RGBKeyboardSpectrograph
         public static int MyCanvasWidth;
         public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
-        public static int RunKeyboardThread = -1;
+        public static string StaticProfilesPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Profiles\\";
+
+        // Cross-thread variables
+        public volatile static int RunKeyboardThread = -1;
+        public volatile static bool WatchForInactivity = false;
+        public volatile static int InactivityTimeTrigger = 0;
+        public volatile static string InactivityResumeAction;
+        public volatile static bool IgnoreUpdateLastProfile = false;
 
         // Spectrograph
         public static float SpectroAmplitude;
@@ -61,7 +68,8 @@ namespace RGBKeyboardSpectrograph
         public static string[] VersionCheckData = new string[4];
 
         // Worker Thread
-        public static Thread newWorker = null;
+        public volatile static Thread newWorker = null;
+        public volatile static Thread idleThread = null;
         
         /// <summary>
         /// The main entry point for the application.

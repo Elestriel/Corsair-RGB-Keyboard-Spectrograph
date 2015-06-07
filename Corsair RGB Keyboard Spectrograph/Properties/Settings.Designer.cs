@@ -26,336 +26,336 @@ namespace RGBKeyboardSpectrograph.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userKeyboardModel {
+        public string settingKeyboardModel {
             get {
-                return ((string)(this["userKeyboardModel"]));
+                return ((string)(this["settingKeyboardModel"]));
             }
             set {
-                this["userKeyboardModel"] = value;
+                this["settingKeyboardModel"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userKeyboardLayout {
+        public string settingKeyboardLayout {
             get {
-                return ((string)(this["userKeyboardLayout"]));
+                return ((string)(this["settingKeyboardLayout"]));
             }
             set {
-                this["userKeyboardLayout"] = value;
+                this["settingKeyboardLayout"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int userAmplitude {
+        public int spectroAmplitude {
             get {
-                return ((int)(this["userAmplitude"]));
+                return ((int)(this["spectroAmplitude"]));
             }
             set {
-                this["userAmplitude"] = value;
+                this["spectroAmplitude"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
-        public int userBackgroundBrightness {
+        public int spectroBackgroundBrightness {
             get {
-                return ((int)(this["userBackgroundBrightness"]));
+                return ((int)(this["spectroBackgroundBrightness"]));
             }
             set {
-                this["userBackgroundBrightness"] = value;
+                this["spectroBackgroundBrightness"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public int userLogLevel {
+        public int debugLogLevel {
             get {
-                return ((int)(this["userLogLevel"]));
+                return ((int)(this["debugLogLevel"]));
             }
             set {
-                this["userLogLevel"] = value;
+                this["debugLogLevel"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool userMinimizeToTray {
+        public bool settingMinimizeToTray {
             get {
-                return ((bool)(this["userMinimizeToTray"]));
+                return ((bool)(this["settingMinimizeToTray"]));
             }
             set {
-                this["userMinimizeToTray"] = value;
+                this["settingMinimizeToTray"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int userRefreshDelay {
+        public int spectroRefreshDelay {
             get {
-                return ((int)(this["userRefreshDelay"]));
+                return ((int)(this["spectroRefreshDelay"]));
             }
             set {
-                this["userRefreshDelay"] = value;
+                this["spectroRefreshDelay"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color userColorBars {
+        public global::System.Drawing.Color spectroColorBars {
             get {
-                return ((global::System.Drawing.Color)(this["userColorBars"]));
+                return ((global::System.Drawing.Color)(this["spectroColorBars"]));
             }
             set {
-                this["userColorBars"] = value;
+                this["spectroColorBars"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Fuchsia")]
-        public global::System.Drawing.Color userColorBackground {
+        public global::System.Drawing.Color spectroColorBackground {
             get {
-                return ((global::System.Drawing.Color)(this["userColorBackground"]));
+                return ((global::System.Drawing.Color)(this["spectroColorBackground"]));
             }
             set {
-                this["userColorBackground"] = value;
+                this["spectroColorBackground"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Rainbow")]
-        public string userColorBackgroundType {
+        public string spectroColorBackgroundType {
             get {
-                return ((string)(this["userColorBackgroundType"]));
+                return ((string)(this["spectroColorBackgroundType"]));
             }
             set {
-                this["userColorBackgroundType"] = value;
+                this["spectroColorBackgroundType"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userUsb3Mode {
+        public bool settingUsb3Mode {
             get {
-                return ((bool)(this["userUsb3Mode"]));
+                return ((bool)(this["settingUsb3Mode"]));
             }
             set {
-                this["userUsb3Mode"] = value;
+                this["settingUsb3Mode"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userShowGraphics {
+        public bool settingShowGraphics {
             get {
-                return ((bool)(this["userShowGraphics"]));
+                return ((bool)(this["settingShowGraphics"]));
             }
             set {
-                this["userShowGraphics"] = value;
+                this["settingShowGraphics"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("104")]
-        public float userBackgroundEffectWidth {
+        public float spectroBackgroundEffectWidth {
             get {
-                return ((float)(this["userBackgroundEffectWidth"]));
+                return ((float)(this["spectroBackgroundEffectWidth"]));
             }
             set {
-                this["userBackgroundEffectWidth"] = value;
+                this["spectroBackgroundEffectWidth"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public float userBackgroundEffectSpeed {
+        public float spectroBackgroundEffectSpeed {
             get {
-                return ((float)(this["userBackgroundEffectSpeed"]));
+                return ((float)(this["spectroBackgroundEffectSpeed"]));
             }
             set {
-                this["userBackgroundEffectSpeed"] = value;
+                this["spectroBackgroundEffectSpeed"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userStartMinimized {
+        public bool settingStartMinimized {
             get {
-                return ((bool)(this["userStartMinimized"]));
+                return ((bool)(this["settingStartMinimized"]));
             }
             set {
-                this["userStartMinimized"] = value;
+                this["settingStartMinimized"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userEffectsOnStart {
+        public bool settingEffectsOnStart {
             get {
-                return ((bool)(this["userEffectsOnStart"]));
+                return ((bool)(this["settingEffectsOnStart"]));
             }
             set {
-                this["userEffectsOnStart"] = value;
+                this["settingEffectsOnStart"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("104")]
-        public float userBarEffectWidth {
+        public float spectroBarEffectWidth {
             get {
-                return ((float)(this["userBarEffectWidth"]));
+                return ((float)(this["spectroBarEffectWidth"]));
             }
             set {
-                this["userBarEffectWidth"] = value;
+                this["spectroBarEffectWidth"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public float userBarEffectSpeed {
+        public float spectroBarEffectSpeed {
             get {
-                return ((float)(this["userBarEffectSpeed"]));
+                return ((float)(this["spectroBarEffectSpeed"]));
             }
             set {
-                this["userBarEffectSpeed"] = value;
+                this["spectroBarEffectSpeed"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int userCaptureMode {
+        public int spectroCaptureMode {
             get {
-                return ((int)(this["userCaptureMode"]));
+                return ((int)(this["spectroCaptureMode"]));
             }
             set {
-                this["userCaptureMode"] = value;
+                this["spectroCaptureMode"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userCaptureDevice {
+        public string spectroCaptureDevice {
             get {
-                return ((string)(this["userCaptureDevice"]));
+                return ((string)(this["spectroCaptureDevice"]));
             }
             set {
-                this["userCaptureDevice"] = value;
+                this["spectroCaptureDevice"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userColorBarsType {
+        public string spectroColorBarsType {
             get {
-                return ((string)(this["userColorBarsType"]));
+                return ((string)(this["spectroColorBarsType"]));
             }
             set {
-                this["userColorBarsType"] = value;
+                this["spectroColorBarsType"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("40")]
-        public int userBarBrightness {
+        public int spectroBarBrightness {
             get {
-                return ((int)(this["userBarBrightness"]));
+                return ((int)(this["spectroBarBrightness"]));
             }
             set {
-                this["userBarBrightness"] = value;
+                this["spectroBarBrightness"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userRestoreLighting {
+        public bool settingRestoreLighting {
             get {
-                return ((bool)(this["userRestoreLighting"]));
+                return ((bool)(this["settingRestoreLighting"]));
             }
             set {
-                this["userRestoreLighting"] = value;
+                this["settingRestoreLighting"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userCueLocation {
+        public string settingCueLocation {
             get {
-                return ((string)(this["userCueLocation"]));
+                return ((string)(this["settingCueLocation"]));
             }
             set {
-                this["userCueLocation"] = value;
+                this["settingCueLocation"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userLaunchCueOnExit {
+        public bool settingLaunchCueOnExit {
             get {
-                return ((bool)(this["userLaunchCueOnExit"]));
+                return ((bool)(this["settingLaunchCueOnExit"]));
             }
             set {
-                this["userLaunchCueOnExit"] = value;
+                this["settingLaunchCueOnExit"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userSpectroOnStart {
+        public bool settingSpectroOnStart {
             get {
-                return ((bool)(this["userSpectroOnStart"]));
+                return ((bool)(this["settingSpectroOnStart"]));
             }
             set {
-                this["userSpectroOnStart"] = value;
+                this["settingSpectroOnStart"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool userStaticOnStart {
+        public bool settingStaticOnStart {
             get {
-                return ((bool)(this["userStaticOnStart"]));
+                return ((bool)(this["settingStaticOnStart"]));
             }
             set {
-                this["userStaticOnStart"] = value;
+                this["settingStaticOnStart"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string userLastUsedProfile {
+        public string appLastUsedProfile {
             get {
-                return ((string)(this["userLastUsedProfile"]));
+                return ((string)(this["appLastUsedProfile"]));
             }
             set {
-                this["userLastUsedProfile"] = value;
+                this["appLastUsedProfile"] = value;
             }
         }
         
@@ -565,7 +565,7 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int Eff_RL_Delay {
             get {
                 return ((int)(this["Eff_RL_Delay"]));
@@ -584,6 +584,54 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["EffectUseStaticKeys"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int idleTriggerTime {
+            get {
+                return ((int)(this["idleTriggerTime"]));
+            }
+            set {
+                this["idleTriggerTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Random Lights")]
+        public string idleMode {
+            get {
+                return ((string)(this["idleMode"]));
+            }
+            set {
+                this["idleMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string idleProfile {
+            get {
+                return ((string)(this["idleProfile"]));
+            }
+            set {
+                this["idleProfile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool idleUseIdleWatcher {
+            get {
+                return ((bool)(this["idleUseIdleWatcher"]));
+            }
+            set {
+                this["idleUseIdleWatcher"] = value;
             }
         }
     }
