@@ -34,6 +34,7 @@ namespace RGBKeyboardSpectrograph
         double keyboardImageScale = 0.6;
         int StaticCopyPasteMode = 0;
         bool StaticUnsavedChanges = false;
+        int[] KeyIDArray;
    
         Thread workerThread = Program.newWorker;
         Thread idleWatcherThread = Program.idleThread;
@@ -150,6 +151,7 @@ namespace RGBKeyboardSpectrograph
             // Settings
             Properties.Settings.Default.settingKeyboardModel = SettingsKeyboardModelCB.Text;
             Properties.Settings.Default.settingKeyboardLayout = SettingsKeyboardLayoutCB.Text;
+            Properties.Settings.Default.settingMouseModel = SettingsMouseModelCB.Text;
 
             Properties.Settings.Default.debugLogLevel = (int)DebugLogLevelUD.Value;
 
@@ -161,6 +163,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.settingStaticOnStart = SettingsStaticOnStartCheck.Checked;
             Properties.Settings.Default.settingRestoreLighting = SettingsRestoreLightingCheck.Checked;
             Properties.Settings.Default.settingLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
+            Properties.Settings.Default.EffectsIncludeMouse = SettingsEffectsIncludeMouse.Checked;
 
             Properties.Settings.Default.settingCueLocation = SettingsCuePathTextBox.Text;
 
@@ -196,11 +199,34 @@ namespace RGBKeyboardSpectrograph
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
             if (!Program.DevMode) { notifyIcon.Visible = false; };
 
+            #region KeyIDArray Population
+            KeyIDArray = new int[] {27, 192, 9, 20, 160, 162, 123, 187, -1, 103,
+                                    2221, -1, 112, 49, 81, 65, -1,  91, 44, -2,
+                                    173, 104, -1, -1, 113, 50, 87, 83, 90, 164,
+                                    145, 8, 178, 105, -1, -1, 114, 51, 69, 68,
+                                    88, -2, 19, 46, 177, -2, -1, -1, 115, 52,
+                                    82, 70, 67, 32, 45, 35, 179, 100, -1, -1,
+                                    116, 53, 84, 71, 86, -2, 36, 34, 176, 101,
+                                    -1, -1, 117, 54, 89, 72, 66, -2, 33, 161,
+                                    144, 102, -1, -1, 118, 55, 85, 74, 78, 165,
+                                    221, 163, 111, 97, -1, -1, 119, 56, 73, 75,
+                                    77, 92, 220, 38, 106, 98, -1, -1, 120, 57, 
+                                    79, 76, 188, 93, -2, 37, 109, 99, -1, -1,
+                                    121, 48, 80, 186, 190, -2, 13, 40, 107, 96, 
+                                    -2, -1, 122, 189, 219, 222, 191, -1, -2, 39,
+                                    14, 110, -2, -1, -2};
+            #endregion
+
             #region Populate Combo Boxes
 
             SettingsKeyboardModelCB.Items.Add("K65-RGB");
             SettingsKeyboardModelCB.Items.Add("K70-RGB");
             SettingsKeyboardModelCB.Items.Add("K95-RGB");
+
+            SettingsMouseModelCB.Items.Add("None");
+            SettingsMouseModelCB.Items.Add("M65 RGB");
+            SettingsMouseModelCB.Items.Add("Sabre 1");
+            SettingsMouseModelCB.Items.Add("Sabre 2");
 
             SpectroBgEffectCB.Items.Add("Solid Colour");
             SpectroBgEffectCB.Items.Add("Rainbow Right");
@@ -218,6 +244,7 @@ namespace RGBKeyboardSpectrograph
             SettingsIdleModeCB.Items.Add("Spectrograph");
             SettingsIdleModeCB.Items.Add("Random Lights");
             SettingsIdleModeCB.Items.Add("Static Profile");
+
 
             #endregion Pupulate Combo Boxes
 
@@ -408,7 +435,10 @@ namespace RGBKeyboardSpectrograph
             string settingKeyboardLayout = Properties.Settings.Default.settingKeyboardLayout;
             if (SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout) > -1) { SettingsKeyboardLayoutCB.SelectedIndex = SettingsKeyboardLayoutCB.FindStringExact(settingKeyboardLayout); };
 
-
+            string settingMouseModel = Properties.Settings.Default.settingMouseModel;
+            if (SettingsMouseModelCB.FindStringExact(settingMouseModel) > -1) { SettingsMouseModelCB.SelectedIndex = SettingsMouseModelCB.FindStringExact(settingMouseModel); };
+            
+            
             int settingLogLevel = Properties.Settings.Default.debugLogLevel;
             if (settingLogLevel < 3) { settingLogLevel = 3; };
             DebugLogLevelUD.Value = settingLogLevel;
@@ -425,7 +455,7 @@ namespace RGBKeyboardSpectrograph
             SettingsStaticOnStartCheck.Checked = Properties.Settings.Default.settingStaticOnStart;
             SettingsRestoreLightingCheck.Checked = Properties.Settings.Default.settingRestoreLighting;
             SettingsLaunchCueCheck.Checked = Properties.Settings.Default.settingLaunchCueOnExit;
-
+            SettingsEffectsIncludeMouse.Checked = Properties.Settings.Default.EffectsIncludeMouse;
 
             SettingsCuePathTextBox.Text = Properties.Settings.Default.settingCueLocation;
 
@@ -461,6 +491,10 @@ namespace RGBKeyboardSpectrograph
             StaticGetKeyboardImage_Click(null, null);
             Program.StaticKeysNeedRedraw = false;
 
+            // Initialize Mouse key colors
+            for (int i = 0; i < 4; i++)
+            { Program.MouseColors[i] = new MouseColorCollection(); }
+
             // Start up automatic tasks if the selected keyboard is valid
             if (SettingsKeyboardLayoutCB.Text != "" && SettingsKeyboardModelCB.Text != "")
             {
@@ -469,9 +503,9 @@ namespace RGBKeyboardSpectrograph
 
                 // Automatically start effects
                 if (Properties.Settings.Default.settingEffectsOnStart == true) { EffectsStartButton_Click(null, null); };
-                
+
                 // Automatically apply static keys
-                if (Properties.Settings.Default.settingStaticOnStart == true && Program.SettingsLastUsedProfile != "") 
+                if (Properties.Settings.Default.settingStaticOnStart == true && Program.SettingsLastUsedProfile != "")
                 {
                     Color[] keyData = new Color[144];
                     KeyColors keyColors = new KeyColors();
@@ -484,7 +518,11 @@ namespace RGBKeyboardSpectrograph
                         {
                             Program.StaticKeyColors[i] = keyColors.Colors[i];
                         }
-                        RefreshKeyColors();
+                        for (int i = 144; i < 148; i++)
+                        {
+                            Program.MouseColors[i].Set(keyColors.Colors[i]);
+                        }
+                            RefreshKeyColors();
                     }
                 };
             }
@@ -536,6 +574,7 @@ namespace RGBKeyboardSpectrograph
                 if (Program.DevMode == true)
                 {
                     Program.SettingsKeyboardID = 0x1B11;
+                    Program.SettingsMouseID = 0x1B12;
                 }
                 else
                 {
@@ -552,6 +591,7 @@ namespace RGBKeyboardSpectrograph
                             break;
                     }
                 }
+                
 
                 UpdateStatusMessage.ShowStatusMessage(4, "Hardware ID: " + Program.SettingsKeyboardID.ToString("X"));
                 SettingsKeyboardLayoutCB.Items.Clear();
@@ -635,9 +675,36 @@ namespace RGBKeyboardSpectrograph
         #endregion Form Stuff
 
         #region Effects Start/Stop
+
+        private void SetMouseSettings()
+        {
+            switch (SettingsMouseModelCB.Text)
+            {
+                case "M65 RGB":
+                    Program.SettingsMouseID = 0x1B12;
+                    Program.SettingsMouseModel = "M65 RGB";
+                    break;
+                case "Sabre 1":
+                    Program.SettingsMouseID = 0x1B14;
+                    Program.SettingsMouseModel = "Sabre 1";
+                    break;
+                case "Sabre 2":
+                    Program.SettingsMouseID = 0x1B19;
+                    Program.SettingsMouseModel = "Sabre 2";
+                    break;
+                case "None":
+                    Program.SettingsMouseID = 0x0;
+                    Program.SettingsMouseModel = "None";
+                    break;
+            }
+        }
+
         private bool StartEffects(string Effect, bool isIdleLaunch = false)
         {
             if (!isIdleLaunch) { Program.InactivityResumeAction = Effect; };
+
+            Program.IncludeMouseInEffects = SettingsEffectsIncludeMouse.Checked;
+            SetMouseSettings();
 
             switch (Effect)
             {
@@ -1535,12 +1602,18 @@ namespace RGBKeyboardSpectrograph
                 if ((int)c.Tag >= 0) { c.BackColor = Program.StaticKeyColors[(int)c.Tag]; };
             }
 
+            StaticMouseLight1.BackColor = Program.MouseColors[0].KeyColor;
+            StaticMouseLight2.BackColor = Program.MouseColors[1].KeyColor;
+            StaticMouseLight3.BackColor = Program.MouseColors[2].KeyColor;
+            StaticMouseLight4.BackColor = Program.MouseColors[3].KeyColor;
+
             for (int i = 0; i < 144; i++)
             {
                 Program.StaticKeyColorsBytes[i] = new StaticColorCollection();
                 Program.StaticKeyColorsBytes[i].SetD(Program.StaticKeyColors[i]);
             }
             SendStaticKeysToKeyboard(false, true);
+            SendColorsToMouse();
         }
         
         private void SendStaticKeysToKeyboard(bool UseLastProfile, bool SuppressMessages = false)
@@ -1554,6 +1627,19 @@ namespace RGBKeyboardSpectrograph
             catch
             {
                 UpdateStatusMessage.ShowStatusMessage(3, "Send Keys Failed");
+            }
+        }
+
+        private void SendColorsToMouse()
+        {
+            MouseWriter mouseWriter = new MouseWriter();
+            try
+            {
+                mouseWriter.Write(Program.MouseColors, true);
+            }
+            catch
+            {
+                UpdateStatusMessage.ShowStatusMessage(3, "Send Mouse Colors Failed");
             }
         }
 
@@ -1697,6 +1783,63 @@ namespace RGBKeyboardSpectrograph
             }
             ((Button)sender).BackColor = selectedColor;
         }
+        
+        private void StaticMouseColor_Click(object sender, EventArgs e)
+        {
+            if (StaticCopyPasteMode == 0) // Open the color picker
+            {
+                System.Windows.Media.Color selectedMediaColor;
+                Color selectedColor = ((Button)sender).BackColor;
+                ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+                dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+                if (dia.ShowDialog() == true)
+                {
+                    selectedMediaColor = dia.SelectedColor; //do something with the selected color
+                    selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+                }
+                ((Button)sender).BackColor = selectedColor;
+                int buttonID = 1;
+
+                string buttonName = ((Button)sender).Name;
+                buttonName = buttonName.Substring(buttonName.Length - 1);
+
+                Int32.TryParse(buttonName, out buttonID);
+
+                Program.MouseColors[buttonID - 1].Set(selectedColor);
+                RefreshKeyColors();
+            }
+            else if (StaticCopyPasteMode == 1) // Copy color
+            {
+                StaticCopyPasteColor.BackColor = Color.FromArgb(255, ((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+                StaticCopyPasteMode = 0;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            }
+            else if (StaticCopyPasteMode == 2) // Paste color
+            {
+
+                Color copiedColor;
+                if (StaticCopyPasteColor.BackColor == Color.Transparent)
+                {
+                    copiedColor = Color.Transparent;
+                }
+                else
+                {
+                    copiedColor = Color.FromArgb(255, StaticCopyPasteColor.BackColor.R, StaticCopyPasteColor.BackColor.G, StaticCopyPasteColor.BackColor.B);
+                }
+
+                ((Button)sender).BackColor = copiedColor;
+                int buttonID = 1;
+
+                string buttonName = ((Button)sender).Name;
+                buttonName = buttonName.Substring(buttonName.Length - 1);
+
+                Int32.TryParse(buttonName, out buttonID);
+
+                Program.MouseColors[buttonID - 1].Set(copiedColor);
+                RefreshKeyColors();
+            }
+            StaticUnsavedChanges = true;
+        }
 
         private void LoadProfileButton_Click(object sender, EventArgs e)
         {
@@ -1765,7 +1908,11 @@ namespace RGBKeyboardSpectrograph
                     {
                         Program.StaticKeyColors[i] = keyColors.Colors[i];
                     }
-                    RefreshKeyColors();
+                    for (int i = 144; i < 148; i++)
+                    {
+                        Program.MouseColors[i -144].Set(keyColors.Colors[i]);
+                    }
+                        RefreshKeyColors();
                     StaticUnsavedChanges = false;
                 }
             }
@@ -1788,7 +1935,7 @@ namespace RGBKeyboardSpectrograph
 
             if (doSave)
             {
-                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, Program.StaticProfilesPath + StaticProfileListCB.Text);
+                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, Program.MouseColors, Program.StaticProfilesPath + StaticProfileListCB.Text);
                 Program.SettingsLastUsedProfile = Program.StaticProfilesPath + StaticProfileListCB.Text;
                 StaticUnsavedChanges = false;
                 StaticKeysLoadProfileList();
@@ -1808,7 +1955,7 @@ namespace RGBKeyboardSpectrograph
             {
                 XmlProfileIO xmlProfileIO = new XmlProfileIO();
                 string xmlFile = sfd.FileName;
-                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, xmlFile);
+                xmlProfileIO.SaveProfile(SettingsKeyboardModelCB.Text, Program.StaticKeyColors, Program.MouseColors, xmlFile);
                 Program.SettingsLastUsedProfile = sfd.FileName;
                 StaticUnsavedChanges = false;
                 StaticKeysLoadProfileList();
@@ -1822,7 +1969,11 @@ namespace RGBKeyboardSpectrograph
             {
                 Program.StaticKeyColors[i] = Color.Transparent;
             }
-            RefreshKeyColors();
+            for (int i = 0; i < 4; i++)
+            {
+                Program.MouseColors[i].Set(Color.Transparent);
+            };
+                RefreshKeyColors();
         }
 
         private void DeleteKeys_Click(object sender, EventArgs e)
@@ -1952,6 +2103,11 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        private void SettingsMouseModelCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetMouseSettings();
+        }
+
         #endregion [Settings] ListBoxes
         
         #region [Settings] CheckBoxes
@@ -2000,6 +2156,11 @@ namespace RGBKeyboardSpectrograph
                 idleWatcherThread = new Thread(() => InactivityWatcher.Watch());
                 idleWatcherThread.Start();
             }
+        }
+
+        private void SettingsUseMosue_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.IncludeMouseInEffects = SettingsEffectsIncludeMouse.Checked;
         }
 
         #endregion [Settings] CheckBoxes
@@ -2166,7 +2327,7 @@ namespace RGBKeyboardSpectrograph
 
     } //MainForm
 
-    #region Helper Classes
+#region Helper Classes
 
 #region Thread Delegates
     public delegate void AddStatusMessageDelegate(int messageType, string messageText);
@@ -2284,5 +2445,6 @@ namespace RGBKeyboardSpectrograph
 
 #endregion Custom Controls
 
+    
 #endregion Helper Classes
 }

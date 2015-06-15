@@ -24,6 +24,7 @@
         UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
         UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
         InactivityStatusChanged.DoAction += InactivityStatusChanged_Action;
+            IListener.KeyDown += new RawKeyEventHandler(IListener_KeyDown);
         */
         #region Windows Form Designer generated code
 
@@ -63,6 +64,8 @@
             this.tsmSwitchStaticProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -144,6 +147,11 @@
             this.Eff_RL_FrequencyUD = new System.Windows.Forms.NumericUpDown();
             this.Eff_RL_DurationUD = new System.Windows.Forms.NumericUpDown();
             this.tabStatic = new System.Windows.Forms.TabPage();
+            this.StaticMouseLightsGB = new System.Windows.Forms.GroupBox();
+            this.StaticMouseLight4 = new System.Windows.Forms.Button();
+            this.StaticMouseLight1 = new System.Windows.Forms.Button();
+            this.StaticMouseLight2 = new System.Windows.Forms.Button();
+            this.StaticMouseLight3 = new System.Windows.Forms.Button();
             this.StaticProfileListCB = new System.Windows.Forms.ComboBox();
             this.StaticSaveProfileAsButton = new System.Windows.Forms.Button();
             this.AnimationsUseStaticLights = new System.Windows.Forms.CheckBox();
@@ -159,6 +167,8 @@
             this.StaticKeyboardImageBox = new System.Windows.Forms.PictureBox();
             this.StaticGetKeyboardImage = new System.Windows.Forms.Button();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.SettingsMouseModelCB = new System.Windows.Forms.ComboBox();
+            this.SettingsEffectsIncludeMouse = new System.Windows.Forms.CheckBox();
             this.SettingsIdleSwitcher = new System.Windows.Forms.CheckBox();
             this.SettingsIdleLabel3 = new System.Windows.Forms.Label();
             this.SettingsIdleProfileCB = new System.Windows.Forms.ComboBox();
@@ -171,8 +181,6 @@
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
-            this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -214,6 +222,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_FrequencyUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_DurationUD)).BeginInit();
             this.tabStatic.SuspendLayout();
+            this.StaticMouseLightsGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).BeginInit();
             this.tabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsIdleTimeUD)).BeginInit();
@@ -244,7 +253,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLight,
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 387);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 384);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(728, 22);
             this.statusStrip1.TabIndex = 3;
@@ -416,7 +425,7 @@
             this.RightClickMenu.Name = "contextMenuStrip1";
             this.RightClickMenu.ShowCheckMargin = true;
             this.RightClickMenu.ShowImageMargin = false;
-            this.RightClickMenu.Size = new System.Drawing.Size(173, 220);
+            this.RightClickMenu.Size = new System.Drawing.Size(173, 198);
             // 
             // tsmAbout
             // 
@@ -464,6 +473,20 @@
             this.tsmStartSpectro.Size = new System.Drawing.Size(172, 22);
             this.tsmStartSpectro.Text = "Start Spectro";
             this.tsmStartSpectro.Click += new System.EventHandler(this.StartSpectrograph_Click);
+            // 
+            // tsmSpectroAmplitude
+            // 
+            this.tsmSpectroAmplitude.Name = "tsmSpectroAmplitude";
+            this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
+            this.tsmSpectroAmplitude.Text = "Amplitude: x";
+            // 
+            // tsmSpectroAmplitudeSlider
+            // 
+            this.tsmSpectroAmplitudeSlider.Maximum = 10;
+            this.tsmSpectroAmplitudeSlider.Minimum = 0;
+            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
+            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
+            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
             // 
             // tsmStartEffects
             // 
@@ -588,7 +611,7 @@
             // SettingsUSB3ModeCheck
             // 
             this.SettingsUSB3ModeCheck.AutoSize = true;
-            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(188, 168);
+            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(188, 145);
             this.SettingsUSB3ModeCheck.Name = "SettingsUSB3ModeCheck";
             this.SettingsUSB3ModeCheck.Size = new System.Drawing.Size(66, 17);
             this.SettingsUSB3ModeCheck.TabIndex = 33;
@@ -1494,6 +1517,7 @@
             // 
             // tabStatic
             // 
+            this.tabStatic.Controls.Add(this.StaticMouseLightsGB);
             this.tabStatic.Controls.Add(this.StaticProfileListCB);
             this.tabStatic.Controls.Add(this.StaticSaveProfileAsButton);
             this.tabStatic.Controls.Add(this.AnimationsUseStaticLights);
@@ -1514,6 +1538,63 @@
             this.tabStatic.TabIndex = 4;
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
+            // 
+            // StaticMouseLightsGB
+            // 
+            this.StaticMouseLightsGB.Controls.Add(this.StaticMouseLight4);
+            this.StaticMouseLightsGB.Controls.Add(this.StaticMouseLight1);
+            this.StaticMouseLightsGB.Controls.Add(this.StaticMouseLight2);
+            this.StaticMouseLightsGB.Controls.Add(this.StaticMouseLight3);
+            this.StaticMouseLightsGB.Location = new System.Drawing.Point(365, 243);
+            this.StaticMouseLightsGB.Name = "StaticMouseLightsGB";
+            this.StaticMouseLightsGB.Size = new System.Drawing.Size(183, 79);
+            this.StaticMouseLightsGB.TabIndex = 64;
+            this.StaticMouseLightsGB.TabStop = false;
+            this.StaticMouseLightsGB.Text = "Mouse Lights";
+            // 
+            // StaticMouseLight4
+            // 
+            this.StaticMouseLight4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticMouseLight4.Location = new System.Drawing.Point(94, 48);
+            this.StaticMouseLight4.Name = "StaticMouseLight4";
+            this.StaticMouseLight4.Size = new System.Drawing.Size(82, 23);
+            this.StaticMouseLight4.TabIndex = 67;
+            this.StaticMouseLight4.Tag = "3";
+            this.StaticMouseLight4.UseVisualStyleBackColor = true;
+            this.StaticMouseLight4.Click += new System.EventHandler(this.StaticMouseColor_Click);
+            // 
+            // StaticMouseLight1
+            // 
+            this.StaticMouseLight1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticMouseLight1.Location = new System.Drawing.Point(6, 19);
+            this.StaticMouseLight1.Name = "StaticMouseLight1";
+            this.StaticMouseLight1.Size = new System.Drawing.Size(82, 23);
+            this.StaticMouseLight1.TabIndex = 64;
+            this.StaticMouseLight1.Tag = "0";
+            this.StaticMouseLight1.UseVisualStyleBackColor = true;
+            this.StaticMouseLight1.Click += new System.EventHandler(this.StaticMouseColor_Click);
+            // 
+            // StaticMouseLight2
+            // 
+            this.StaticMouseLight2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticMouseLight2.Location = new System.Drawing.Point(6, 48);
+            this.StaticMouseLight2.Name = "StaticMouseLight2";
+            this.StaticMouseLight2.Size = new System.Drawing.Size(82, 23);
+            this.StaticMouseLight2.TabIndex = 66;
+            this.StaticMouseLight2.Tag = "1";
+            this.StaticMouseLight2.UseVisualStyleBackColor = true;
+            this.StaticMouseLight2.Click += new System.EventHandler(this.StaticMouseColor_Click);
+            // 
+            // StaticMouseLight3
+            // 
+            this.StaticMouseLight3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticMouseLight3.Location = new System.Drawing.Point(94, 19);
+            this.StaticMouseLight3.Name = "StaticMouseLight3";
+            this.StaticMouseLight3.Size = new System.Drawing.Size(82, 23);
+            this.StaticMouseLight3.TabIndex = 65;
+            this.StaticMouseLight3.Tag = "2";
+            this.StaticMouseLight3.UseVisualStyleBackColor = true;
+            this.StaticMouseLight3.Click += new System.EventHandler(this.StaticMouseColor_Click);
             // 
             // StaticProfileListCB
             // 
@@ -1612,7 +1693,7 @@
             // 
             // StaticDeleteKeysButton
             // 
-            this.StaticDeleteKeysButton.Location = new System.Drawing.Point(529, 305);
+            this.StaticDeleteKeysButton.Location = new System.Drawing.Point(610, 280);
             this.StaticDeleteKeysButton.Name = "StaticDeleteKeysButton";
             this.StaticDeleteKeysButton.Size = new System.Drawing.Size(75, 23);
             this.StaticDeleteKeysButton.TabIndex = 5;
@@ -1651,7 +1732,7 @@
             // 
             // StaticGetKeyboardImage
             // 
-            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(448, 305);
+            this.StaticGetKeyboardImage.Location = new System.Drawing.Point(610, 254);
             this.StaticGetKeyboardImage.Name = "StaticGetKeyboardImage";
             this.StaticGetKeyboardImage.Size = new System.Drawing.Size(75, 23);
             this.StaticGetKeyboardImage.TabIndex = 1;
@@ -1662,6 +1743,8 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.SettingsMouseModelCB);
+            this.tabSettings.Controls.Add(this.SettingsEffectsIncludeMouse);
             this.tabSettings.Controls.Add(this.SettingsIdleSwitcher);
             this.tabSettings.Controls.Add(this.SettingsIdleLabel3);
             this.tabSettings.Controls.Add(this.SettingsIdleProfileCB);
@@ -1689,6 +1772,27 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // SettingsMouseModelCB
+            // 
+            this.SettingsMouseModelCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SettingsMouseModelCB.FormattingEnabled = true;
+            this.SettingsMouseModelCB.Location = new System.Drawing.Point(161, 13);
+            this.SettingsMouseModelCB.Name = "SettingsMouseModelCB";
+            this.SettingsMouseModelCB.Size = new System.Drawing.Size(130, 21);
+            this.SettingsMouseModelCB.TabIndex = 66;
+            this.SettingsMouseModelCB.SelectedIndexChanged += new System.EventHandler(this.SettingsMouseModelCB_SelectedIndexChanged);
+            // 
+            // SettingsEffectsIncludeMouse
+            // 
+            this.SettingsEffectsIncludeMouse.AutoSize = true;
+            this.SettingsEffectsIncludeMouse.Location = new System.Drawing.Point(161, 42);
+            this.SettingsEffectsIncludeMouse.Name = "SettingsEffectsIncludeMouse";
+            this.SettingsEffectsIncludeMouse.Size = new System.Drawing.Size(135, 17);
+            this.SettingsEffectsIncludeMouse.TabIndex = 65;
+            this.SettingsEffectsIncludeMouse.Text = "Apply Effects to Mouse";
+            this.SettingsEffectsIncludeMouse.UseVisualStyleBackColor = true;
+            this.SettingsEffectsIncludeMouse.CheckedChanged += new System.EventHandler(this.SettingsUseMosue_CheckedChanged);
             // 
             // SettingsIdleSwitcher
             // 
@@ -1809,26 +1913,12 @@
             this.SettingsCuePathLabel.TabIndex = 53;
             this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
-            // tsmSpectroAmplitude
-            // 
-            this.tsmSpectroAmplitude.Name = "tsmSpectroAmplitude";
-            this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
-            this.tsmSpectroAmplitude.Text = "Amplitude: x";
-            // 
-            // tsmSpectroAmplitudeSlider
-            // 
-            this.tsmSpectroAmplitudeSlider.Maximum = 10;
-            this.tsmSpectroAmplitudeSlider.Minimum = 0;
-            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
-            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
-            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(728, 409);
+            this.ClientSize = new System.Drawing.Size(728, 406);
             this.Controls.Add(this.DebugTestModeButton);
             this.Controls.Add(this.DebugTesterUD);
             this.Controls.Add(this.DebugStatusLog);
@@ -1893,6 +1983,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Eff_RL_DurationUD)).EndInit();
             this.tabStatic.ResumeLayout(false);
             this.tabStatic.PerformLayout();
+            this.StaticMouseLightsGB.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).EndInit();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
@@ -2038,6 +2129,13 @@
         private System.Windows.Forms.ToolStripMenuItem tsmSwitchStaticProfile;
         private System.Windows.Forms.ToolStripMenuItem tsmSpectroAmplitude;
         private ToolStripTrackBar tsmSpectroAmplitudeSlider;
+        private System.Windows.Forms.CheckBox SettingsEffectsIncludeMouse;
+        private System.Windows.Forms.ComboBox SettingsMouseModelCB;
+        private System.Windows.Forms.GroupBox StaticMouseLightsGB;
+        private System.Windows.Forms.Button StaticMouseLight4;
+        private System.Windows.Forms.Button StaticMouseLight1;
+        private System.Windows.Forms.Button StaticMouseLight2;
+        private System.Windows.Forms.Button StaticMouseLight3;
 
     }
 }

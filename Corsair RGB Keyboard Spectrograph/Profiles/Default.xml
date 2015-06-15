@@ -144,4 +144,8 @@
   <key id="141">#FF0080</key>
   <key id="142">Transparent</key>
   <key id="143">#008C87</key>
+  <mouse id="0">#8000FF</mouse>
+  <mouse id="1">#FF0080</mouse>
+  <mouse id="2">#004A11</mouse>
+  <mouse id="3">#FF0080</mouse>
 </profile>

@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Effect_RandomLights.cs" />
     <Compile Include="InactivityWatcher.cs" />
+    <Compile Include="MouseWriter.cs" />
     <Compile Include="SpectroEffects.cs" />
     <Compile Include="SpectroControl.cs" />
     <Compile Include="KeyboardWriter.cs" />

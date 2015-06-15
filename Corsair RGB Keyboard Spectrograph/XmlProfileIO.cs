@@ -12,10 +12,8 @@ namespace RGBKeyboardSpectrograph
 {
     class XmlProfileIO
     {
-        public void SaveProfile(string keyboardID, Color[] keyData, string xmlPath)
+        public void SaveProfile(string keyboardID, Color[] keyData, MouseColorCollection[] mouseData, string xmlPath)
         {
-            //string xmlPath = Directory.GetCurrentDirectory() + "\\TestOutput.xml";
-
             XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.NewLineHandling = NewLineHandling.Entitize;
             xmlWriterSettings.Indent = true;
@@ -33,8 +31,15 @@ namespace RGBKeyboardSpectrograph
                 xmlWriter.WriteString(ColorTranslator.ToHtml(keyData[i]));
                 xmlWriter.WriteEndElement();
             }
+            for (int i = 0; i < mouseData.Length; i++)
+            {
+                xmlWriter.WriteStartElement("mouse");
+                xmlWriter.WriteAttributeString("id", i.ToString());
+                xmlWriter.WriteString(ColorTranslator.ToHtml(mouseData[i].KeyColor));
+                xmlWriter.WriteEndElement();
+            }
 
-            xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
             
             xmlWriter.WriteEndDocument();
             xmlWriter.Close();
@@ -49,6 +54,8 @@ namespace RGBKeyboardSpectrograph
 
             XmlElement root = doc.DocumentElement;
             XmlNodeList keys = root.SelectNodes("key");
+            XmlNodeList mouses = root.SelectNodes("mouse");
+
             try
             {
                 string keyboardID = root.Attributes["keyboard"].Value;
@@ -62,6 +69,7 @@ namespace RGBKeyboardSpectrograph
 
             Color tempColor = new Color();
             int k = 0;
+            int m = 0;
 
             foreach (XmlNode key in keys)
             {
@@ -75,8 +83,24 @@ namespace RGBKeyboardSpectrograph
                         tempColor = ColorTranslator.FromHtml(key.InnerText);
                         keyData.Colors[k] = Color.FromArgb(127, tempColor.R, tempColor.G, tempColor.B);
                     }
+                    k++;
+                }
+            }
+
+            foreach (XmlNode mouse in mouses)
+            {
+                if (mouse.Name == "mouse")
+                {
+                    if (mouse.InnerText == "Transparent")
+                    {
+                        keyData.Colors[m + 144] = Color.Transparent;
+                    }
+                    else
+                    {
+                        keyData.Colors[m + 144] = ColorTranslator.FromHtml(mouse.InnerText);
+                    }
+                    m++;
                 };
-                k++;
             }
             keyData.Success = true;
             return keyData;
@@ -86,6 +110,6 @@ namespace RGBKeyboardSpectrograph
     public class KeyColors
     {
         public bool Success;
-        public Color[] Colors = new Color[144];
+        public Color[] Colors = new Color[148];
     }
 }

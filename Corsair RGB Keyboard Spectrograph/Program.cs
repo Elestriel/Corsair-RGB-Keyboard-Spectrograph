@@ -12,13 +12,14 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.1";
+        public static string VersionNumber = "0.6.2";
 
         // Application Variables
         public static byte[] MyPositionMap;
         public static float[] MySizeMap;
         public static Color[] StaticKeyColors = new Color[144];
         public static StaticColorCollection[] StaticKeyColorsBytes = new StaticColorCollection[144];
+        public static MouseColorCollection[] MouseColors = new MouseColorCollection[4];
         public static int MyCanvasWidth;
         public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
@@ -30,6 +31,7 @@ namespace RGBKeyboardSpectrograph
         public volatile static int InactivityTimeTrigger = 0;
         public volatile static string InactivityResumeAction;
         public volatile static bool IgnoreUpdateLastProfile = false;
+        public volatile static bool IncludeMouseInEffects = false;
 
         // Spectrograph
         public static float SpectroAmplitude;
@@ -47,6 +49,8 @@ namespace RGBKeyboardSpectrograph
         public static string SettingsKeyboardModel;
         public static string SettingsKeyboardLayout;
         public static uint SettingsKeyboardID;
+        public static uint SettingsMouseID;
+        public static string SettingsMouseModel;
         public static bool SettingsUsb3Mode;
         public static bool SettingsRestoreOnExit = false;
         public static bool SettingLaunchCueOnExit = false;
@@ -250,6 +254,54 @@ namespace RGBKeyboardSpectrograph
             this.ERandRLow = ErrLow; this.ERandRHigh = ErrHigh;
             this.ERandGLow = ErgLow; this.ERandGHigh = ErgHigh;
             this.ERandBLow = ErbLow; this.ERandBHigh = ErbHigh;
+        }
+    }
+
+    public class MouseColorCollection
+    {
+        public bool Transparent;
+        public int Red;
+        public int Grn;
+        public int Blu;
+        public Color KeyColor
+        {
+            get
+            {
+                return Color.FromArgb(255, Red, Grn, Blu);
+            }
+        }
+
+        public void Set(Color c)
+        {
+            if (c == Color.Transparent)
+            {
+                this.Transparent = true;
+                this.Red = 0;
+                this.Grn = 0;
+                this.Blu = 0;
+            }
+            else
+            {
+                this.Transparent = false;
+                this.Red = c.R;
+                this.Grn = c.G;
+                this.Blu = c.B;
+            }
+        }
+
+        public void SetD(Color c)
+        {
+            if (c == Color.Transparent)
+            {
+                this.Transparent = true;
+            }
+            else
+            {
+                this.Transparent = false;
+                this.Red = c.R / Program.ColorModeDivisor;
+                this.Grn = c.G / Program.ColorModeDivisor;
+                this.Blu = c.B / Program.ColorModeDivisor;
+            }
         }
     }
 }

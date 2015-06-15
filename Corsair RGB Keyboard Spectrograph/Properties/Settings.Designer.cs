@@ -634,5 +634,29 @@ namespace RGBKeyboardSpectrograph.Properties {
                 this["idleUseIdleWatcher"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public string settingMouseModel {
+            get {
+                return ((string)(this["settingMouseModel"]));
+            }
+            set {
+                this["settingMouseModel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EffectsIncludeMouse {
+            get {
+                return ((bool)(this["EffectsIncludeMouse"]));
+            }
+            set {
+                this["EffectsIncludeMouse"] = value;
+            }
+        }
     }
 }

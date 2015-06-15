@@ -91,6 +91,7 @@ namespace RGBKeyboardSpectrograph
     {
         private static WasapiCapture capture;
         private static KeyboardWriter keyWriter;
+        //private static MouseWriter mouseWriter; IN PREPARATION FOR WHATEVER EFFECTS I COME UP WITH
 
         private static int fftLength;
         private static SampleAggregator sampleAggregator;
