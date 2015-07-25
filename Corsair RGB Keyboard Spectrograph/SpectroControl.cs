@@ -48,10 +48,7 @@ namespace RGBKeyboardSpectrograph
         {
             if (PerformFFT && FftCalculated != null)
             {
-                //fftBuffer[fftPos].Real = value * FastFourierTransformation.HammingWindowF(fftPos, fftLength);
                 fftBuffer[fftPos].Real = value * 0.5f * (float)Math.Cos((2 * Math.PI) / (fftLength - 1)) * Program.SpectroAmplitude * 100;
-                //fftBuffer[fftPos].Real = (value - .5f) * Program.SpectroAmplitude * 100;
-                //fftBuffer[fftPos].Real = fftPos;
                 fftBuffer[fftPos].Imaginary = 0; // This is always zero with audio.
                 fftPos++;
                 if (fftPos >= fftLength)
@@ -64,17 +61,6 @@ namespace RGBKeyboardSpectrograph
             }
             return false;
         }
-
-        public Complex[] Hann(Complex[] iwv)
-        {
-            int N = iwv.Length;
-
-            for (int n = 0; n < N; n++)
-                iwv[n].Real = 0.5f * (float)Math.Cos((2 * Math.PI * n) / (N - 1));
-
-            return iwv;
-        }
-
     }
 
     public class FftEventArgs : EventArgs
@@ -254,5 +240,6 @@ namespace RGBKeyboardSpectrograph
  0: Destroyed
  1: Test Mode
  2: Spectro Running
- 3: Effects Running
+ 3: Effect - Random Lights Running
+ 4: Effect - Rainfall Running
  */

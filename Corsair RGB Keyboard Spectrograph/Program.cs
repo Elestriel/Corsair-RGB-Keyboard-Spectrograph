@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.2";
+        public static string VersionNumber = "0.6.3pre1";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -68,7 +68,7 @@ namespace RGBKeyboardSpectrograph
         public static int RefreshDelay = 10;
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
-        public static bool DevMode = false;
+        public static bool DevMode = true;
         public static string[] VersionCheckData = new string[4];
 
         // Worker Thread

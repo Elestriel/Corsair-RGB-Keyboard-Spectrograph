@@ -84,7 +84,7 @@ namespace RGBKeyboardSpectrograph
                             break;
                         }
                     }
-
+                    
                     for (int i = 0; i < 144; i++)
                     {
                         if (Program.AnimationsUseStaticKeys == true && Program.StaticKeyColorsBytes[i].Transparent == false)
@@ -199,7 +199,10 @@ namespace RGBKeyboardSpectrograph
  0: Destroyed
  1: Test Mode
  2: Spectro Running
- 3: Effects Running
+ 3: Effect - Random Lights
+ 4: Effect - Rainfall
+ 10: Reactive - Single Keys
+ 11: Reactive - Heatmap
  */
 
 /* 40FPS, 25ms refresh */

@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +36,10 @@ namespace RGBKeyboardSpectrograph
         int StaticCopyPasteMode = 0;
         bool StaticUnsavedChanges = false;
         int[] KeyIDArray;
-   
+
         Thread workerThread = Program.newWorker;
         Thread idleWatcherThread = Program.idleThread;
-
+        
         public MainForm()
         {
             InitializeComponent();
@@ -120,28 +121,28 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.spectroCaptureDevice = SpectroWasapiDevicesCB.Text;
 
             // Effects
-            if (Eff_RL_Start_Radio1.Checked == true) { Properties.Settings.Default.Eff_RL_S_Mode = 1; }
-            else { Properties.Settings.Default.Eff_RL_S_Mode = 2; }
-            Properties.Settings.Default.Eff_RL_S_DefinedColor = Eff_RL_Start_ColourButton.BackColor;
-            Properties.Settings.Default.Eff_RL_S_CLow_Red = Program.EfColors.SRandRLow;
-            Properties.Settings.Default.Eff_RL_S_CLow_Green = Program.EfColors.SRandGLow;
-            Properties.Settings.Default.Eff_RL_S_CLow_Blue = Program.EfColors.SRandBLow;
-            Properties.Settings.Default.Eff_RL_S_CHigh_Red = Program.EfColors.SRandRHigh;
-            Properties.Settings.Default.Eff_RL_S_CHigh_Green = Program.EfColors.SRandGHigh;
-            Properties.Settings.Default.Eff_RL_S_CHigh_Blue = Program.EfColors.SRandBHigh;
+            if (Effect_Float_Start_Radio1.Checked == true) { Properties.Settings.Default.Effect_RandomLights_Start_Mode = 1; }
+            else { Properties.Settings.Default.Effect_RandomLights_Start_Mode = 2; }
+            Properties.Settings.Default.Effect_RandomLights_Start_DefinedColor = Effect_Float_Start_ColourButton.BackColor;
+            Properties.Settings.Default.Effect_RandomLights_Start_CLow_Red = Program.EfColors.SRandRLow;
+            Properties.Settings.Default.Effect_RandomLights_Start_CLow_Green = Program.EfColors.SRandGLow;
+            Properties.Settings.Default.Effect_RandomLights_Start_CLow_Blue = Program.EfColors.SRandBLow;
+            Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Red = Program.EfColors.SRandRHigh;
+            Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Green = Program.EfColors.SRandGHigh;
+            Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Blue = Program.EfColors.SRandBHigh;
 
-            if (Eff_RL_End_Radio1.Checked == true) { Properties.Settings.Default.Eff_RL_E_Mode = 1; }
-            else { Properties.Settings.Default.Eff_RL_E_Mode = 2; }
-            Properties.Settings.Default.Eff_RL_E_DefinedColor = Eff_RL_End_ColourButton.BackColor;
-            Properties.Settings.Default.Eff_RL_E_CLow_Red = Program.EfColors.ERandRLow;
-            Properties.Settings.Default.Eff_RL_E_CLow_Green = Program.EfColors.ERandGLow;
-            Properties.Settings.Default.Eff_RL_E_CLow_Blue = Program.EfColors.ERandBLow;
-            Properties.Settings.Default.Eff_RL_E_CHigh_Red = Program.EfColors.ERandRHigh;
-            Properties.Settings.Default.Eff_RL_E_CHigh_Green = Program.EfColors.ERandGHigh;
-            Properties.Settings.Default.Eff_RL_E_CHigh_Blue = Program.EfColors.ERandBHigh;
+            if (Effect_Float_End_Radio1.Checked == true) { Properties.Settings.Default.Effect_RandomLights_End_Mode = 1; }
+            else { Properties.Settings.Default.Effect_RandomLights_End_Mode = 2; }
+            Properties.Settings.Default.Effect_RandomLights_End_DefinedColor = Effect_Float_End_ColourButton.BackColor;
+            Properties.Settings.Default.Effect_RandomLights_End_CLow_Red = Program.EfColors.ERandRLow;
+            Properties.Settings.Default.Effect_RandomLights_End_CLow_Green = Program.EfColors.ERandGLow;
+            Properties.Settings.Default.Effect_RandomLights_End_CLow_Blue = Program.EfColors.ERandBLow;
+            Properties.Settings.Default.Effect_RandomLights_End_CHigh_Red = Program.EfColors.ERandRHigh;
+            Properties.Settings.Default.Effect_RandomLights_End_CHigh_Green = Program.EfColors.ERandGHigh;
+            Properties.Settings.Default.Effect_RandomLights_End_CHigh_Blue = Program.EfColors.ERandBHigh;
 
-            Properties.Settings.Default.Eff_RL_Duration = (int)Eff_RL_DurationUD.Value;
-            Properties.Settings.Default.Eff_RL_Delay = (int)Eff_RL_FrequencyUD.Value;
+            Properties.Settings.Default.Effect_RandomLights_Duration = (int)Effect_Float_DurationUD.Value;
+            Properties.Settings.Default.Effect_RandomLights_Delay = (int)Effect_Float_FrequencyUD.Value;
 
             Properties.Settings.Default.EffectUseStaticKeys = Program.AnimationsUseStaticKeys;
 
@@ -189,6 +190,12 @@ namespace RGBKeyboardSpectrograph
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Thread-safe method handlers
+            UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
+            UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
+            UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
+            InactivityStatusChanged.DoAction += InactivityStatusChanged_Action; 
+
             UpdateStatusMessage.ShowStatusMessage(0, "Version " + Program.VersionNumber);
 
             // Check for updates
@@ -343,73 +350,73 @@ namespace RGBKeyboardSpectrograph
             #region Effects
 
         #region Effects - Random Lights - Start
-            int setting_Eff_RL_S_Mode = Properties.Settings.Default.Eff_RL_S_Mode;
-            if (setting_Eff_RL_S_Mode == 1) { Eff_RL_Start_Radio1.Checked = true; }
-            else {Eff_RL_Start_Radio2.Checked = true; }
+            int setting_Eff_RL_S_Mode = Properties.Settings.Default.Effect_RandomLights_Start_Mode;
+            if (setting_Eff_RL_S_Mode == 1) { Effect_Float_Start_Radio1.Checked = true; }
+            else {Effect_Float_Start_Radio2.Checked = true; }
 
-            Eff_RL_Start_ColourButton.BackColor = Properties.Settings.Default.Eff_RL_S_DefinedColor;
+            Effect_Float_Start_ColourButton.BackColor = Properties.Settings.Default.Effect_RandomLights_Start_DefinedColor;
 
-            int setting_Eff_RL_S_CLow_Red = Properties.Settings.Default.Eff_RL_S_CLow_Red;
+            int setting_Eff_RL_S_CLow_Red = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Red;
             if (setting_Eff_RL_S_CLow_Red < 0 || setting_Eff_RL_S_CLow_Red > 255) { setting_Eff_RL_S_CLow_Red = 0; };
-            Eff_RL_Start_Red_LowUD.Value = setting_Eff_RL_S_CLow_Red;
+            Effect_Float_Start_Red_LowUD.Value = setting_Eff_RL_S_CLow_Red;
 
-            int setting_Eff_RL_S_CLow_Green = Properties.Settings.Default.Eff_RL_S_CLow_Green;
+            int setting_Eff_RL_S_CLow_Green = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Green;
             if (setting_Eff_RL_S_CLow_Green < 0 || setting_Eff_RL_S_CLow_Green > 255) { setting_Eff_RL_S_CLow_Green = 0; };
-            Eff_RL_Start_Green_LowUD.Value = setting_Eff_RL_S_CLow_Green;
+            Effect_Float_Start_Green_LowUD.Value = setting_Eff_RL_S_CLow_Green;
 
-            int setting_Eff_RL_S_CLow_Blue = Properties.Settings.Default.Eff_RL_S_CLow_Blue;
+            int setting_Eff_RL_S_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Blue;
             if (setting_Eff_RL_S_CLow_Blue < 0 || setting_Eff_RL_S_CLow_Blue > 255) { setting_Eff_RL_S_CLow_Blue = 0; };
-            Eff_RL_Start_Blue_LowUD.Value = setting_Eff_RL_S_CLow_Blue;
+            Effect_Float_Start_Blue_LowUD.Value = setting_Eff_RL_S_CLow_Blue;
 
-            int setting_Eff_RL_S_CHigh_Red = Properties.Settings.Default.Eff_RL_S_CHigh_Red;
+            int setting_Eff_RL_S_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Red;
             if (setting_Eff_RL_S_CHigh_Red < 0 || setting_Eff_RL_S_CHigh_Red > 255) { setting_Eff_RL_S_CHigh_Red = 255; };
-            Eff_RL_Start_Red_HighUD.Value = setting_Eff_RL_S_CHigh_Red;
+            Effect_Float_Start_Red_HighUD.Value = setting_Eff_RL_S_CHigh_Red;
 
-            int setting_Eff_RL_S_CHigh_Green = Properties.Settings.Default.Eff_RL_S_CHigh_Green;
+            int setting_Eff_RL_S_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Green;
             if (setting_Eff_RL_S_CHigh_Green < 0 || setting_Eff_RL_S_CHigh_Green > 255) { setting_Eff_RL_S_CHigh_Green = 255; };
-            Eff_RL_Start_Green_HighUD.Value = setting_Eff_RL_S_CHigh_Green;
+            Effect_Float_Start_Green_HighUD.Value = setting_Eff_RL_S_CHigh_Green;
 
-            int setting_Eff_RL_S_CHigh_Blue = Properties.Settings.Default.Eff_RL_S_CHigh_Blue;
+            int setting_Eff_RL_S_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Blue;
             if (setting_Eff_RL_S_CHigh_Blue < 0 || setting_Eff_RL_S_CHigh_Blue > 255) { setting_Eff_RL_S_CHigh_Blue = 255; };
-            Eff_RL_Start_Blue_HighUD.Value = setting_Eff_RL_S_CHigh_Blue;
+            Effect_Float_Start_Blue_HighUD.Value = setting_Eff_RL_S_CHigh_Blue;
 
         #endregion Effects - Random Lights - Start
 
         #region Effects - Random Lights - End
-            int setting_Eff_RL_E_Mode = Properties.Settings.Default.Eff_RL_E_Mode;
-            if (setting_Eff_RL_E_Mode == 2) { Eff_RL_End_Radio2.Checked = true; }
-            else { Eff_RL_End_Radio1.Checked = true; }
+            int setting_Eff_RL_E_Mode = Properties.Settings.Default.Effect_RandomLights_End_Mode;
+            if (setting_Eff_RL_E_Mode == 2) { Effect_Float_End_Radio2.Checked = true; }
+            else { Effect_Float_End_Radio1.Checked = true; }
 
-            Eff_RL_End_ColourButton.BackColor = Properties.Settings.Default.Eff_RL_E_DefinedColor;
+            Effect_Float_End_ColourButton.BackColor = Properties.Settings.Default.Effect_RandomLights_End_DefinedColor;
 
-            int setting_Eff_RL_E_CLow_Red = Properties.Settings.Default.Eff_RL_E_CLow_Red;
+            int setting_Eff_RL_E_CLow_Red = Properties.Settings.Default.Effect_RandomLights_End_CLow_Red;
             if (setting_Eff_RL_E_CLow_Red < 0 || setting_Eff_RL_E_CLow_Red > 255) { setting_Eff_RL_E_CLow_Red = 0; };
-            Eff_RL_End_Red_LowUD.Value = setting_Eff_RL_E_CLow_Red;
+            Effect_Float_End_Red_LowUD.Value = setting_Eff_RL_E_CLow_Red;
 
-            int setting_Eff_RL_E_CLow_Green = Properties.Settings.Default.Eff_RL_E_CLow_Green;
+            int setting_Eff_RL_E_CLow_Green = Properties.Settings.Default.Effect_RandomLights_End_CLow_Green;
             if (setting_Eff_RL_E_CLow_Green < 0 || setting_Eff_RL_E_CLow_Green > 255) { setting_Eff_RL_E_CLow_Green = 0; };
-            Eff_RL_End_Green_LowUD.Value = setting_Eff_RL_E_CLow_Green;
+            Effect_Float_End_Green_LowUD.Value = setting_Eff_RL_E_CLow_Green;
 
-            int setting_Eff_RL_E_CLow_Blue = Properties.Settings.Default.Eff_RL_E_CLow_Blue;
+            int setting_Eff_RL_E_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_End_CLow_Blue;
             if (setting_Eff_RL_E_CLow_Blue < 0 || setting_Eff_RL_E_CLow_Blue > 255) { setting_Eff_RL_E_CLow_Blue = 0; };
-            Eff_RL_End_Blue_LowUD.Value = setting_Eff_RL_E_CLow_Blue;
+            Effect_Float_End_Blue_LowUD.Value = setting_Eff_RL_E_CLow_Blue;
 
-            int setting_Eff_RL_E_CHigh_Red = Properties.Settings.Default.Eff_RL_E_CHigh_Red;
+            int setting_Eff_RL_E_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Red;
             if (setting_Eff_RL_E_CHigh_Red < 0 || setting_Eff_RL_E_CHigh_Red > 255) { setting_Eff_RL_E_CHigh_Red = 255; };
-            Eff_RL_End_Red_HighUD.Value = setting_Eff_RL_E_CHigh_Red;
+            Effect_Float_End_Red_HighUD.Value = setting_Eff_RL_E_CHigh_Red;
 
-            int setting_Eff_RL_E_CHigh_Green = Properties.Settings.Default.Eff_RL_E_CHigh_Green;
+            int setting_Eff_RL_E_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Green;
             if (setting_Eff_RL_E_CHigh_Green < 0 || setting_Eff_RL_E_CHigh_Green > 255) { setting_Eff_RL_E_CHigh_Green = 255; };
-            Eff_RL_End_Green_HighUD.Value = setting_Eff_RL_E_CHigh_Green;
+            Effect_Float_End_Green_HighUD.Value = setting_Eff_RL_E_CHigh_Green;
 
-            int setting_Eff_RL_E_CHigh_Blue = Properties.Settings.Default.Eff_RL_E_CHigh_Blue;
+            int setting_Eff_RL_E_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Blue;
             if (setting_Eff_RL_E_CHigh_Blue < 0 || setting_Eff_RL_E_CHigh_Blue > 255) { setting_Eff_RL_E_CHigh_Blue = 255; };
-            Eff_RL_End_Blue_HighUD.Value = setting_Eff_RL_E_CHigh_Blue;
+            Effect_Float_End_Blue_HighUD.Value = setting_Eff_RL_E_CHigh_Blue;
 
         #endregion Effects - Random Lights - End
 
-            Eff_RL_DurationUD.Value = Properties.Settings.Default.Eff_RL_Duration;
-            Eff_RL_FrequencyUD.Value = Properties.Settings.Default.Eff_RL_Delay;
+            Effect_Float_DurationUD.Value = Properties.Settings.Default.Effect_RandomLights_Duration;
+            Effect_Float_FrequencyUD.Value = Properties.Settings.Default.Effect_RandomLights_Delay;
 
             Eff_RL_Start_UpdateColorBoxes(null, null);
             Eff_RL_End_UpdateColorBoxes(null, null);
@@ -474,6 +481,119 @@ namespace RGBKeyboardSpectrograph
             SettingsIdleSwitcher_CheckedChanged(null, null);
 
             #endregion Settings
+
+            #region Tooltips
+            ToolTip hintsToolTip = new ToolTip();
+            hintsToolTip.AutoPopDelay = 3000;
+            hintsToolTip.InitialDelay = 1000;
+            hintsToolTip.ReshowDelay = 500;
+            hintsToolTip.ShowAlways = true;
+
+            // ToolTip Texts
+            /* To add:
+             * Everything on Reactive page
+             */
+            hintsToolTip.SetToolTip(this.AnimationsUseStaticLights, "Whether or not to display static lights on top of effects.");
+            hintsToolTip.SetToolTip(this.DebugLogLevelLabel, "");
+            hintsToolTip.SetToolTip(this.DebugLogLevelUD, "");
+            hintsToolTip.SetToolTip(this.DebugStatusLog, "");
+            hintsToolTip.SetToolTip(this.DebugTesterUD, "");
+            hintsToolTip.SetToolTip(this.DebugTestModeButton, "Enter test mode, illuminating one key at a time.");
+            hintsToolTip.SetToolTip(this.Effect_Float_DurationLabel, "Lifespan of a lit-up key.");
+            hintsToolTip.SetToolTip(this.Effect_Float_DurationUD, "Lifespan of a lit-up key.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Blue_HighButton, "Displaying the uppermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Blue_HighUD, "Set the highest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Blue_LowButton, "Displaying the lowermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Blue_LowUD, "Set the lowest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Green_HighButton, "Displaying the uppermost green value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Green_HighUD, "Set the highest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Green_LowButton, "Displaying the lowermost green value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Green_LowUD, "Set the lowest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Radio1, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Radio2, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Red_HighButton, "Displaying the uppermost red value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Red_HighUD, "Set the highest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Red_LowButton, "Displaying the lowermost red value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_Red_LowUD, "Set the lowest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_FrequencyLabel, "Time between cycles.");
+            hintsToolTip.SetToolTip(this.Effect_Float_FrequencyUD, "Time between cycles.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Blue_HighButton, "Displaying the uppermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Blue_HighUD, "Set the highest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Blue_LowButton, "Displaying the lowermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Blue_LowUD, "Set the lowest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_HighButton, "Displaying the uppermost green value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_HighUD, "Set the highest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_LowButton, "Displaying the lowermost green value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_LowUD, "Set the lowest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Radio1, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Radio2, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_HighButton, "Displaying the uppermost red value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_HighUD, "Set the highest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_LowButton, "Displaying the lowermost red value selected.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_LowUD, "Set the lowest value for the red channel.");
+            hintsToolTip.SetToolTip(this.EffectsStartButton, "Start effects.");
+            hintsToolTip.SetToolTip(this.EffectsStopButton, "Stop all effects.");
+            hintsToolTip.SetToolTip(this.EffectTab_Rainfall, "Display a rainfall effect.");
+            hintsToolTip.SetToolTip(this.EffectTab_RandomLights, "Light up random keys.");
+            hintsToolTip.SetToolTip(this.SettingsBrowseCuePathButton, "Find your CUE executable for automatic launching upon close. This is not required.");
+            hintsToolTip.SetToolTip(this.SettingsCuePathLabel, "Find your CUE executable for automatic launching upon close. This is not required.");
+            hintsToolTip.SetToolTip(this.SettingsCuePathTextBox, "Find your CUE executable for automatic launching upon close. This is not required.");
+            hintsToolTip.SetToolTip(this.SettingsEffectsIncludeMouse, "Expand effects to the mouse. NOTE: This currently only applies to the Effects tab.");
+            hintsToolTip.SetToolTip(this.SettingsEffectsOnStartCheck, "Automatically start effects when the program starts.");
+            hintsToolTip.SetToolTip(this.SettingsGetUpdateButton, "Open your web browser to the location of the latest update.");
+            hintsToolTip.SetToolTip(this.SettingsIdleSwitcher, "Switch to different effects or a static profile when away from the computer.");
+            hintsToolTip.SetToolTip(this.SettingsKeyboardLayoutCB, "Select the layout of your keyboard.");
+            hintsToolTip.SetToolTip(this.SettingsKeyboardModelCB, "Select the model of your keyboard.");
+            hintsToolTip.SetToolTip(this.SettingsLaunchCueCheck, "Launches CUE upon quitting this application. Requires the path to be entered below.");
+            hintsToolTip.SetToolTip(this.SettingsMinimizeToTrayCheck, "Minimize to the System Tray instead of the Task Bar.");
+            hintsToolTip.SetToolTip(this.SettingsMouseModelCB, "Select the model of your mouse.");
+            hintsToolTip.SetToolTip(this.SettingsRestoreLightingCheck, "Restores the lightig saved on the device upon quitting the program. NOTE: This does not currently affect mice.");
+            hintsToolTip.SetToolTip(this.SettingsSpectroOnStartCheck, "Automatically start the spectrograph when the program starts.");
+            hintsToolTip.SetToolTip(this.SettingsStartMinimizedCheck, "Automatically minimizes the program when it is started.");
+            hintsToolTip.SetToolTip(this.SettingsStaticOnStartCheck, "Display a static keys profile when the program is started.");
+            hintsToolTip.SetToolTip(this.SettingsUSB3ModeCheck, "What have you done!? You shouldn't be seeing this!");
+            hintsToolTip.SetToolTip(this.SpectroAmplitudeLabel, "Change the sensitivity of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroAmplitudeUD, "Change the sensitivity of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBarBrightnessUD, "Change the brightness of the foreground of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBarEffectCB, "Select the effect for the foreground of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBarSpeed, "Determines the animation speed for the foreground of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBarWidth, "Determines the width of the effect for the foreground of the spectrograph. For rainbow profiles, the maximum represents the entire keyboard's width.");
+            hintsToolTip.SetToolTip(this.SpectroBgBrightnessUD, "Change the brightness of background of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBgEffectCB, "Select the effect for the background of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBgSpeed, "Determines the animation speed for the background of the spectrograph.");
+            hintsToolTip.SetToolTip(this.SpectroBgWidth, "Determines the width of the effect for the background of the spectrograph. For rainbow profiles, the maximum represents the entire keyboard's width.");
+            hintsToolTip.SetToolTip(this.SpectroColorBars, "Select the colour of the foreground of the spectrograph when using Solid Colour.");
+            hintsToolTip.SetToolTip(this.SpectroColorBg, "Select the colour of the background of the spectrograph when using Solid Colour.");
+            hintsToolTip.SetToolTip(this.SpectroRefreshDelayLabel, "Time between updates.");
+            hintsToolTip.SetToolTip(this.SpectroRefreshDelayUD, "Time between updates.");
+            hintsToolTip.SetToolTip(this.SpectroShowGraphicsCheck, "What have you done!? You shouldn't be seeing this!");
+            hintsToolTip.SetToolTip(this.SpectroWasapiDevicesCB, "Select your desired input device.");
+            hintsToolTip.SetToolTip(this.SpectroWasapiLoopbackRadio, "Listen to the audio being output by your computer's default sound device. NOTE: This may not work on AMD HDMI Audio lines.");
+            hintsToolTip.SetToolTip(this.SpectroWasapiRadio, "Listen to the audio being input to your computer over devices such as a microphone or line-in.");
+            hintsToolTip.SetToolTip(this.StartSpectrographButton, "Starts the Spectrograph.");
+            hintsToolTip.SetToolTip(this.StaticClearButton, "Clear the copied colour.");
+            hintsToolTip.SetToolTip(this.StaticCopyButton, "Copy a key's colour.");
+            hintsToolTip.SetToolTip(this.StaticCopyPasteColor, "Click to define the colour that will be pasted.");
+            hintsToolTip.SetToolTip(this.StaticDeleteKeysButton, "DEBUG: Delete all keys from the static page.");
+            hintsToolTip.SetToolTip(this.StaticGetKeyboardImage, "DEBUG: Load the image of the selected keyboard.");
+            hintsToolTip.SetToolTip(this.StaticLoadProfileButton, "Load a saved profile.");
+            hintsToolTip.SetToolTip(this.StaticMouseLight1, "Click to define Mouse Light 1.");
+            hintsToolTip.SetToolTip(this.StaticMouseLight2, "Click to define Mouse Light 2.");
+            hintsToolTip.SetToolTip(this.StaticMouseLight3, "Click to define Mouse Light 3.");
+            hintsToolTip.SetToolTip(this.StaticMouseLight4, "Click to define Mouse Light 4. (Saber Only)");
+            hintsToolTip.SetToolTip(this.StaticMutedColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.StaticMutedColourLabel, "The colour of the mute button when Windows audio is muted.");
+            hintsToolTip.SetToolTip(this.StaticNewProfileButton, "Clear the current profile.");
+            hintsToolTip.SetToolTip(this.StaticPasteButton, "Paste the copied colour.");
+            hintsToolTip.SetToolTip(this.StaticProfileListCB, "Profiles stored in the Profiles folder.");
+            hintsToolTip.SetToolTip(this.StaticSaveProfileAsButton, "Save the current profile as a new profile.");
+            hintsToolTip.SetToolTip(this.StaticSaveProfileButton, "Save the current profile over the selected profile.");
+            hintsToolTip.SetToolTip(this.StaticUpdateKeyboardButton, "DEBUG: Outputs current display to the keyboard.");
+            hintsToolTip.SetToolTip(this.StopSpectrographButton, "Stops all effects.");
+
+            #endregion Tooltips
 
             #region Post Load Tasks
             // Automatically minimize
@@ -547,6 +667,9 @@ namespace RGBKeyboardSpectrograph
             {
                 MainTabControl.SelectTab(3);
             };
+
+            // Start up mute watching timer
+            MuteCheckTimer.Start();
 
             #endregion Post Load Tasks
 
@@ -671,7 +794,7 @@ namespace RGBKeyboardSpectrograph
                 }
             }
         }
-
+        
         #endregion Form Stuff
 
         #region Effects Start/Stop
@@ -714,11 +837,20 @@ namespace RGBKeyboardSpectrograph
                     if (Program.RunKeyboardThread == 3) { return false; };
                     if (LoadSizePositionMaps() == false) { return false; };
 
-                    Program.EfSettings.Set((int)Eff_RL_DurationUD.Value, (int)Eff_RL_FrequencyUD.Value, 0);
+                    Program.EfSettings.Set((int)Effect_Float_DurationUD.Value, (int)Effect_Float_FrequencyUD.Value, 0);
                     Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
 
                     Program.RunKeyboardThread = 3;
                     workerThread = new Thread(() => Effect_RandomLights.KeyboardControl());
+                    workerThread.Start();
+                    return true;
+                case "Reactive-SingleLight":
+                    if (Program.RunKeyboardThread == 10) { return false; };
+                    if (LoadSizePositionMaps() == false) { return false; };
+
+                    Program.RunKeyboardThread = 10;
+                    Reactive_SingleLight react = new Reactive_SingleLight();
+                    workerThread = new Thread(() => react.KeyboardControl());
                     workerThread.Start();
                     return true;
                 default:
@@ -792,6 +924,14 @@ namespace RGBKeyboardSpectrograph
             Program.SettingsKeyboardLayout = SettingsKeyboardLayoutCB.Text;
             Program.RunKeyboardThread = RunType;
             return true;
+        }
+
+        private void StopEffects()
+        {
+            Program.RunKeyboardThread = 0;
+            DebugTestModeButton.Enabled = true;
+
+            MuteCheckTimer.Start();
         }
 
         private bool LoadSizePositionMaps()
@@ -1059,10 +1199,7 @@ namespace RGBKeyboardSpectrograph
 
         private void StopSpectrograph_Click(object sender, EventArgs e)
         {
-            Program.RunKeyboardThread = 0;
-                StartSpectrographButton.Enabled = true;
-                DebugTestModeButton.Enabled = true;
-                tabEffects.Enabled = true;
+            StopEffects();
         }
 
         #endregion [Spectro] Buttons
@@ -1364,12 +1501,19 @@ namespace RGBKeyboardSpectrograph
 
         private void EffectsStartButton_Click(object sender, EventArgs e)
         {
-            StartEffects("Effect-RandomLights");
+            if (EffectTabControl.SelectedTab == EffectTabControl.TabPages["EffectTab_RandomLights"])
+            {
+                StartEffects("Effect-RandomLights");
+            } 
+            else if (EffectTabControl.SelectedTab == EffectTabControl.TabPages["EffectTab_Rainfall"])
+            {
+                StartEffects("Effect-Rainfall");
+            }
         }
 
         private void EffectsStopButton_Click(object sender, EventArgs e)
         {
-            Program.RunKeyboardThread = 0;
+            StopEffects();
         }
 
         private void AnimationsUseStaticLights_CheckedChanged(object sender, EventArgs e)
@@ -1384,42 +1528,56 @@ namespace RGBKeyboardSpectrograph
             AnimationsUseStaticLights.Checked = tsmShowStatic.Checked;
         }
 
+        private void EffectTabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (EffectTabControl.SelectedIndex == 2)
+            {
+                Effect_Float_StartGB.Visible = false;
+                Effect_Float_EndGB.Visible = false;
+            }
+            else
+            {
+                Effect_Float_StartGB.Visible = true;
+                Effect_Float_EndGB.Visible = true;
+            }
+        }
+
         #region Tab: Effects: Random Lights
         private void Eff_RL_UpdateColorConfig(int mode)
         {
             switch (mode) { 
                 case 1:
                     Program.EfColors.SetStart(
-                        (byte)Eff_RL_Start_ColourButton.BackColor.R,
-                        (byte)Eff_RL_Start_ColourButton.BackColor.G,
-                        (byte)Eff_RL_Start_ColourButton.BackColor.B,
+                        (byte)Effect_Float_Start_ColourButton.BackColor.R,
+                        (byte)Effect_Float_Start_ColourButton.BackColor.G,
+                        (byte)Effect_Float_Start_ColourButton.BackColor.B,
                         Eff_RL_End_GetMode());
                     break;
                 case 2:
                     Program.EfColors.SetStart(
-                        (int)Eff_RL_Start_Red_LowUD.Value,
-                        (int)Eff_RL_Start_Red_HighUD.Value,
-                        (int)Eff_RL_Start_Green_LowUD.Value,
-                        (int)Eff_RL_Start_Green_HighUD.Value,
-                        (int)Eff_RL_Start_Blue_LowUD.Value,
-                        (int)Eff_RL_Start_Blue_HighUD.Value,
+                        (int)Effect_Float_Start_Red_LowUD.Value,
+                        (int)Effect_Float_Start_Red_HighUD.Value,
+                        (int)Effect_Float_Start_Green_LowUD.Value,
+                        (int)Effect_Float_Start_Green_HighUD.Value,
+                        (int)Effect_Float_Start_Blue_LowUD.Value,
+                        (int)Effect_Float_Start_Blue_HighUD.Value,
                         Eff_RL_End_GetMode());
                     break;
                 case 3:
                     Program.EfColors.SetEnd(
-                        (int)Eff_RL_End_Red_LowUD.Value,
-                        (int)Eff_RL_End_Red_HighUD.Value,
-                        (int)Eff_RL_End_Green_LowUD.Value,
-                        (int)Eff_RL_End_Green_HighUD.Value,
-                        (int)Eff_RL_End_Blue_LowUD.Value,
-                        (int)Eff_RL_End_Blue_HighUD.Value,
+                        (int)Effect_Float_End_Red_LowUD.Value,
+                        (int)Effect_Float_End_Red_HighUD.Value,
+                        (int)Effect_Float_End_Green_LowUD.Value,
+                        (int)Effect_Float_End_Green_HighUD.Value,
+                        (int)Effect_Float_End_Blue_LowUD.Value,
+                        (int)Effect_Float_End_Blue_HighUD.Value,
                         Eff_RL_End_GetMode());
                     break;
                 case 4:
                     Program.EfColors.SetEnd(
-                        (byte)Eff_RL_End_ColourButton.BackColor.R,
-                        (byte)Eff_RL_End_ColourButton.BackColor.G,
-                        (byte)Eff_RL_End_ColourButton.BackColor.B,
+                        (byte)Effect_Float_End_ColourButton.BackColor.R,
+                        (byte)Effect_Float_End_ColourButton.BackColor.G,
+                        (byte)Effect_Float_End_ColourButton.BackColor.B,
                         Eff_RL_End_GetMode());
                     break;
         }
@@ -1427,36 +1585,36 @@ namespace RGBKeyboardSpectrograph
 
         private void Eff_RL_Start_UpdateColorBoxes(object sender, EventArgs e)
         {
-            Eff_RL_Start_Red_LowButton.BackColor = Color.FromArgb(255, (int)Eff_RL_Start_Red_LowUD.Value, 0, 0);
-            Eff_RL_Start_Red_HighButton.BackColor = Color.FromArgb(255, (int)Eff_RL_Start_Red_HighUD.Value, 0, 0);
+            Effect_Float_Start_Red_LowButton.BackColor = Color.FromArgb(255, (int)Effect_Float_Start_Red_LowUD.Value, 0, 0);
+            Effect_Float_Start_Red_HighButton.BackColor = Color.FromArgb(255, (int)Effect_Float_Start_Red_HighUD.Value, 0, 0);
 
-            Eff_RL_Start_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_Start_Green_LowUD.Value, 0);
-            Eff_RL_Start_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_Start_Green_HighUD.Value, 0);
+            Effect_Float_Start_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Effect_Float_Start_Green_LowUD.Value, 0);
+            Effect_Float_Start_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Effect_Float_Start_Green_HighUD.Value, 0);
 
-            Eff_RL_Start_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_Start_Blue_LowUD.Value);
-            Eff_RL_Start_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_Start_Blue_HighUD.Value);
+            Effect_Float_Start_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Effect_Float_Start_Blue_LowUD.Value);
+            Effect_Float_Start_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Effect_Float_Start_Blue_HighUD.Value);
 
-            Eff_RL_Start_Red_LowUD.Maximum = Eff_RL_Start_Red_HighUD.Value;
-            Eff_RL_Start_Green_LowUD.Maximum = Eff_RL_Start_Green_HighUD.Value;
-            Eff_RL_Start_Blue_LowUD.Maximum = Eff_RL_Start_Blue_HighUD.Value;
+            Effect_Float_Start_Red_LowUD.Maximum = Effect_Float_Start_Red_HighUD.Value;
+            Effect_Float_Start_Green_LowUD.Maximum = Effect_Float_Start_Green_HighUD.Value;
+            Effect_Float_Start_Blue_LowUD.Maximum = Effect_Float_Start_Blue_HighUD.Value;
 
             Eff_RL_UpdateColorConfig(2);
         }
 
         private void Eff_RL_End_UpdateColorBoxes(object sender, EventArgs e)
         {
-            Eff_RL_End_Red_LowButton.BackColor = Color.FromArgb(255, (int)Eff_RL_End_Red_LowUD.Value, 0, 0);
-            Eff_RL_End_Red_HighButton.BackColor = Color.FromArgb(255, (int)Eff_RL_End_Red_HighUD.Value, 0, 0);
+            Effect_Float_End_Red_LowButton.BackColor = Color.FromArgb(255, (int)Effect_Float_End_Red_LowUD.Value, 0, 0);
+            Effect_Float_End_Red_HighButton.BackColor = Color.FromArgb(255, (int)Effect_Float_End_Red_HighUD.Value, 0, 0);
 
-            Eff_RL_End_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_End_Green_LowUD.Value, 0);
-            Eff_RL_End_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Eff_RL_End_Green_HighUD.Value, 0);
+            Effect_Float_End_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Effect_Float_End_Green_LowUD.Value, 0);
+            Effect_Float_End_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Effect_Float_End_Green_HighUD.Value, 0);
 
-            Eff_RL_End_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_End_Blue_LowUD.Value);
-            Eff_RL_End_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Eff_RL_End_Blue_HighUD.Value);
+            Effect_Float_End_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Effect_Float_End_Blue_LowUD.Value);
+            Effect_Float_End_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Effect_Float_End_Blue_HighUD.Value);
 
-            Eff_RL_End_Red_LowUD.Maximum = Eff_RL_End_Red_HighUD.Value;
-            Eff_RL_End_Green_LowUD.Maximum = Eff_RL_End_Green_HighUD.Value;
-            Eff_RL_End_Blue_LowUD.Maximum = Eff_RL_Start_Blue_HighUD.Value;
+            Effect_Float_End_Red_LowUD.Maximum = Effect_Float_End_Red_HighUD.Value;
+            Effect_Float_End_Green_LowUD.Maximum = Effect_Float_End_Green_HighUD.Value;
+            Effect_Float_End_Blue_LowUD.Maximum = Effect_Float_Start_Blue_HighUD.Value;
 
             Eff_RL_UpdateColorConfig(3);
         }
@@ -1471,19 +1629,19 @@ namespace RGBKeyboardSpectrograph
              */
             int newMode = 0;
 
-            if (Eff_RL_Start_Radio1.Checked && Eff_RL_End_Radio1.Checked)
+            if (Effect_Float_Start_Radio1.Checked && Effect_Float_End_Radio1.Checked)
             {
                 newMode = 1;
             }
-            else if (Eff_RL_Start_Radio2.Checked && Eff_RL_End_Radio1.Checked)
+            else if (Effect_Float_Start_Radio2.Checked && Effect_Float_End_Radio1.Checked)
             {
                 newMode = 2;
             }
-            else if (Eff_RL_Start_Radio1.Checked && Eff_RL_End_Radio2.Checked)
+            else if (Effect_Float_Start_Radio1.Checked && Effect_Float_End_Radio2.Checked)
             {
                 newMode = 3;
             }
-            else if (Eff_RL_Start_Radio2.Checked && Eff_RL_End_Radio2.Checked)
+            else if (Effect_Float_Start_Radio2.Checked && Effect_Float_End_Radio2.Checked)
             {
                 newMode = 4;
             }
@@ -1513,30 +1671,30 @@ namespace RGBKeyboardSpectrograph
 
         private void Eff_RL_Start_RadioCheckedChanged(object sender, EventArgs e)
         {
-            if (Eff_RL_Start_Radio1.Checked == true)
+            if (Effect_Float_Start_Radio1.Checked == true)
             { Eff_RL_UpdateColorConfig(1); }
 
-            else if (Eff_RL_Start_Radio2.Checked == true)
+            else if (Effect_Float_Start_Radio2.Checked == true)
             { Eff_RL_UpdateColorConfig(2); }
         }
 
         private void Eff_RL_End_RadioCheckedChanged(object sender, EventArgs e)
         {
-            if (Eff_RL_End_Radio1.Checked == true)
+            if (Effect_Float_End_Radio1.Checked == true)
             { Eff_RL_UpdateColorConfig(4); }
 
-            else if (Eff_RL_End_Radio2.Checked == true)
+            else if (Effect_Float_End_Radio2.Checked == true)
             { Eff_RL_UpdateColorConfig(3); }
         }
 
         private void Eff_RL_DurationUD_ValueChanged(object sender, EventArgs e)
         {
-            Program.EfSettings.Duration = (int)Eff_RL_DurationUD.Value;
+            Program.EfSettings.Duration = (int)Effect_Float_DurationUD.Value;
         }
 
         private void Eff_RL_FrequencyUD_ValueChanged(object sender, EventArgs e)
         {
-            Program.EfSettings.Frequency = (int)Eff_RL_FrequencyUD.Value;
+            Program.EfSettings.Frequency = (int)Effect_Float_FrequencyUD.Value;
         }
 
         #endregion Tab: Effects: Random Lights
@@ -2028,6 +2186,32 @@ namespace RGBKeyboardSpectrograph
         
         #endregion Tab: Static Keys
 
+        #region Tab: Reactive
+        private void ReactiveColor_Click(object sender, EventArgs e)
+        {
+            System.Windows.Media.Color selectedMediaColor;
+            Color selectedColor = ((Button)sender).BackColor;
+            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+            if (dia.ShowDialog() == true)
+            {
+                selectedMediaColor = dia.SelectedColor; //do something with the selected color
+                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+            }
+            ((Button)sender).BackColor = selectedColor;
+        }
+
+        private void ReactiveStartButton_Click(object sender, EventArgs e)
+        {
+            StartEffects("Reactive-SingleLight");
+        }
+
+        private void ReactiveStopButton_Click(object sender, EventArgs e)
+        {
+            Program.RunKeyboardThread = 0;
+        }
+        #endregion Tab: Reactive
+
         #region Tab: Settings
 
         #region [Settings] Buttons
@@ -2300,6 +2484,11 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        private void MuteCheckTimer_Tick(object sender, EventArgs e)
+        {
+            // Leave if one of the effects are running, as they will manage mute state
+            if (Program.RunKeyboardThread > 1) { return; };
+        }
         #endregion Program
 
         #region ToolStrip
@@ -2308,7 +2497,6 @@ namespace RGBKeyboardSpectrograph
         {
             this.Close();
         }
-
 
         private void tsmProfileList_Click(object sender, EventArgs e)
         {

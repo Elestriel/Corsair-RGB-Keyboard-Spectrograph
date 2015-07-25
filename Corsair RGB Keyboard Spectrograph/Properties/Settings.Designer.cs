@@ -362,216 +362,216 @@ namespace RGBKeyboardSpectrograph.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public int Eff_RL_S_Mode {
+        public int Effect_RandomLights_Start_Mode {
             get {
-                return ((int)(this["Eff_RL_S_Mode"]));
+                return ((int)(this["Effect_RandomLights_Start_Mode"]));
             }
             set {
-                this["Eff_RL_S_Mode"] = value;
+                this["Effect_RandomLights_Start_Mode"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color Eff_RL_S_DefinedColor {
+        public global::System.Drawing.Color Effect_RandomLights_Start_DefinedColor {
             get {
-                return ((global::System.Drawing.Color)(this["Eff_RL_S_DefinedColor"]));
+                return ((global::System.Drawing.Color)(this["Effect_RandomLights_Start_DefinedColor"]));
             }
             set {
-                this["Eff_RL_S_DefinedColor"] = value;
+                this["Effect_RandomLights_Start_DefinedColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_S_CLow_Red {
+        public int Effect_RandomLights_Start_CLow_Red {
             get {
-                return ((int)(this["Eff_RL_S_CLow_Red"]));
+                return ((int)(this["Effect_RandomLights_Start_CLow_Red"]));
             }
             set {
-                this["Eff_RL_S_CLow_Red"] = value;
+                this["Effect_RandomLights_Start_CLow_Red"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_S_CLow_Green {
+        public int Effect_RandomLights_Start_CLow_Green {
             get {
-                return ((int)(this["Eff_RL_S_CLow_Green"]));
+                return ((int)(this["Effect_RandomLights_Start_CLow_Green"]));
             }
             set {
-                this["Eff_RL_S_CLow_Green"] = value;
+                this["Effect_RandomLights_Start_CLow_Green"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_S_CLow_Blue {
+        public int Effect_RandomLights_Start_CLow_Blue {
             get {
-                return ((int)(this["Eff_RL_S_CLow_Blue"]));
+                return ((int)(this["Effect_RandomLights_Start_CLow_Blue"]));
             }
             set {
-                this["Eff_RL_S_CLow_Blue"] = value;
+                this["Effect_RandomLights_Start_CLow_Blue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_S_CHigh_Red {
+        public int Effect_RandomLights_Start_CHigh_Red {
             get {
-                return ((int)(this["Eff_RL_S_CHigh_Red"]));
+                return ((int)(this["Effect_RandomLights_Start_CHigh_Red"]));
             }
             set {
-                this["Eff_RL_S_CHigh_Red"] = value;
+                this["Effect_RandomLights_Start_CHigh_Red"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_S_CHigh_Green {
+        public int Effect_RandomLights_Start_CHigh_Green {
             get {
-                return ((int)(this["Eff_RL_S_CHigh_Green"]));
+                return ((int)(this["Effect_RandomLights_Start_CHigh_Green"]));
             }
             set {
-                this["Eff_RL_S_CHigh_Green"] = value;
+                this["Effect_RandomLights_Start_CHigh_Green"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_S_CHigh_Blue {
+        public int Effect_RandomLights_Start_CHigh_Blue {
             get {
-                return ((int)(this["Eff_RL_S_CHigh_Blue"]));
+                return ((int)(this["Effect_RandomLights_Start_CHigh_Blue"]));
             }
             set {
-                this["Eff_RL_S_CHigh_Blue"] = value;
+                this["Effect_RandomLights_Start_CHigh_Blue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_E_Mode {
+        public int Effect_RandomLights_End_Mode {
             get {
-                return ((int)(this["Eff_RL_E_Mode"]));
+                return ((int)(this["Effect_RandomLights_End_Mode"]));
             }
             set {
-                this["Eff_RL_E_Mode"] = value;
+                this["Effect_RandomLights_End_Mode"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public global::System.Drawing.Color Eff_RL_E_DefinedColor {
+        public global::System.Drawing.Color Effect_RandomLights_End_DefinedColor {
             get {
-                return ((global::System.Drawing.Color)(this["Eff_RL_E_DefinedColor"]));
+                return ((global::System.Drawing.Color)(this["Effect_RandomLights_End_DefinedColor"]));
             }
             set {
-                this["Eff_RL_E_DefinedColor"] = value;
+                this["Effect_RandomLights_End_DefinedColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_E_CLow_Red {
+        public int Effect_RandomLights_End_CLow_Red {
             get {
-                return ((int)(this["Eff_RL_E_CLow_Red"]));
+                return ((int)(this["Effect_RandomLights_End_CLow_Red"]));
             }
             set {
-                this["Eff_RL_E_CLow_Red"] = value;
+                this["Effect_RandomLights_End_CLow_Red"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_E_CLow_Green {
+        public int Effect_RandomLights_End_CLow_Green {
             get {
-                return ((int)(this["Eff_RL_E_CLow_Green"]));
+                return ((int)(this["Effect_RandomLights_End_CLow_Green"]));
             }
             set {
-                this["Eff_RL_E_CLow_Green"] = value;
+                this["Effect_RandomLights_End_CLow_Green"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Eff_RL_E_CLow_Blue {
+        public int Effect_RandomLights_End_CLow_Blue {
             get {
-                return ((int)(this["Eff_RL_E_CLow_Blue"]));
+                return ((int)(this["Effect_RandomLights_End_CLow_Blue"]));
             }
             set {
-                this["Eff_RL_E_CLow_Blue"] = value;
+                this["Effect_RandomLights_End_CLow_Blue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_E_CHigh_Red {
+        public int Effect_RandomLights_End_CHigh_Red {
             get {
-                return ((int)(this["Eff_RL_E_CHigh_Red"]));
+                return ((int)(this["Effect_RandomLights_End_CHigh_Red"]));
             }
             set {
-                this["Eff_RL_E_CHigh_Red"] = value;
+                this["Effect_RandomLights_End_CHigh_Red"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_E_CHigh_Green {
+        public int Effect_RandomLights_End_CHigh_Green {
             get {
-                return ((int)(this["Eff_RL_E_CHigh_Green"]));
+                return ((int)(this["Effect_RandomLights_End_CHigh_Green"]));
             }
             set {
-                this["Eff_RL_E_CHigh_Green"] = value;
+                this["Effect_RandomLights_End_CHigh_Green"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("255")]
-        public int Eff_RL_E_CHigh_Blue {
+        public int Effect_RandomLights_End_CHigh_Blue {
             get {
-                return ((int)(this["Eff_RL_E_CHigh_Blue"]));
+                return ((int)(this["Effect_RandomLights_End_CHigh_Blue"]));
             }
             set {
-                this["Eff_RL_E_CHigh_Blue"] = value;
+                this["Effect_RandomLights_End_CHigh_Blue"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("80")]
-        public int Eff_RL_Duration {
+        public int Effect_RandomLights_Duration {
             get {
-                return ((int)(this["Eff_RL_Duration"]));
+                return ((int)(this["Effect_RandomLights_Duration"]));
             }
             set {
-                this["Eff_RL_Duration"] = value;
+                this["Effect_RandomLights_Duration"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int Eff_RL_Delay {
+        public int Effect_RandomLights_Delay {
             get {
-                return ((int)(this["Eff_RL_Delay"]));
+                return ((int)(this["Effect_RandomLights_Delay"]));
             }
             set {
-                this["Eff_RL_Delay"] = value;
+                this["Effect_RandomLights_Delay"] = value;
             }
         }
         
@@ -656,6 +656,222 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["EffectsIncludeMouse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int Effect_Rainfall_Start_Mode {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_Mode"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color Effect_Rainfall_Start_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Effect_Rainfall_Start_DefinedColor"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_Start_CLow_Red {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CLow_Red"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_Start_CLow_Green {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CLow_Green"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_Start_CLow_Blue {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CLow_Blue"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_Start_CHigh_Red {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CHigh_Red"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_Start_CHigh_Green {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CHigh_Green"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_Start_CHigh_Blue {
+            get {
+                return ((int)(this["Effect_Rainfall_Start_CHigh_Blue"]));
+            }
+            set {
+                this["Effect_Rainfall_Start_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_End_Mode {
+            get {
+                return ((int)(this["Effect_Rainfall_End_Mode"]));
+            }
+            set {
+                this["Effect_Rainfall_End_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color Effect_Rainfall_End_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Effect_Rainfall_End_DefinedColor"]));
+            }
+            set {
+                this["Effect_Rainfall_End_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_End_CLow_Red {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CLow_Red"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_End_CLow_Green {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CLow_Green"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Effect_Rainfall_End_CLow_Blue {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CLow_Blue"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_End_CHigh_Red {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CHigh_Red"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_End_CHigh_Green {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CHigh_Green"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Effect_Rainfall_End_CHigh_Blue {
+            get {
+                return ((int)(this["Effect_Rainfall_End_CHigh_Blue"]));
+            }
+            set {
+                this["Effect_Rainfall_End_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int Effect_Rainfall_Duration {
+            get {
+                return ((int)(this["Effect_Rainfall_Duration"]));
+            }
+            set {
+                this["Effect_Rainfall_Duration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int Effect_Rainfall_Delay {
+            get {
+                return ((int)(this["Effect_Rainfall_Delay"]));
+            }
+            set {
+                this["Effect_Rainfall_Delay"] = value;
             }
         }
     }

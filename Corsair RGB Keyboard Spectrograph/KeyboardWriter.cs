@@ -17,10 +17,12 @@ namespace RGBKeyboardSpectrograph
     public class KeyboardWriter
     {
         #region pInvoke Imports
-
         [DllImport("hid.dll", SetLastError = true)]
         public static extern bool HidD_SetFeature(IntPtr HidDeviceObject, ref Byte lpReportBuffer, int ReportBufferLength);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr ipOverlapped); 
+        
         [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
         static extern IntPtr SetupDiGetClassDevs(           // 1st form using a ClassGUID only, with null Enumerator
            ref Guid ClassGuid,
@@ -190,10 +192,7 @@ namespace RGBKeyboardSpectrograph
         private static SpectroEffects Foreground;
         private static SpectroEffects Background;
 
-        // Stuff for new USB methods - https://github.com/VRocker/LogiLed2Corsair/blob/master/LibCorsairRGB/USBHelper.cpp
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static public extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, ref uint lpNumberOfBytesWritten, IntPtr ipOverlapped); 
-        
+
         public KeyboardWriter(bool restoreLighting = false, bool SuppressMessages = false)
         {
             if (restoreLighting == true)
@@ -277,6 +276,7 @@ namespace RGBKeyboardSpectrograph
 
         public void Write(StaticColorCollection[] staticColors, bool DoUpdate)
         {
+            bool WindowsAudioMute = false;
             for (int i = 0; i < 144; i++)
             {
                 if (staticColors[i].Transparent == false) 
@@ -288,6 +288,8 @@ namespace RGBKeyboardSpectrograph
                     if (DoUpdate == true) { this.SetLed(i, 0, 0, 0); };
                 }
             }
+
+            if (WindowsAudioMute) { this.SetLed(20, 255, 0, 0); };
             if (DoUpdate == true) { UpdateKeyboard(); };
         }
 
