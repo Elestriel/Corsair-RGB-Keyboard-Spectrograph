@@ -23,11 +23,11 @@ namespace RGBKeyboardSpectrograph
                 { UpdateStatusMessage.ShowStatusMessage(1, "Inactive: " + idleTime); }
 
                 // When inactivity timer pops, change layout and then enter a loop waiting for activity
-                if ((IdleTimeFinder.GetIdleTime() / 1000) >= Program.InactivityTimeTrigger * 6 && Program.InactivityTimeTrigger > 0)
+                if ((IdleTimeFinder.GetIdleTime() / 1000) >= Program.InactivityTimeTrigger * 60 && Program.InactivityTimeTrigger > 0)
                 {
                     InactivityStatusChanged.UpdateInactivity(1);
 
-                    while ((idleTime / 1000) >= Program.InactivityTimeTrigger * 6) //FIXME
+                    while ((idleTime / 1000) >= Program.InactivityTimeTrigger * 60) 
                     {
                         idleTime = IdleTimeFinder.GetIdleTime();
                         Thread.Sleep(100);
