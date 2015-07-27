@@ -54,8 +54,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmReactive = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmQuit = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +68,6 @@
             this.SpectroBgEffectCB = new System.Windows.Forms.ComboBox();
             this.SpectroColorBg = new System.Windows.Forms.Button();
             this.GraphicsPictureBox = new System.Windows.Forms.PictureBox();
-            this.SettingsUSB3ModeCheck = new System.Windows.Forms.CheckBox();
             this.SpectroShowGraphicsCheck = new System.Windows.Forms.CheckBox();
             this.SpectroWidthLabel = new System.Windows.Forms.Label();
             this.SpectroBgWidth = new System.Windows.Forms.NumericUpDown();
@@ -110,8 +109,8 @@
             this.Effect_Float_End_Red_HighButton = new System.Windows.Forms.Button();
             this.Effect_Float_End_Red_LowButton = new System.Windows.Forms.Button();
             this.Effect_Float_End_ColourButton = new System.Windows.Forms.Button();
-            this.Effect_Float_End_Radio2 = new System.Windows.Forms.RadioButton();
-            this.Effect_Float_End_Radio1 = new System.Windows.Forms.RadioButton();
+            this.Effect_Float_End_RadioRandom = new System.Windows.Forms.RadioButton();
+            this.Effect_Float_End_RadioDefined = new System.Windows.Forms.RadioButton();
             this.Effect_Float_StartGB = new System.Windows.Forms.GroupBox();
             this.Effect_Float_Start_BlueGB = new System.Windows.Forms.GroupBox();
             this.Effect_Float_Start_Blue_HighUD = new System.Windows.Forms.NumericUpDown();
@@ -129,14 +128,18 @@
             this.Effect_Float_Start_Red_HighButton = new System.Windows.Forms.Button();
             this.Effect_Float_Start_Red_LowButton = new System.Windows.Forms.Button();
             this.Effect_Float_Start_ColourButton = new System.Windows.Forms.Button();
-            this.Effect_Float_Start_Radio2 = new System.Windows.Forms.RadioButton();
-            this.Effect_Float_Start_Radio1 = new System.Windows.Forms.RadioButton();
+            this.Effect_Float_Start_RadioRandom = new System.Windows.Forms.RadioButton();
+            this.Effect_Float_Start_RadioDefined = new System.Windows.Forms.RadioButton();
             this.EffectsStopButton = new System.Windows.Forms.Button();
             this.EffectsStartButton = new System.Windows.Forms.Button();
             this.EffectTabControl = new System.Windows.Forms.TabControl();
             this.EffectTab_RandomLights = new System.Windows.Forms.TabPage();
             this.EffectTab_Rainfall = new System.Windows.Forms.TabPage();
             this.tabStatic = new System.Windows.Forms.TabPage();
+            this.StaticNumColourButton = new System.Windows.Forms.Button();
+            this.StaticScrollColourButton = new System.Windows.Forms.Button();
+            this.StaticCapsColourButton = new System.Windows.Forms.Button();
+            this.StaticMutedColourButton = new System.Windows.Forms.Button();
             this.StaticMouseLightsGB = new System.Windows.Forms.GroupBox();
             this.StaticMouseLight4 = new System.Windows.Forms.Button();
             this.StaticMouseLight1 = new System.Windows.Forms.Button();
@@ -156,7 +159,58 @@
             this.StaticKeyboardImageBox = new System.Windows.Forms.PictureBox();
             this.StaticGetKeyboardImage = new System.Windows.Forms.Button();
             this.tabReactive = new System.Windows.Forms.TabPage();
-            this.ReactiveColor = new System.Windows.Forms.Button();
+            this.ReactiveTabControl = new System.Windows.Forms.TabControl();
+            this.ReactiveTab_Reactive = new System.Windows.Forms.TabPage();
+            this.Reactive_FrequencyLabel = new System.Windows.Forms.Label();
+            this.Reactive_DurationLabel = new System.Windows.Forms.Label();
+            this.Reactive_DurationUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_FrequencyUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_StartGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_Start_RadioRainbow = new System.Windows.Forms.RadioButton();
+            this.Reactive_Start_BlueGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_Start_Blue_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Blue_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Blue_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_Blue_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_GreenGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_Start_Green_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Green_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Green_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_Green_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_RedGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_Start_Red_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Red_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_Start_Red_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_Red_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_ColourButton = new System.Windows.Forms.Button();
+            this.Reactive_Start_RadioRandom = new System.Windows.Forms.RadioButton();
+            this.Reactive_Start_RadioDefined = new System.Windows.Forms.RadioButton();
+            this.Reactive_EndGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_End_RadioOriginal = new System.Windows.Forms.RadioButton();
+            this.Reactive_End_BlueGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_End_Blue_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Blue_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Blue_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_End_Blue_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_End_GreenGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_End_Green_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Green_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Green_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_End_Green_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_End_RedGB = new System.Windows.Forms.GroupBox();
+            this.Reactive_End_Red_HighUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Red_LowUD = new System.Windows.Forms.NumericUpDown();
+            this.Reactive_End_Red_HighButton = new System.Windows.Forms.Button();
+            this.Reactive_End_Red_LowButton = new System.Windows.Forms.Button();
+            this.Reactive_End_ColourButton = new System.Windows.Forms.Button();
+            this.Reactive_End_RadioRandom = new System.Windows.Forms.RadioButton();
+            this.Reactive_End_RadioDefined = new System.Windows.Forms.RadioButton();
+            this.ReactiveTab_Heatmap = new System.Windows.Forms.TabPage();
+            this.Heatmap_ResetMaxButton = new System.Windows.Forms.Button();
+            this.Heatmap_End_ColourLabel = new System.Windows.Forms.Label();
+            this.Heatmap_Start_ColourLabel = new System.Windows.Forms.Label();
+            this.Heatmap_End_ColourButton = new System.Windows.Forms.Button();
+            this.Heatmap_Start_ColourButton = new System.Windows.Forms.Button();
             this.ReactiveStopButton = new System.Windows.Forms.Button();
             this.ReactiveStartButton = new System.Windows.Forms.Button();
             this.tabSettings = new System.Windows.Forms.TabPage();
@@ -175,9 +229,9 @@
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
-            this.StaticMutedColourButton = new System.Windows.Forms.Button();
-            this.StaticMutedColourLabel = new System.Windows.Forms.Label();
             this.MuteCheckTimer = new System.Windows.Forms.Timer(this.components);
+            this.tsmHeatmap = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -221,13 +275,38 @@
             this.StaticMouseLightsGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).BeginInit();
             this.tabReactive.SuspendLayout();
+            this.ReactiveTabControl.SuspendLayout();
+            this.ReactiveTab_Reactive.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_DurationUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_FrequencyUD)).BeginInit();
+            this.Reactive_StartGB.SuspendLayout();
+            this.Reactive_Start_BlueGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Blue_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Blue_LowUD)).BeginInit();
+            this.Reactive_Start_GreenGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Green_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Green_LowUD)).BeginInit();
+            this.Reactive_Start_RedGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Red_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Red_LowUD)).BeginInit();
+            this.Reactive_EndGB.SuspendLayout();
+            this.Reactive_End_BlueGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Blue_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Blue_LowUD)).BeginInit();
+            this.Reactive_End_GreenGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Green_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Green_LowUD)).BeginInit();
+            this.Reactive_End_RedGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Red_HighUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Red_LowUD)).BeginInit();
+            this.ReactiveTab_Heatmap.SuspendLayout();
             this.tabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsIdleTimeUD)).BeginInit();
             this.SuspendLayout();
             // 
             // StartSpectrographButton
             // 
-            this.StartSpectrographButton.Location = new System.Drawing.Point(7, 306);
+            this.StartSpectrographButton.Location = new System.Drawing.Point(7, 330);
             this.StartSpectrographButton.Name = "StartSpectrographButton";
             this.StartSpectrographButton.Size = new System.Drawing.Size(75, 23);
             this.StartSpectrographButton.TabIndex = 0;
@@ -237,20 +316,20 @@
             // 
             // StopSpectrographButton
             // 
-            this.StopSpectrographButton.Location = new System.Drawing.Point(323, 304);
+            this.StopSpectrographButton.Location = new System.Drawing.Point(323, 330);
             this.StopSpectrographButton.Name = "StopSpectrographButton";
             this.StopSpectrographButton.Size = new System.Drawing.Size(75, 23);
             this.StopSpectrographButton.TabIndex = 1;
             this.StopSpectrographButton.Text = "Stop";
             this.StopSpectrographButton.UseVisualStyleBackColor = true;
-            this.StopSpectrographButton.Click += new System.EventHandler(this.StopSpectrograph_Click);
+            this.StopSpectrographButton.Click += new System.EventHandler(this.StopEffects);
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLight,
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 384);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 405);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(724, 22);
             this.statusStrip1.TabIndex = 3;
@@ -330,7 +409,7 @@
             // 
             // DebugTestModeButton
             // 
-            this.DebugTestModeButton.Location = new System.Drawing.Point(424, 309);
+            this.DebugTestModeButton.Location = new System.Drawing.Point(424, 332);
             this.DebugTestModeButton.Name = "DebugTestModeButton";
             this.DebugTestModeButton.Size = new System.Drawing.Size(87, 23);
             this.DebugTestModeButton.TabIndex = 20;
@@ -340,7 +419,7 @@
             // 
             // DebugTesterUD
             // 
-            this.DebugTesterUD.Location = new System.Drawing.Point(517, 312);
+            this.DebugTesterUD.Location = new System.Drawing.Point(517, 334);
             this.DebugTesterUD.Maximum = new decimal(new int[] {
             143,
             0,
@@ -358,13 +437,13 @@
             this.DebugStatusLog.HideSelection = false;
             this.DebugStatusLog.Location = new System.Drawing.Point(424, 44);
             this.DebugStatusLog.Name = "DebugStatusLog";
-            this.DebugStatusLog.Size = new System.Drawing.Size(278, 259);
+            this.DebugStatusLog.Size = new System.Drawing.Size(278, 282);
             this.DebugStatusLog.TabIndex = 22;
             this.DebugStatusLog.Text = "";
             // 
             // DebugLogLevelUD
             // 
-            this.DebugLogLevelUD.Location = new System.Drawing.Point(655, 312);
+            this.DebugLogLevelUD.Location = new System.Drawing.Point(655, 334);
             this.DebugLogLevelUD.Maximum = new decimal(new int[] {
             6,
             0,
@@ -388,7 +467,7 @@
             // DebugLogLevelLabel
             // 
             this.DebugLogLevelLabel.AutoSize = true;
-            this.DebugLogLevelLabel.Location = new System.Drawing.Point(592, 314);
+            this.DebugLogLevelLabel.Location = new System.Drawing.Point(592, 336);
             this.DebugLogLevelLabel.Name = "DebugLogLevelLabel";
             this.DebugLogLevelLabel.Size = new System.Drawing.Size(57, 13);
             this.DebugLogLevelLabel.TabIndex = 24;
@@ -416,13 +495,15 @@
             this.toolStripSeparator2,
             this.tsmStartSpectro,
             this.tsmStartEffects,
+            this.tsmReactive,
+            this.tsmHeatmap,
             this.tsmStop,
             this.toolStripSeparator3,
             this.tsmQuit});
             this.RightClickMenu.Name = "contextMenuStrip1";
             this.RightClickMenu.ShowCheckMargin = true;
             this.RightClickMenu.ShowImageMargin = false;
-            this.RightClickMenu.Size = new System.Drawing.Size(173, 198);
+            this.RightClickMenu.Size = new System.Drawing.Size(173, 242);
             // 
             // tsmAbout
             // 
@@ -477,14 +558,6 @@
             this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
             this.tsmSpectroAmplitude.Text = "Amplitude: x";
             // 
-            // tsmSpectroAmplitudeSlider
-            // 
-            this.tsmSpectroAmplitudeSlider.Maximum = 10;
-            this.tsmSpectroAmplitudeSlider.Minimum = 0;
-            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
-            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
-            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
-            // 
             // tsmStartEffects
             // 
             this.tsmStartEffects.Name = "tsmStartEffects";
@@ -492,12 +565,19 @@
             this.tsmStartEffects.Text = "Start Effects";
             this.tsmStartEffects.Click += new System.EventHandler(this.EffectsStartButton_Click);
             // 
+            // tsmReactive
+            // 
+            this.tsmReactive.Name = "tsmReactive";
+            this.tsmReactive.Size = new System.Drawing.Size(172, 22);
+            this.tsmReactive.Text = "Start Reactive";
+            this.tsmReactive.Click += new System.EventHandler(this.ReactiveStartButton_LaunchFromRightClickMenu);
+            // 
             // tsmStop
             // 
             this.tsmStop.Name = "tsmStop";
             this.tsmStop.Size = new System.Drawing.Size(172, 22);
             this.tsmStop.Text = "Stop Animation";
-            this.tsmStop.Click += new System.EventHandler(this.StopSpectrograph_Click);
+            this.tsmStop.Click += new System.EventHandler(this.StopEffects);
             // 
             // toolStripSeparator3
             // 
@@ -572,7 +652,7 @@
             this.SpectroColorBars.TabIndex = 29;
             this.SpectroColorBars.Text = "Bars";
             this.SpectroColorBars.UseVisualStyleBackColor = true;
-            this.SpectroColorBars.Click += new System.EventHandler(this.SpectroColorBars_Click);
+            this.SpectroColorBars.Click += new System.EventHandler(this.OpenColorPicker);
             // 
             // SpectroBgEffectCB
             // 
@@ -593,7 +673,7 @@
             this.SpectroColorBg.TabIndex = 31;
             this.SpectroColorBg.Text = "BG";
             this.SpectroColorBg.UseVisualStyleBackColor = true;
-            this.SpectroColorBg.Click += new System.EventHandler(this.SpectroColorBackground_Click);
+            this.SpectroColorBg.Click += new System.EventHandler(this.OpenColorPicker);
             // 
             // GraphicsPictureBox
             // 
@@ -604,18 +684,6 @@
             this.GraphicsPictureBox.TabIndex = 32;
             this.GraphicsPictureBox.TabStop = false;
             this.GraphicsPictureBox.Visible = false;
-            // 
-            // SettingsUSB3ModeCheck
-            // 
-            this.SettingsUSB3ModeCheck.AutoSize = true;
-            this.SettingsUSB3ModeCheck.Location = new System.Drawing.Point(188, 145);
-            this.SettingsUSB3ModeCheck.Name = "SettingsUSB3ModeCheck";
-            this.SettingsUSB3ModeCheck.Size = new System.Drawing.Size(66, 17);
-            this.SettingsUSB3ModeCheck.TabIndex = 33;
-            this.SettingsUSB3ModeCheck.Text = "USB 3.0";
-            this.SettingsUSB3ModeCheck.UseVisualStyleBackColor = true;
-            this.SettingsUSB3ModeCheck.Visible = false;
-            this.SettingsUSB3ModeCheck.CheckedChanged += new System.EventHandler(this.SettingsUSB3Mode_CheckedChanged);
             // 
             // SpectroShowGraphicsCheck
             // 
@@ -875,7 +943,7 @@
             this.MainTabControl.Location = new System.Drawing.Point(12, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(704, 365);
+            this.MainTabControl.Size = new System.Drawing.Size(704, 386);
             this.MainTabControl.TabIndex = 53;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControl_SelectedIndexChanged);
             // 
@@ -908,7 +976,7 @@
             this.tabSpectro.Location = new System.Drawing.Point(4, 22);
             this.tabSpectro.Name = "tabSpectro";
             this.tabSpectro.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSpectro.Size = new System.Drawing.Size(696, 339);
+            this.tabSpectro.Size = new System.Drawing.Size(696, 360);
             this.tabSpectro.TabIndex = 0;
             this.tabSpectro.Text = "Spectro";
             this.tabSpectro.UseVisualStyleBackColor = true;
@@ -926,7 +994,7 @@
             this.tabEffects.Controls.Add(this.EffectTabControl);
             this.tabEffects.Location = new System.Drawing.Point(4, 22);
             this.tabEffects.Name = "tabEffects";
-            this.tabEffects.Size = new System.Drawing.Size(696, 339);
+            this.tabEffects.Size = new System.Drawing.Size(696, 360);
             this.tabEffects.TabIndex = 3;
             this.tabEffects.Text = "Effects";
             this.tabEffects.UseVisualStyleBackColor = true;
@@ -934,7 +1002,7 @@
             // Effect_Float_FrequencyLabel
             // 
             this.Effect_Float_FrequencyLabel.AutoSize = true;
-            this.Effect_Float_FrequencyLabel.Location = new System.Drawing.Point(177, 271);
+            this.Effect_Float_FrequencyLabel.Location = new System.Drawing.Point(176, 295);
             this.Effect_Float_FrequencyLabel.Name = "Effect_Float_FrequencyLabel";
             this.Effect_Float_FrequencyLabel.Size = new System.Drawing.Size(72, 13);
             this.Effect_Float_FrequencyLabel.TabIndex = 5;
@@ -943,7 +1011,7 @@
             // Effect_Float_DurationLabel
             // 
             this.Effect_Float_DurationLabel.AutoSize = true;
-            this.Effect_Float_DurationLabel.Location = new System.Drawing.Point(69, 271);
+            this.Effect_Float_DurationLabel.Location = new System.Drawing.Point(68, 295);
             this.Effect_Float_DurationLabel.Name = "Effect_Float_DurationLabel";
             this.Effect_Float_DurationLabel.Size = new System.Drawing.Size(47, 13);
             this.Effect_Float_DurationLabel.TabIndex = 4;
@@ -956,7 +1024,7 @@
             0,
             0,
             0});
-            this.Effect_Float_DurationUD.Location = new System.Drawing.Point(14, 269);
+            this.Effect_Float_DurationUD.Location = new System.Drawing.Point(13, 293);
             this.Effect_Float_DurationUD.Maximum = new decimal(new int[] {
             800,
             0,
@@ -975,11 +1043,11 @@
             0,
             0,
             0});
-            this.Effect_Float_DurationUD.ValueChanged += new System.EventHandler(this.Eff_RL_DurationUD_ValueChanged);
+            this.Effect_Float_DurationUD.ValueChanged += new System.EventHandler(this.Effects_RandomLights_DurationUD_ValueChanged);
             // 
             // Effect_Float_FrequencyUD
             // 
-            this.Effect_Float_FrequencyUD.Location = new System.Drawing.Point(122, 269);
+            this.Effect_Float_FrequencyUD.Location = new System.Drawing.Point(121, 293);
             this.Effect_Float_FrequencyUD.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -988,7 +1056,7 @@
             this.Effect_Float_FrequencyUD.Name = "Effect_Float_FrequencyUD";
             this.Effect_Float_FrequencyUD.Size = new System.Drawing.Size(49, 20);
             this.Effect_Float_FrequencyUD.TabIndex = 2;
-            this.Effect_Float_FrequencyUD.ValueChanged += new System.EventHandler(this.Eff_RL_FrequencyUD_ValueChanged);
+            this.Effect_Float_FrequencyUD.ValueChanged += new System.EventHandler(this.Effects_RandomLights_FrequencyUD_ValueChanged);
             // 
             // Effect_Float_EndGB
             // 
@@ -996,11 +1064,11 @@
             this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_GreenGB);
             this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_RedGB);
             this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_ColourButton);
-            this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_Radio2);
-            this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_Radio1);
+            this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_RadioRandom);
+            this.Effect_Float_EndGB.Controls.Add(this.Effect_Float_End_RadioDefined);
             this.Effect_Float_EndGB.Location = new System.Drawing.Point(210, 39);
             this.Effect_Float_EndGB.Name = "Effect_Float_EndGB";
-            this.Effect_Float_EndGB.Size = new System.Drawing.Size(176, 224);
+            this.Effect_Float_EndGB.Size = new System.Drawing.Size(176, 248);
             this.Effect_Float_EndGB.TabIndex = 16;
             this.Effect_Float_EndGB.TabStop = false;
             this.Effect_Float_EndGB.Text = "End Colour";
@@ -1011,7 +1079,7 @@
             this.Effect_Float_End_BlueGB.Controls.Add(this.Effect_Float_End_Blue_LowUD);
             this.Effect_Float_End_BlueGB.Controls.Add(this.Effect_Float_End_Blue_HighButton);
             this.Effect_Float_End_BlueGB.Controls.Add(this.Effect_Float_End_Blue_LowButton);
-            this.Effect_Float_End_BlueGB.Location = new System.Drawing.Point(12, 169);
+            this.Effect_Float_End_BlueGB.Location = new System.Drawing.Point(12, 192);
             this.Effect_Float_End_BlueGB.Name = "Effect_Float_End_BlueGB";
             this.Effect_Float_End_BlueGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_End_BlueGB.TabIndex = 15;
@@ -1034,7 +1102,7 @@
             0,
             0,
             0});
-            this.Effect_Float_End_Blue_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Blue_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Blue_LowUD
             // 
@@ -1047,7 +1115,7 @@
             this.Effect_Float_End_Blue_LowUD.Name = "Effect_Float_End_Blue_LowUD";
             this.Effect_Float_End_Blue_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_End_Blue_LowUD.TabIndex = 8;
-            this.Effect_Float_End_Blue_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Blue_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Blue_HighButton
             // 
@@ -1075,7 +1143,7 @@
             this.Effect_Float_End_GreenGB.Controls.Add(this.Effect_Float_End_Green_LowUD);
             this.Effect_Float_End_GreenGB.Controls.Add(this.Effect_Float_End_Green_HighButton);
             this.Effect_Float_End_GreenGB.Controls.Add(this.Effect_Float_End_Green_LowButton);
-            this.Effect_Float_End_GreenGB.Location = new System.Drawing.Point(12, 117);
+            this.Effect_Float_End_GreenGB.Location = new System.Drawing.Point(12, 140);
             this.Effect_Float_End_GreenGB.Name = "Effect_Float_End_GreenGB";
             this.Effect_Float_End_GreenGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_End_GreenGB.TabIndex = 15;
@@ -1098,7 +1166,7 @@
             0,
             0,
             0});
-            this.Effect_Float_End_Green_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Green_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Green_LowUD
             // 
@@ -1111,7 +1179,7 @@
             this.Effect_Float_End_Green_LowUD.Name = "Effect_Float_End_Green_LowUD";
             this.Effect_Float_End_Green_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_End_Green_LowUD.TabIndex = 8;
-            this.Effect_Float_End_Green_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Green_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Green_HighButton
             // 
@@ -1139,7 +1207,7 @@
             this.Effect_Float_End_RedGB.Controls.Add(this.Effect_Float_End_Red_LowUD);
             this.Effect_Float_End_RedGB.Controls.Add(this.Effect_Float_End_Red_HighButton);
             this.Effect_Float_End_RedGB.Controls.Add(this.Effect_Float_End_Red_LowButton);
-            this.Effect_Float_End_RedGB.Location = new System.Drawing.Point(12, 65);
+            this.Effect_Float_End_RedGB.Location = new System.Drawing.Point(12, 88);
             this.Effect_Float_End_RedGB.Name = "Effect_Float_End_RedGB";
             this.Effect_Float_End_RedGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_End_RedGB.TabIndex = 12;
@@ -1162,7 +1230,7 @@
             0,
             0,
             0});
-            this.Effect_Float_End_Red_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Red_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Red_LowUD
             // 
@@ -1175,7 +1243,7 @@
             this.Effect_Float_End_Red_LowUD.Name = "Effect_Float_End_Red_LowUD";
             this.Effect_Float_End_Red_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_End_Red_LowUD.TabIndex = 8;
-            this.Effect_Float_End_Red_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_End_UpdateColorBoxes);
+            this.Effect_Float_End_Red_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_End_UpdateColorBoxes);
             // 
             // Effect_Float_End_Red_HighButton
             // 
@@ -1206,31 +1274,31 @@
             this.Effect_Float_End_ColourButton.TabIndex = 11;
             this.Effect_Float_End_ColourButton.Tag = "";
             this.Effect_Float_End_ColourButton.UseVisualStyleBackColor = true;
-            this.Effect_Float_End_ColourButton.Click += new System.EventHandler(this.Eff_RL_ColourButton_Click);
+            this.Effect_Float_End_ColourButton.Click += new System.EventHandler(this.Effects_RandomLights_ColourButton_Click);
             // 
-            // Effect_Float_End_Radio2
+            // Effect_Float_End_RadioRandom
             // 
-            this.Effect_Float_End_Radio2.AutoSize = true;
-            this.Effect_Float_End_Radio2.Location = new System.Drawing.Point(12, 42);
-            this.Effect_Float_End_Radio2.Name = "Effect_Float_End_Radio2";
-            this.Effect_Float_End_Radio2.Size = new System.Drawing.Size(98, 17);
-            this.Effect_Float_End_Radio2.TabIndex = 1;
-            this.Effect_Float_End_Radio2.Text = "Random Colour";
-            this.Effect_Float_End_Radio2.UseVisualStyleBackColor = true;
-            this.Effect_Float_End_Radio2.CheckedChanged += new System.EventHandler(this.Eff_RL_End_RadioCheckedChanged);
+            this.Effect_Float_End_RadioRandom.AutoSize = true;
+            this.Effect_Float_End_RadioRandom.Location = new System.Drawing.Point(12, 42);
+            this.Effect_Float_End_RadioRandom.Name = "Effect_Float_End_RadioRandom";
+            this.Effect_Float_End_RadioRandom.Size = new System.Drawing.Size(98, 17);
+            this.Effect_Float_End_RadioRandom.TabIndex = 1;
+            this.Effect_Float_End_RadioRandom.Text = "Random Colour";
+            this.Effect_Float_End_RadioRandom.UseVisualStyleBackColor = true;
+            this.Effect_Float_End_RadioRandom.CheckedChanged += new System.EventHandler(this.Effects_RandomLights_End_RadioCheckedChanged);
             // 
-            // Effect_Float_End_Radio1
+            // Effect_Float_End_RadioDefined
             // 
-            this.Effect_Float_End_Radio1.AutoSize = true;
-            this.Effect_Float_End_Radio1.Checked = true;
-            this.Effect_Float_End_Radio1.Location = new System.Drawing.Point(12, 19);
-            this.Effect_Float_End_Radio1.Name = "Effect_Float_End_Radio1";
-            this.Effect_Float_End_Radio1.Size = new System.Drawing.Size(95, 17);
-            this.Effect_Float_End_Radio1.TabIndex = 0;
-            this.Effect_Float_End_Radio1.TabStop = true;
-            this.Effect_Float_End_Radio1.Text = "Defined Colour";
-            this.Effect_Float_End_Radio1.UseVisualStyleBackColor = true;
-            this.Effect_Float_End_Radio1.CheckedChanged += new System.EventHandler(this.Eff_RL_End_RadioCheckedChanged);
+            this.Effect_Float_End_RadioDefined.AutoSize = true;
+            this.Effect_Float_End_RadioDefined.Checked = true;
+            this.Effect_Float_End_RadioDefined.Location = new System.Drawing.Point(12, 19);
+            this.Effect_Float_End_RadioDefined.Name = "Effect_Float_End_RadioDefined";
+            this.Effect_Float_End_RadioDefined.Size = new System.Drawing.Size(95, 17);
+            this.Effect_Float_End_RadioDefined.TabIndex = 0;
+            this.Effect_Float_End_RadioDefined.TabStop = true;
+            this.Effect_Float_End_RadioDefined.Text = "Defined Colour";
+            this.Effect_Float_End_RadioDefined.UseVisualStyleBackColor = true;
+            this.Effect_Float_End_RadioDefined.CheckedChanged += new System.EventHandler(this.Effects_RandomLights_End_RadioCheckedChanged);
             // 
             // Effect_Float_StartGB
             // 
@@ -1238,11 +1306,11 @@
             this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_GreenGB);
             this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_RedGB);
             this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_ColourButton);
-            this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_Radio2);
-            this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_Radio1);
+            this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_RadioRandom);
+            this.Effect_Float_StartGB.Controls.Add(this.Effect_Float_Start_RadioDefined);
             this.Effect_Float_StartGB.Location = new System.Drawing.Point(20, 39);
             this.Effect_Float_StartGB.Name = "Effect_Float_StartGB";
-            this.Effect_Float_StartGB.Size = new System.Drawing.Size(176, 224);
+            this.Effect_Float_StartGB.Size = new System.Drawing.Size(176, 248);
             this.Effect_Float_StartGB.TabIndex = 7;
             this.Effect_Float_StartGB.TabStop = false;
             this.Effect_Float_StartGB.Text = "Start Colour";
@@ -1253,7 +1321,7 @@
             this.Effect_Float_Start_BlueGB.Controls.Add(this.Effect_Float_Start_Blue_LowUD);
             this.Effect_Float_Start_BlueGB.Controls.Add(this.Effect_Float_Start_Blue_HighButton);
             this.Effect_Float_Start_BlueGB.Controls.Add(this.Effect_Float_Start_Blue_LowButton);
-            this.Effect_Float_Start_BlueGB.Location = new System.Drawing.Point(12, 169);
+            this.Effect_Float_Start_BlueGB.Location = new System.Drawing.Point(12, 192);
             this.Effect_Float_Start_BlueGB.Name = "Effect_Float_Start_BlueGB";
             this.Effect_Float_Start_BlueGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_Start_BlueGB.TabIndex = 15;
@@ -1276,7 +1344,7 @@
             0,
             0,
             0});
-            this.Effect_Float_Start_Blue_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Blue_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Blue_LowUD
             // 
@@ -1289,7 +1357,7 @@
             this.Effect_Float_Start_Blue_LowUD.Name = "Effect_Float_Start_Blue_LowUD";
             this.Effect_Float_Start_Blue_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_Start_Blue_LowUD.TabIndex = 8;
-            this.Effect_Float_Start_Blue_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Blue_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Blue_HighButton
             // 
@@ -1317,7 +1385,7 @@
             this.Effect_Float_Start_GreenGB.Controls.Add(this.Effect_Float_Start_Green_LowUD);
             this.Effect_Float_Start_GreenGB.Controls.Add(this.Effect_Float_Start_Green_HighButton);
             this.Effect_Float_Start_GreenGB.Controls.Add(this.Effect_Float_Start_Green_LowButton);
-            this.Effect_Float_Start_GreenGB.Location = new System.Drawing.Point(12, 117);
+            this.Effect_Float_Start_GreenGB.Location = new System.Drawing.Point(12, 140);
             this.Effect_Float_Start_GreenGB.Name = "Effect_Float_Start_GreenGB";
             this.Effect_Float_Start_GreenGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_Start_GreenGB.TabIndex = 15;
@@ -1340,7 +1408,7 @@
             0,
             0,
             0});
-            this.Effect_Float_Start_Green_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Green_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Green_LowUD
             // 
@@ -1353,7 +1421,7 @@
             this.Effect_Float_Start_Green_LowUD.Name = "Effect_Float_Start_Green_LowUD";
             this.Effect_Float_Start_Green_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_Start_Green_LowUD.TabIndex = 8;
-            this.Effect_Float_Start_Green_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Green_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Green_HighButton
             // 
@@ -1381,7 +1449,7 @@
             this.Effect_Float_Start_RedGB.Controls.Add(this.Effect_Float_Start_Red_LowUD);
             this.Effect_Float_Start_RedGB.Controls.Add(this.Effect_Float_Start_Red_HighButton);
             this.Effect_Float_Start_RedGB.Controls.Add(this.Effect_Float_Start_Red_LowButton);
-            this.Effect_Float_Start_RedGB.Location = new System.Drawing.Point(12, 65);
+            this.Effect_Float_Start_RedGB.Location = new System.Drawing.Point(12, 88);
             this.Effect_Float_Start_RedGB.Name = "Effect_Float_Start_RedGB";
             this.Effect_Float_Start_RedGB.Size = new System.Drawing.Size(152, 48);
             this.Effect_Float_Start_RedGB.TabIndex = 12;
@@ -1404,7 +1472,7 @@
             0,
             0,
             0});
-            this.Effect_Float_Start_Red_HighUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Red_HighUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Red_LowUD
             // 
@@ -1417,7 +1485,7 @@
             this.Effect_Float_Start_Red_LowUD.Name = "Effect_Float_Start_Red_LowUD";
             this.Effect_Float_Start_Red_LowUD.Size = new System.Drawing.Size(39, 20);
             this.Effect_Float_Start_Red_LowUD.TabIndex = 8;
-            this.Effect_Float_Start_Red_LowUD.ValueChanged += new System.EventHandler(this.Eff_RL_Start_UpdateColorBoxes);
+            this.Effect_Float_Start_Red_LowUD.ValueChanged += new System.EventHandler(this.Effect_RandomLights_Start_UpdateColorBoxes);
             // 
             // Effect_Float_Start_Red_HighButton
             // 
@@ -1448,45 +1516,45 @@
             this.Effect_Float_Start_ColourButton.TabIndex = 11;
             this.Effect_Float_Start_ColourButton.Tag = "";
             this.Effect_Float_Start_ColourButton.UseVisualStyleBackColor = true;
-            this.Effect_Float_Start_ColourButton.Click += new System.EventHandler(this.Eff_RL_ColourButton_Click);
+            this.Effect_Float_Start_ColourButton.Click += new System.EventHandler(this.Effects_RandomLights_ColourButton_Click);
             // 
-            // Effect_Float_Start_Radio2
+            // Effect_Float_Start_RadioRandom
             // 
-            this.Effect_Float_Start_Radio2.AutoSize = true;
-            this.Effect_Float_Start_Radio2.Location = new System.Drawing.Point(12, 42);
-            this.Effect_Float_Start_Radio2.Name = "Effect_Float_Start_Radio2";
-            this.Effect_Float_Start_Radio2.Size = new System.Drawing.Size(98, 17);
-            this.Effect_Float_Start_Radio2.TabIndex = 1;
-            this.Effect_Float_Start_Radio2.Text = "Random Colour";
-            this.Effect_Float_Start_Radio2.UseVisualStyleBackColor = true;
-            this.Effect_Float_Start_Radio2.CheckedChanged += new System.EventHandler(this.Eff_RL_Start_RadioCheckedChanged);
+            this.Effect_Float_Start_RadioRandom.AutoSize = true;
+            this.Effect_Float_Start_RadioRandom.Location = new System.Drawing.Point(12, 42);
+            this.Effect_Float_Start_RadioRandom.Name = "Effect_Float_Start_RadioRandom";
+            this.Effect_Float_Start_RadioRandom.Size = new System.Drawing.Size(98, 17);
+            this.Effect_Float_Start_RadioRandom.TabIndex = 1;
+            this.Effect_Float_Start_RadioRandom.Text = "Random Colour";
+            this.Effect_Float_Start_RadioRandom.UseVisualStyleBackColor = true;
+            this.Effect_Float_Start_RadioRandom.CheckedChanged += new System.EventHandler(this.Effects_RandomLights_Start_RadioCheckedChanged);
             // 
-            // Effect_Float_Start_Radio1
+            // Effect_Float_Start_RadioDefined
             // 
-            this.Effect_Float_Start_Radio1.AutoSize = true;
-            this.Effect_Float_Start_Radio1.Checked = true;
-            this.Effect_Float_Start_Radio1.Location = new System.Drawing.Point(12, 19);
-            this.Effect_Float_Start_Radio1.Name = "Effect_Float_Start_Radio1";
-            this.Effect_Float_Start_Radio1.Size = new System.Drawing.Size(95, 17);
-            this.Effect_Float_Start_Radio1.TabIndex = 0;
-            this.Effect_Float_Start_Radio1.TabStop = true;
-            this.Effect_Float_Start_Radio1.Text = "Defined Colour";
-            this.Effect_Float_Start_Radio1.UseVisualStyleBackColor = true;
-            this.Effect_Float_Start_Radio1.CheckedChanged += new System.EventHandler(this.Eff_RL_Start_RadioCheckedChanged);
+            this.Effect_Float_Start_RadioDefined.AutoSize = true;
+            this.Effect_Float_Start_RadioDefined.Checked = true;
+            this.Effect_Float_Start_RadioDefined.Location = new System.Drawing.Point(12, 19);
+            this.Effect_Float_Start_RadioDefined.Name = "Effect_Float_Start_RadioDefined";
+            this.Effect_Float_Start_RadioDefined.Size = new System.Drawing.Size(95, 17);
+            this.Effect_Float_Start_RadioDefined.TabIndex = 0;
+            this.Effect_Float_Start_RadioDefined.TabStop = true;
+            this.Effect_Float_Start_RadioDefined.Text = "Defined Colour";
+            this.Effect_Float_Start_RadioDefined.UseVisualStyleBackColor = true;
+            this.Effect_Float_Start_RadioDefined.CheckedChanged += new System.EventHandler(this.Effects_RandomLights_Start_RadioCheckedChanged);
             // 
             // EffectsStopButton
             // 
-            this.EffectsStopButton.Location = new System.Drawing.Point(323, 304);
+            this.EffectsStopButton.Location = new System.Drawing.Point(323, 330);
             this.EffectsStopButton.Name = "EffectsStopButton";
             this.EffectsStopButton.Size = new System.Drawing.Size(75, 23);
             this.EffectsStopButton.TabIndex = 2;
             this.EffectsStopButton.Text = "Stop";
             this.EffectsStopButton.UseVisualStyleBackColor = true;
-            this.EffectsStopButton.Click += new System.EventHandler(this.EffectsStopButton_Click);
+            this.EffectsStopButton.Click += new System.EventHandler(this.StopEffects);
             // 
             // EffectsStartButton
             // 
-            this.EffectsStartButton.Location = new System.Drawing.Point(7, 306);
+            this.EffectsStartButton.Location = new System.Drawing.Point(7, 330);
             this.EffectsStartButton.Name = "EffectsStartButton";
             this.EffectsStartButton.Size = new System.Drawing.Size(75, 23);
             this.EffectsStartButton.TabIndex = 0;
@@ -1501,7 +1569,7 @@
             this.EffectTabControl.Location = new System.Drawing.Point(3, 10);
             this.EffectTabControl.Name = "EffectTabControl";
             this.EffectTabControl.SelectedIndex = 0;
-            this.EffectTabControl.Size = new System.Drawing.Size(399, 288);
+            this.EffectTabControl.Size = new System.Drawing.Size(399, 314);
             this.EffectTabControl.TabIndex = 1;
             this.EffectTabControl.SelectedIndexChanged += new System.EventHandler(this.EffectTabControl_SelectedIndexChanged);
             // 
@@ -1510,7 +1578,7 @@
             this.EffectTab_RandomLights.Location = new System.Drawing.Point(4, 22);
             this.EffectTab_RandomLights.Name = "EffectTab_RandomLights";
             this.EffectTab_RandomLights.Padding = new System.Windows.Forms.Padding(3);
-            this.EffectTab_RandomLights.Size = new System.Drawing.Size(391, 262);
+            this.EffectTab_RandomLights.Size = new System.Drawing.Size(391, 288);
             this.EffectTab_RandomLights.TabIndex = 0;
             this.EffectTab_RandomLights.Text = "Random Lights";
             this.EffectTab_RandomLights.UseVisualStyleBackColor = true;
@@ -1519,14 +1587,16 @@
             // 
             this.EffectTab_Rainfall.Location = new System.Drawing.Point(4, 22);
             this.EffectTab_Rainfall.Name = "EffectTab_Rainfall";
-            this.EffectTab_Rainfall.Size = new System.Drawing.Size(391, 262);
+            this.EffectTab_Rainfall.Size = new System.Drawing.Size(391, 288);
             this.EffectTab_Rainfall.TabIndex = 1;
             this.EffectTab_Rainfall.Text = "Rainfall";
             this.EffectTab_Rainfall.UseVisualStyleBackColor = true;
             // 
             // tabStatic
             // 
-            this.tabStatic.Controls.Add(this.StaticMutedColourLabel);
+            this.tabStatic.Controls.Add(this.StaticNumColourButton);
+            this.tabStatic.Controls.Add(this.StaticScrollColourButton);
+            this.tabStatic.Controls.Add(this.StaticCapsColourButton);
             this.tabStatic.Controls.Add(this.StaticMutedColourButton);
             this.tabStatic.Controls.Add(this.StaticMouseLightsGB);
             this.tabStatic.Controls.Add(this.StaticProfileListCB);
@@ -1544,10 +1614,62 @@
             this.tabStatic.Controls.Add(this.StaticGetKeyboardImage);
             this.tabStatic.Location = new System.Drawing.Point(4, 22);
             this.tabStatic.Name = "tabStatic";
-            this.tabStatic.Size = new System.Drawing.Size(696, 339);
+            this.tabStatic.Size = new System.Drawing.Size(696, 360);
             this.tabStatic.TabIndex = 4;
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
+            // 
+            // StaticNumColourButton
+            // 
+            this.StaticNumColourButton.Enabled = false;
+            this.StaticNumColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticNumColourButton.Location = new System.Drawing.Point(15, 328);
+            this.StaticNumColourButton.Name = "StaticNumColourButton";
+            this.StaticNumColourButton.Size = new System.Drawing.Size(80, 23);
+            this.StaticNumColourButton.TabIndex = 71;
+            this.StaticNumColourButton.Tag = "0";
+            this.StaticNumColourButton.Text = "Num Lock";
+            this.StaticNumColourButton.UseVisualStyleBackColor = true;
+            this.StaticNumColourButton.Visible = false;
+            // 
+            // StaticScrollColourButton
+            // 
+            this.StaticScrollColourButton.Enabled = false;
+            this.StaticScrollColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticScrollColourButton.Location = new System.Drawing.Point(101, 299);
+            this.StaticScrollColourButton.Name = "StaticScrollColourButton";
+            this.StaticScrollColourButton.Size = new System.Drawing.Size(80, 23);
+            this.StaticScrollColourButton.TabIndex = 70;
+            this.StaticScrollColourButton.Tag = "0";
+            this.StaticScrollColourButton.Text = "Scroll Lock";
+            this.StaticScrollColourButton.UseVisualStyleBackColor = true;
+            this.StaticScrollColourButton.Visible = false;
+            // 
+            // StaticCapsColourButton
+            // 
+            this.StaticCapsColourButton.Enabled = false;
+            this.StaticCapsColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticCapsColourButton.Location = new System.Drawing.Point(15, 299);
+            this.StaticCapsColourButton.Name = "StaticCapsColourButton";
+            this.StaticCapsColourButton.Size = new System.Drawing.Size(80, 23);
+            this.StaticCapsColourButton.TabIndex = 69;
+            this.StaticCapsColourButton.Tag = "0";
+            this.StaticCapsColourButton.Text = "Caps Lock";
+            this.StaticCapsColourButton.UseVisualStyleBackColor = true;
+            this.StaticCapsColourButton.Visible = false;
+            // 
+            // StaticMutedColourButton
+            // 
+            this.StaticMutedColourButton.Enabled = false;
+            this.StaticMutedColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StaticMutedColourButton.Location = new System.Drawing.Point(101, 328);
+            this.StaticMutedColourButton.Name = "StaticMutedColourButton";
+            this.StaticMutedColourButton.Size = new System.Drawing.Size(80, 23);
+            this.StaticMutedColourButton.TabIndex = 68;
+            this.StaticMutedColourButton.Tag = "0";
+            this.StaticMutedColourButton.Text = "Mute";
+            this.StaticMutedColourButton.UseVisualStyleBackColor = true;
+            this.StaticMutedColourButton.Visible = false;
             // 
             // StaticMouseLightsGB
             // 
@@ -1645,7 +1767,7 @@
             this.StaticCopyPasteColor.TabIndex = 10;
             this.StaticCopyPasteColor.Tag = "";
             this.StaticCopyPasteColor.UseVisualStyleBackColor = true;
-            this.StaticCopyPasteColor.Click += new System.EventHandler(this.StaticCopyPasteColor_Click);
+            this.StaticCopyPasteColor.Click += new System.EventHandler(this.OpenColorPicker);
             // 
             // StaticPasteButton
             // 
@@ -1742,40 +1864,689 @@
             // 
             // tabReactive
             // 
-            this.tabReactive.Controls.Add(this.ReactiveColor);
+            this.tabReactive.Controls.Add(this.ReactiveTabControl);
             this.tabReactive.Controls.Add(this.ReactiveStopButton);
             this.tabReactive.Controls.Add(this.ReactiveStartButton);
             this.tabReactive.Location = new System.Drawing.Point(4, 22);
             this.tabReactive.Name = "tabReactive";
-            this.tabReactive.Size = new System.Drawing.Size(696, 339);
+            this.tabReactive.Size = new System.Drawing.Size(696, 360);
             this.tabReactive.TabIndex = 5;
             this.tabReactive.Text = "Reactive";
             this.tabReactive.UseVisualStyleBackColor = true;
             // 
-            // ReactiveColor
+            // ReactiveTabControl
             // 
-            this.ReactiveColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ReactiveColor.Location = new System.Drawing.Point(159, 310);
-            this.ReactiveColor.Name = "ReactiveColor";
-            this.ReactiveColor.Size = new System.Drawing.Size(46, 17);
-            this.ReactiveColor.TabIndex = 12;
-            this.ReactiveColor.Tag = "";
-            this.ReactiveColor.UseVisualStyleBackColor = true;
-            this.ReactiveColor.Click += new System.EventHandler(this.ReactiveColor_Click);
+            this.ReactiveTabControl.Controls.Add(this.ReactiveTab_Reactive);
+            this.ReactiveTabControl.Controls.Add(this.ReactiveTab_Heatmap);
+            this.ReactiveTabControl.Location = new System.Drawing.Point(3, 10);
+            this.ReactiveTabControl.Name = "ReactiveTabControl";
+            this.ReactiveTabControl.SelectedIndex = 0;
+            this.ReactiveTabControl.Size = new System.Drawing.Size(399, 314);
+            this.ReactiveTabControl.TabIndex = 13;
+            // 
+            // ReactiveTab_Reactive
+            // 
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_FrequencyLabel);
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_DurationLabel);
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_DurationUD);
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_FrequencyUD);
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_StartGB);
+            this.ReactiveTab_Reactive.Controls.Add(this.Reactive_EndGB);
+            this.ReactiveTab_Reactive.Location = new System.Drawing.Point(4, 22);
+            this.ReactiveTab_Reactive.Name = "ReactiveTab_Reactive";
+            this.ReactiveTab_Reactive.Padding = new System.Windows.Forms.Padding(3);
+            this.ReactiveTab_Reactive.Size = new System.Drawing.Size(391, 288);
+            this.ReactiveTab_Reactive.TabIndex = 0;
+            this.ReactiveTab_Reactive.Text = "Reactive";
+            this.ReactiveTab_Reactive.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_FrequencyLabel
+            // 
+            this.Reactive_FrequencyLabel.AutoSize = true;
+            this.Reactive_FrequencyLabel.Location = new System.Drawing.Point(169, 263);
+            this.Reactive_FrequencyLabel.Name = "Reactive_FrequencyLabel";
+            this.Reactive_FrequencyLabel.Size = new System.Drawing.Size(72, 13);
+            this.Reactive_FrequencyLabel.TabIndex = 22;
+            this.Reactive_FrequencyLabel.Text = "Update Delay";
+            // 
+            // Reactive_DurationLabel
+            // 
+            this.Reactive_DurationLabel.AutoSize = true;
+            this.Reactive_DurationLabel.Location = new System.Drawing.Point(61, 263);
+            this.Reactive_DurationLabel.Name = "Reactive_DurationLabel";
+            this.Reactive_DurationLabel.Size = new System.Drawing.Size(47, 13);
+            this.Reactive_DurationLabel.TabIndex = 21;
+            this.Reactive_DurationLabel.Text = "Duration";
+            // 
+            // Reactive_DurationUD
+            // 
+            this.Reactive_DurationUD.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.Reactive_DurationUD.Location = new System.Drawing.Point(6, 261);
+            this.Reactive_DurationUD.Maximum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.Reactive_DurationUD.Minimum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.Reactive_DurationUD.Name = "Reactive_DurationUD";
+            this.Reactive_DurationUD.Size = new System.Drawing.Size(49, 20);
+            this.Reactive_DurationUD.TabIndex = 19;
+            this.Reactive_DurationUD.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.Reactive_DurationUD.ValueChanged += new System.EventHandler(this.Reactive_DurationUD_ValueChanged);
+            // 
+            // Reactive_FrequencyUD
+            // 
+            this.Reactive_FrequencyUD.Location = new System.Drawing.Point(114, 261);
+            this.Reactive_FrequencyUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.Reactive_FrequencyUD.Name = "Reactive_FrequencyUD";
+            this.Reactive_FrequencyUD.Size = new System.Drawing.Size(49, 20);
+            this.Reactive_FrequencyUD.TabIndex = 20;
+            this.Reactive_FrequencyUD.ValueChanged += new System.EventHandler(this.Reactive_FrequencyUD_ValueChanged);
+            // 
+            // Reactive_StartGB
+            // 
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_RadioRainbow);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_BlueGB);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_GreenGB);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_RedGB);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_ColourButton);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_RadioRandom);
+            this.Reactive_StartGB.Controls.Add(this.Reactive_Start_RadioDefined);
+            this.Reactive_StartGB.Location = new System.Drawing.Point(13, 7);
+            this.Reactive_StartGB.Name = "Reactive_StartGB";
+            this.Reactive_StartGB.Size = new System.Drawing.Size(176, 248);
+            this.Reactive_StartGB.TabIndex = 17;
+            this.Reactive_StartGB.TabStop = false;
+            this.Reactive_StartGB.Text = "Start Colour";
+            // 
+            // Reactive_Start_RadioRainbow
+            // 
+            this.Reactive_Start_RadioRainbow.AutoSize = true;
+            this.Reactive_Start_RadioRainbow.Enabled = false;
+            this.Reactive_Start_RadioRainbow.Location = new System.Drawing.Point(12, 42);
+            this.Reactive_Start_RadioRainbow.Name = "Reactive_Start_RadioRainbow";
+            this.Reactive_Start_RadioRainbow.Size = new System.Drawing.Size(67, 17);
+            this.Reactive_Start_RadioRainbow.TabIndex = 16;
+            this.Reactive_Start_RadioRainbow.Text = "Rainbow";
+            this.Reactive_Start_RadioRainbow.UseVisualStyleBackColor = true;
+            this.Reactive_Start_RadioRainbow.CheckedChanged += new System.EventHandler(this.Reactive_Start_RadioCheckedChanged);
+            // 
+            // Reactive_Start_BlueGB
+            // 
+            this.Reactive_Start_BlueGB.Controls.Add(this.Reactive_Start_Blue_HighUD);
+            this.Reactive_Start_BlueGB.Controls.Add(this.Reactive_Start_Blue_LowUD);
+            this.Reactive_Start_BlueGB.Controls.Add(this.Reactive_Start_Blue_HighButton);
+            this.Reactive_Start_BlueGB.Controls.Add(this.Reactive_Start_Blue_LowButton);
+            this.Reactive_Start_BlueGB.Location = new System.Drawing.Point(12, 192);
+            this.Reactive_Start_BlueGB.Name = "Reactive_Start_BlueGB";
+            this.Reactive_Start_BlueGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_Start_BlueGB.TabIndex = 15;
+            this.Reactive_Start_BlueGB.TabStop = false;
+            this.Reactive_Start_BlueGB.Text = "Range of Blue";
+            // 
+            // Reactive_Start_Blue_HighUD
+            // 
+            this.Reactive_Start_Blue_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_Start_Blue_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Blue_HighUD.Name = "Reactive_Start_Blue_HighUD";
+            this.Reactive_Start_Blue_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Blue_HighUD.TabIndex = 14;
+            this.Reactive_Start_Blue_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Blue_HighUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Blue_LowUD
+            // 
+            this.Reactive_Start_Blue_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_Start_Blue_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Blue_LowUD.Name = "Reactive_Start_Blue_LowUD";
+            this.Reactive_Start_Blue_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Blue_LowUD.TabIndex = 8;
+            this.Reactive_Start_Blue_LowUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Blue_HighButton
+            // 
+            this.Reactive_Start_Blue_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Blue_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_Start_Blue_HighButton.Name = "Reactive_Start_Blue_HighButton";
+            this.Reactive_Start_Blue_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Blue_HighButton.TabIndex = 13;
+            this.Reactive_Start_Blue_HighButton.Tag = "";
+            this.Reactive_Start_Blue_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_Blue_LowButton
+            // 
+            this.Reactive_Start_Blue_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Blue_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_Start_Blue_LowButton.Name = "Reactive_Start_Blue_LowButton";
+            this.Reactive_Start_Blue_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Blue_LowButton.TabIndex = 12;
+            this.Reactive_Start_Blue_LowButton.Tag = "";
+            this.Reactive_Start_Blue_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_GreenGB
+            // 
+            this.Reactive_Start_GreenGB.Controls.Add(this.Reactive_Start_Green_HighUD);
+            this.Reactive_Start_GreenGB.Controls.Add(this.Reactive_Start_Green_LowUD);
+            this.Reactive_Start_GreenGB.Controls.Add(this.Reactive_Start_Green_HighButton);
+            this.Reactive_Start_GreenGB.Controls.Add(this.Reactive_Start_Green_LowButton);
+            this.Reactive_Start_GreenGB.Location = new System.Drawing.Point(12, 140);
+            this.Reactive_Start_GreenGB.Name = "Reactive_Start_GreenGB";
+            this.Reactive_Start_GreenGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_Start_GreenGB.TabIndex = 15;
+            this.Reactive_Start_GreenGB.TabStop = false;
+            this.Reactive_Start_GreenGB.Text = "Range of Green";
+            // 
+            // Reactive_Start_Green_HighUD
+            // 
+            this.Reactive_Start_Green_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_Start_Green_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Green_HighUD.Name = "Reactive_Start_Green_HighUD";
+            this.Reactive_Start_Green_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Green_HighUD.TabIndex = 14;
+            this.Reactive_Start_Green_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Green_HighUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Green_LowUD
+            // 
+            this.Reactive_Start_Green_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_Start_Green_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Green_LowUD.Name = "Reactive_Start_Green_LowUD";
+            this.Reactive_Start_Green_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Green_LowUD.TabIndex = 8;
+            this.Reactive_Start_Green_LowUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Green_HighButton
+            // 
+            this.Reactive_Start_Green_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Green_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_Start_Green_HighButton.Name = "Reactive_Start_Green_HighButton";
+            this.Reactive_Start_Green_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Green_HighButton.TabIndex = 13;
+            this.Reactive_Start_Green_HighButton.Tag = "";
+            this.Reactive_Start_Green_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_Green_LowButton
+            // 
+            this.Reactive_Start_Green_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Green_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_Start_Green_LowButton.Name = "Reactive_Start_Green_LowButton";
+            this.Reactive_Start_Green_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Green_LowButton.TabIndex = 12;
+            this.Reactive_Start_Green_LowButton.Tag = "";
+            this.Reactive_Start_Green_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_RedGB
+            // 
+            this.Reactive_Start_RedGB.Controls.Add(this.Reactive_Start_Red_HighUD);
+            this.Reactive_Start_RedGB.Controls.Add(this.Reactive_Start_Red_LowUD);
+            this.Reactive_Start_RedGB.Controls.Add(this.Reactive_Start_Red_HighButton);
+            this.Reactive_Start_RedGB.Controls.Add(this.Reactive_Start_Red_LowButton);
+            this.Reactive_Start_RedGB.Location = new System.Drawing.Point(12, 88);
+            this.Reactive_Start_RedGB.Name = "Reactive_Start_RedGB";
+            this.Reactive_Start_RedGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_Start_RedGB.TabIndex = 12;
+            this.Reactive_Start_RedGB.TabStop = false;
+            this.Reactive_Start_RedGB.Text = "Range of Red";
+            // 
+            // Reactive_Start_Red_HighUD
+            // 
+            this.Reactive_Start_Red_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_Start_Red_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Red_HighUD.Name = "Reactive_Start_Red_HighUD";
+            this.Reactive_Start_Red_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Red_HighUD.TabIndex = 14;
+            this.Reactive_Start_Red_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Red_HighUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Red_LowUD
+            // 
+            this.Reactive_Start_Red_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_Start_Red_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_Start_Red_LowUD.Name = "Reactive_Start_Red_LowUD";
+            this.Reactive_Start_Red_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_Start_Red_LowUD.TabIndex = 8;
+            this.Reactive_Start_Red_LowUD.ValueChanged += new System.EventHandler(this.Reactive_Start_UpdateColorBoxes);
+            // 
+            // Reactive_Start_Red_HighButton
+            // 
+            this.Reactive_Start_Red_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Red_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_Start_Red_HighButton.Name = "Reactive_Start_Red_HighButton";
+            this.Reactive_Start_Red_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Red_HighButton.TabIndex = 13;
+            this.Reactive_Start_Red_HighButton.Tag = "";
+            this.Reactive_Start_Red_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_Red_LowButton
+            // 
+            this.Reactive_Start_Red_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_Red_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_Start_Red_LowButton.Name = "Reactive_Start_Red_LowButton";
+            this.Reactive_Start_Red_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_Start_Red_LowButton.TabIndex = 12;
+            this.Reactive_Start_Red_LowButton.Tag = "";
+            this.Reactive_Start_Red_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_Start_ColourButton
+            // 
+            this.Reactive_Start_ColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_Start_ColourButton.Location = new System.Drawing.Point(118, 19);
+            this.Reactive_Start_ColourButton.Name = "Reactive_Start_ColourButton";
+            this.Reactive_Start_ColourButton.Size = new System.Drawing.Size(46, 17);
+            this.Reactive_Start_ColourButton.TabIndex = 11;
+            this.Reactive_Start_ColourButton.Tag = "";
+            this.Reactive_Start_ColourButton.UseVisualStyleBackColor = true;
+            this.Reactive_Start_ColourButton.Click += new System.EventHandler(this.Reactive_ColourButton_ColourChange);
+            // 
+            // Reactive_Start_RadioRandom
+            // 
+            this.Reactive_Start_RadioRandom.AutoSize = true;
+            this.Reactive_Start_RadioRandom.Location = new System.Drawing.Point(12, 65);
+            this.Reactive_Start_RadioRandom.Name = "Reactive_Start_RadioRandom";
+            this.Reactive_Start_RadioRandom.Size = new System.Drawing.Size(98, 17);
+            this.Reactive_Start_RadioRandom.TabIndex = 1;
+            this.Reactive_Start_RadioRandom.Text = "Random Colour";
+            this.Reactive_Start_RadioRandom.UseVisualStyleBackColor = true;
+            this.Reactive_Start_RadioRandom.CheckedChanged += new System.EventHandler(this.Reactive_Start_RadioCheckedChanged);
+            // 
+            // Reactive_Start_RadioDefined
+            // 
+            this.Reactive_Start_RadioDefined.AutoSize = true;
+            this.Reactive_Start_RadioDefined.Checked = true;
+            this.Reactive_Start_RadioDefined.Location = new System.Drawing.Point(12, 19);
+            this.Reactive_Start_RadioDefined.Name = "Reactive_Start_RadioDefined";
+            this.Reactive_Start_RadioDefined.Size = new System.Drawing.Size(95, 17);
+            this.Reactive_Start_RadioDefined.TabIndex = 0;
+            this.Reactive_Start_RadioDefined.TabStop = true;
+            this.Reactive_Start_RadioDefined.Text = "Defined Colour";
+            this.Reactive_Start_RadioDefined.UseVisualStyleBackColor = true;
+            this.Reactive_Start_RadioDefined.CheckedChanged += new System.EventHandler(this.Reactive_Start_RadioCheckedChanged);
+            // 
+            // Reactive_EndGB
+            // 
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_RadioOriginal);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_BlueGB);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_GreenGB);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_RedGB);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_ColourButton);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_RadioRandom);
+            this.Reactive_EndGB.Controls.Add(this.Reactive_End_RadioDefined);
+            this.Reactive_EndGB.Location = new System.Drawing.Point(203, 7);
+            this.Reactive_EndGB.Name = "Reactive_EndGB";
+            this.Reactive_EndGB.Size = new System.Drawing.Size(176, 248);
+            this.Reactive_EndGB.TabIndex = 18;
+            this.Reactive_EndGB.TabStop = false;
+            this.Reactive_EndGB.Text = "End Colour";
+            // 
+            // Reactive_End_RadioOriginal
+            // 
+            this.Reactive_End_RadioOriginal.AutoSize = true;
+            this.Reactive_End_RadioOriginal.Checked = true;
+            this.Reactive_End_RadioOriginal.Location = new System.Drawing.Point(12, 42);
+            this.Reactive_End_RadioOriginal.Name = "Reactive_End_RadioOriginal";
+            this.Reactive_End_RadioOriginal.Size = new System.Drawing.Size(93, 17);
+            this.Reactive_End_RadioOriginal.TabIndex = 16;
+            this.Reactive_End_RadioOriginal.TabStop = true;
+            this.Reactive_End_RadioOriginal.Text = "Original Colour";
+            this.Reactive_End_RadioOriginal.UseVisualStyleBackColor = true;
+            this.Reactive_End_RadioOriginal.CheckedChanged += new System.EventHandler(this.Reactive_End_RadioCheckedChanged);
+            // 
+            // Reactive_End_BlueGB
+            // 
+            this.Reactive_End_BlueGB.Controls.Add(this.Reactive_End_Blue_HighUD);
+            this.Reactive_End_BlueGB.Controls.Add(this.Reactive_End_Blue_LowUD);
+            this.Reactive_End_BlueGB.Controls.Add(this.Reactive_End_Blue_HighButton);
+            this.Reactive_End_BlueGB.Controls.Add(this.Reactive_End_Blue_LowButton);
+            this.Reactive_End_BlueGB.Location = new System.Drawing.Point(12, 192);
+            this.Reactive_End_BlueGB.Name = "Reactive_End_BlueGB";
+            this.Reactive_End_BlueGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_End_BlueGB.TabIndex = 15;
+            this.Reactive_End_BlueGB.TabStop = false;
+            this.Reactive_End_BlueGB.Text = "Range of Blue";
+            // 
+            // Reactive_End_Blue_HighUD
+            // 
+            this.Reactive_End_Blue_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_End_Blue_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Blue_HighUD.Name = "Reactive_End_Blue_HighUD";
+            this.Reactive_End_Blue_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Blue_HighUD.TabIndex = 14;
+            this.Reactive_End_Blue_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Blue_HighUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Blue_LowUD
+            // 
+            this.Reactive_End_Blue_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_End_Blue_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Blue_LowUD.Name = "Reactive_End_Blue_LowUD";
+            this.Reactive_End_Blue_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Blue_LowUD.TabIndex = 8;
+            this.Reactive_End_Blue_LowUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Blue_HighButton
+            // 
+            this.Reactive_End_Blue_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Blue_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_End_Blue_HighButton.Name = "Reactive_End_Blue_HighButton";
+            this.Reactive_End_Blue_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Blue_HighButton.TabIndex = 13;
+            this.Reactive_End_Blue_HighButton.Tag = "";
+            this.Reactive_End_Blue_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_Blue_LowButton
+            // 
+            this.Reactive_End_Blue_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Blue_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_End_Blue_LowButton.Name = "Reactive_End_Blue_LowButton";
+            this.Reactive_End_Blue_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Blue_LowButton.TabIndex = 12;
+            this.Reactive_End_Blue_LowButton.Tag = "";
+            this.Reactive_End_Blue_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_GreenGB
+            // 
+            this.Reactive_End_GreenGB.Controls.Add(this.Reactive_End_Green_HighUD);
+            this.Reactive_End_GreenGB.Controls.Add(this.Reactive_End_Green_LowUD);
+            this.Reactive_End_GreenGB.Controls.Add(this.Reactive_End_Green_HighButton);
+            this.Reactive_End_GreenGB.Controls.Add(this.Reactive_End_Green_LowButton);
+            this.Reactive_End_GreenGB.Location = new System.Drawing.Point(12, 140);
+            this.Reactive_End_GreenGB.Name = "Reactive_End_GreenGB";
+            this.Reactive_End_GreenGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_End_GreenGB.TabIndex = 15;
+            this.Reactive_End_GreenGB.TabStop = false;
+            this.Reactive_End_GreenGB.Text = "Range of Green";
+            // 
+            // Reactive_End_Green_HighUD
+            // 
+            this.Reactive_End_Green_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_End_Green_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Green_HighUD.Name = "Reactive_End_Green_HighUD";
+            this.Reactive_End_Green_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Green_HighUD.TabIndex = 14;
+            this.Reactive_End_Green_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Green_HighUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Green_LowUD
+            // 
+            this.Reactive_End_Green_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_End_Green_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Green_LowUD.Name = "Reactive_End_Green_LowUD";
+            this.Reactive_End_Green_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Green_LowUD.TabIndex = 8;
+            this.Reactive_End_Green_LowUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Green_HighButton
+            // 
+            this.Reactive_End_Green_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Green_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_End_Green_HighButton.Name = "Reactive_End_Green_HighButton";
+            this.Reactive_End_Green_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Green_HighButton.TabIndex = 13;
+            this.Reactive_End_Green_HighButton.Tag = "";
+            this.Reactive_End_Green_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_Green_LowButton
+            // 
+            this.Reactive_End_Green_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Green_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_End_Green_LowButton.Name = "Reactive_End_Green_LowButton";
+            this.Reactive_End_Green_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Green_LowButton.TabIndex = 12;
+            this.Reactive_End_Green_LowButton.Tag = "";
+            this.Reactive_End_Green_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_RedGB
+            // 
+            this.Reactive_End_RedGB.Controls.Add(this.Reactive_End_Red_HighUD);
+            this.Reactive_End_RedGB.Controls.Add(this.Reactive_End_Red_LowUD);
+            this.Reactive_End_RedGB.Controls.Add(this.Reactive_End_Red_HighButton);
+            this.Reactive_End_RedGB.Controls.Add(this.Reactive_End_Red_LowButton);
+            this.Reactive_End_RedGB.Location = new System.Drawing.Point(12, 88);
+            this.Reactive_End_RedGB.Name = "Reactive_End_RedGB";
+            this.Reactive_End_RedGB.Size = new System.Drawing.Size(152, 48);
+            this.Reactive_End_RedGB.TabIndex = 12;
+            this.Reactive_End_RedGB.TabStop = false;
+            this.Reactive_End_RedGB.Text = "Range of Red";
+            // 
+            // Reactive_End_Red_HighUD
+            // 
+            this.Reactive_End_Red_HighUD.Location = new System.Drawing.Point(107, 19);
+            this.Reactive_End_Red_HighUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Red_HighUD.Name = "Reactive_End_Red_HighUD";
+            this.Reactive_End_Red_HighUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Red_HighUD.TabIndex = 14;
+            this.Reactive_End_Red_HighUD.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Red_HighUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Red_LowUD
+            // 
+            this.Reactive_End_Red_LowUD.Location = new System.Drawing.Point(6, 19);
+            this.Reactive_End_Red_LowUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.Reactive_End_Red_LowUD.Name = "Reactive_End_Red_LowUD";
+            this.Reactive_End_Red_LowUD.Size = new System.Drawing.Size(39, 20);
+            this.Reactive_End_Red_LowUD.TabIndex = 8;
+            this.Reactive_End_Red_LowUD.ValueChanged += new System.EventHandler(this.Reactive_End_UpdateColorBoxes);
+            // 
+            // Reactive_End_Red_HighButton
+            // 
+            this.Reactive_End_Red_HighButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Red_HighButton.Location = new System.Drawing.Point(79, 19);
+            this.Reactive_End_Red_HighButton.Name = "Reactive_End_Red_HighButton";
+            this.Reactive_End_Red_HighButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Red_HighButton.TabIndex = 13;
+            this.Reactive_End_Red_HighButton.Tag = "";
+            this.Reactive_End_Red_HighButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_Red_LowButton
+            // 
+            this.Reactive_End_Red_LowButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_Red_LowButton.Location = new System.Drawing.Point(51, 19);
+            this.Reactive_End_Red_LowButton.Name = "Reactive_End_Red_LowButton";
+            this.Reactive_End_Red_LowButton.Size = new System.Drawing.Size(22, 20);
+            this.Reactive_End_Red_LowButton.TabIndex = 12;
+            this.Reactive_End_Red_LowButton.Tag = "";
+            this.Reactive_End_Red_LowButton.UseVisualStyleBackColor = true;
+            // 
+            // Reactive_End_ColourButton
+            // 
+            this.Reactive_End_ColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reactive_End_ColourButton.Location = new System.Drawing.Point(118, 19);
+            this.Reactive_End_ColourButton.Name = "Reactive_End_ColourButton";
+            this.Reactive_End_ColourButton.Size = new System.Drawing.Size(46, 17);
+            this.Reactive_End_ColourButton.TabIndex = 11;
+            this.Reactive_End_ColourButton.Tag = "";
+            this.Reactive_End_ColourButton.UseVisualStyleBackColor = true;
+            this.Reactive_End_ColourButton.Click += new System.EventHandler(this.Reactive_ColourButton_ColourChange);
+            // 
+            // Reactive_End_RadioRandom
+            // 
+            this.Reactive_End_RadioRandom.AutoSize = true;
+            this.Reactive_End_RadioRandom.Location = new System.Drawing.Point(12, 65);
+            this.Reactive_End_RadioRandom.Name = "Reactive_End_RadioRandom";
+            this.Reactive_End_RadioRandom.Size = new System.Drawing.Size(98, 17);
+            this.Reactive_End_RadioRandom.TabIndex = 1;
+            this.Reactive_End_RadioRandom.Text = "Random Colour";
+            this.Reactive_End_RadioRandom.UseVisualStyleBackColor = true;
+            this.Reactive_End_RadioRandom.CheckedChanged += new System.EventHandler(this.Reactive_End_RadioCheckedChanged);
+            // 
+            // Reactive_End_RadioDefined
+            // 
+            this.Reactive_End_RadioDefined.AutoSize = true;
+            this.Reactive_End_RadioDefined.Location = new System.Drawing.Point(12, 19);
+            this.Reactive_End_RadioDefined.Name = "Reactive_End_RadioDefined";
+            this.Reactive_End_RadioDefined.Size = new System.Drawing.Size(95, 17);
+            this.Reactive_End_RadioDefined.TabIndex = 0;
+            this.Reactive_End_RadioDefined.Text = "Defined Colour";
+            this.Reactive_End_RadioDefined.UseVisualStyleBackColor = true;
+            this.Reactive_End_RadioDefined.CheckedChanged += new System.EventHandler(this.Reactive_End_RadioCheckedChanged);
+            // 
+            // ReactiveTab_Heatmap
+            // 
+            this.ReactiveTab_Heatmap.Controls.Add(this.Heatmap_ResetMaxButton);
+            this.ReactiveTab_Heatmap.Controls.Add(this.Heatmap_End_ColourLabel);
+            this.ReactiveTab_Heatmap.Controls.Add(this.Heatmap_Start_ColourLabel);
+            this.ReactiveTab_Heatmap.Controls.Add(this.Heatmap_End_ColourButton);
+            this.ReactiveTab_Heatmap.Controls.Add(this.Heatmap_Start_ColourButton);
+            this.ReactiveTab_Heatmap.Location = new System.Drawing.Point(4, 22);
+            this.ReactiveTab_Heatmap.Name = "ReactiveTab_Heatmap";
+            this.ReactiveTab_Heatmap.Size = new System.Drawing.Size(391, 288);
+            this.ReactiveTab_Heatmap.TabIndex = 1;
+            this.ReactiveTab_Heatmap.Text = "Heatmap";
+            this.ReactiveTab_Heatmap.UseVisualStyleBackColor = true;
+            // 
+            // Heatmap_ResetMaxButton
+            // 
+            this.Heatmap_ResetMaxButton.Location = new System.Drawing.Point(11, 249);
+            this.Heatmap_ResetMaxButton.Name = "Heatmap_ResetMaxButton";
+            this.Heatmap_ResetMaxButton.Size = new System.Drawing.Size(75, 23);
+            this.Heatmap_ResetMaxButton.TabIndex = 14;
+            this.Heatmap_ResetMaxButton.Text = "Reset";
+            this.Heatmap_ResetMaxButton.UseVisualStyleBackColor = true;
+            this.Heatmap_ResetMaxButton.Click += new System.EventHandler(this.Heatmap_ResetMaxButton_Click);
+            // 
+            // Heatmap_End_ColourLabel
+            // 
+            this.Heatmap_End_ColourLabel.AutoSize = true;
+            this.Heatmap_End_ColourLabel.Location = new System.Drawing.Point(24, 39);
+            this.Heatmap_End_ColourLabel.Name = "Heatmap_End_ColourLabel";
+            this.Heatmap_End_ColourLabel.Size = new System.Drawing.Size(49, 13);
+            this.Heatmap_End_ColourLabel.TabIndex = 15;
+            this.Heatmap_End_ColourLabel.Text = "Most Hit:";
+            this.Heatmap_End_ColourLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // Heatmap_Start_ColourLabel
+            // 
+            this.Heatmap_Start_ColourLabel.AutoSize = true;
+            this.Heatmap_Start_ColourLabel.Location = new System.Drawing.Point(21, 16);
+            this.Heatmap_Start_ColourLabel.Name = "Heatmap_Start_ColourLabel";
+            this.Heatmap_Start_ColourLabel.Size = new System.Drawing.Size(52, 13);
+            this.Heatmap_Start_ColourLabel.TabIndex = 14;
+            this.Heatmap_Start_ColourLabel.Text = "Least Hit:";
+            this.Heatmap_Start_ColourLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // Heatmap_End_ColourButton
+            // 
+            this.Heatmap_End_ColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Heatmap_End_ColourButton.Location = new System.Drawing.Point(79, 37);
+            this.Heatmap_End_ColourButton.Name = "Heatmap_End_ColourButton";
+            this.Heatmap_End_ColourButton.Size = new System.Drawing.Size(46, 17);
+            this.Heatmap_End_ColourButton.TabIndex = 13;
+            this.Heatmap_End_ColourButton.Tag = "";
+            this.Heatmap_End_ColourButton.UseVisualStyleBackColor = true;
+            this.Heatmap_End_ColourButton.Click += new System.EventHandler(this.Heatmap_ColourButton_ColourChange);
+            // 
+            // Heatmap_Start_ColourButton
+            // 
+            this.Heatmap_Start_ColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Heatmap_Start_ColourButton.Location = new System.Drawing.Point(79, 14);
+            this.Heatmap_Start_ColourButton.Name = "Heatmap_Start_ColourButton";
+            this.Heatmap_Start_ColourButton.Size = new System.Drawing.Size(46, 17);
+            this.Heatmap_Start_ColourButton.TabIndex = 12;
+            this.Heatmap_Start_ColourButton.Tag = "";
+            this.Heatmap_Start_ColourButton.UseVisualStyleBackColor = true;
+            this.Heatmap_Start_ColourButton.Click += new System.EventHandler(this.Heatmap_ColourButton_ColourChange);
             // 
             // ReactiveStopButton
             // 
-            this.ReactiveStopButton.Location = new System.Drawing.Point(323, 304);
+            this.ReactiveStopButton.Location = new System.Drawing.Point(323, 330);
             this.ReactiveStopButton.Name = "ReactiveStopButton";
             this.ReactiveStopButton.Size = new System.Drawing.Size(75, 23);
             this.ReactiveStopButton.TabIndex = 4;
             this.ReactiveStopButton.Text = "Stop";
             this.ReactiveStopButton.UseVisualStyleBackColor = true;
-            this.ReactiveStopButton.Click += new System.EventHandler(this.ReactiveStopButton_Click);
+            this.ReactiveStopButton.Click += new System.EventHandler(this.StopEffects);
             // 
             // ReactiveStartButton
             // 
-            this.ReactiveStartButton.Location = new System.Drawing.Point(7, 306);
+            this.ReactiveStartButton.Location = new System.Drawing.Point(7, 330);
             this.ReactiveStartButton.Name = "ReactiveStartButton";
             this.ReactiveStartButton.Size = new System.Drawing.Size(75, 23);
             this.ReactiveStartButton.TabIndex = 3;
@@ -1806,12 +2577,11 @@
             this.tabSettings.Controls.Add(this.SettingsRestoreLightingCheck);
             this.tabSettings.Controls.Add(this.SettingsKeyboardModelCB);
             this.tabSettings.Controls.Add(this.SettingsLaunchCueCheck);
-            this.tabSettings.Controls.Add(this.SettingsUSB3ModeCheck);
             this.tabSettings.Controls.Add(this.SettingsStartMinimizedCheck);
             this.tabSettings.Controls.Add(this.SettingsEffectsOnStartCheck);
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
-            this.tabSettings.Size = new System.Drawing.Size(696, 339);
+            this.tabSettings.Size = new System.Drawing.Size(696, 360);
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
@@ -1942,7 +2712,7 @@
             // 
             // SettingsBrowseCuePathButton
             // 
-            this.SettingsBrowseCuePathButton.Location = new System.Drawing.Point(13, 305);
+            this.SettingsBrowseCuePathButton.Location = new System.Drawing.Point(13, 334);
             this.SettingsBrowseCuePathButton.Name = "SettingsBrowseCuePathButton";
             this.SettingsBrowseCuePathButton.Size = new System.Drawing.Size(87, 23);
             this.SettingsBrowseCuePathButton.TabIndex = 55;
@@ -1952,7 +2722,7 @@
             // 
             // SettingsCuePathTextBox
             // 
-            this.SettingsCuePathTextBox.Location = new System.Drawing.Point(106, 307);
+            this.SettingsCuePathTextBox.Location = new System.Drawing.Point(106, 336);
             this.SettingsCuePathTextBox.Name = "SettingsCuePathTextBox";
             this.SettingsCuePathTextBox.Size = new System.Drawing.Size(580, 20);
             this.SettingsCuePathTextBox.TabIndex = 54;
@@ -1961,41 +2731,37 @@
             // SettingsCuePathLabel
             // 
             this.SettingsCuePathLabel.AutoSize = true;
-            this.SettingsCuePathLabel.Location = new System.Drawing.Point(103, 291);
+            this.SettingsCuePathLabel.Location = new System.Drawing.Point(103, 320);
             this.SettingsCuePathLabel.Name = "SettingsCuePathLabel";
             this.SettingsCuePathLabel.Size = new System.Drawing.Size(128, 13);
             this.SettingsCuePathLabel.TabIndex = 53;
             this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
-            // StaticMutedColourButton
-            // 
-            this.StaticMutedColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StaticMutedColourButton.Location = new System.Drawing.Point(91, 299);
-            this.StaticMutedColourButton.Name = "StaticMutedColourButton";
-            this.StaticMutedColourButton.Size = new System.Drawing.Size(80, 23);
-            this.StaticMutedColourButton.TabIndex = 68;
-            this.StaticMutedColourButton.Tag = "0";
-            this.StaticMutedColourButton.UseVisualStyleBackColor = true;
-            // 
-            // StaticMutedColourLabel
-            // 
-            this.StaticMutedColourLabel.AutoSize = true;
-            this.StaticMutedColourLabel.Location = new System.Drawing.Point(12, 304);
-            this.StaticMutedColourLabel.Name = "StaticMutedColourLabel";
-            this.StaticMutedColourLabel.Size = new System.Drawing.Size(73, 13);
-            this.StaticMutedColourLabel.TabIndex = 69;
-            this.StaticMutedColourLabel.Text = "Muted Colour:";
-            // 
             // MuteCheckTimer
             // 
             this.MuteCheckTimer.Tick += new System.EventHandler(this.MuteCheckTimer_Tick);
+            // 
+            // tsmHeatmap
+            // 
+            this.tsmHeatmap.Name = "tsmHeatmap";
+            this.tsmHeatmap.Size = new System.Drawing.Size(172, 22);
+            this.tsmHeatmap.Text = "Start Heatmap";
+            this.tsmHeatmap.Click += new System.EventHandler(this.ReactiveStartButton_LaunchFromRightClickMenu);
+            // 
+            // tsmSpectroAmplitudeSlider
+            // 
+            this.tsmSpectroAmplitudeSlider.Maximum = 10;
+            this.tsmSpectroAmplitudeSlider.Minimum = 0;
+            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
+            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
+            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(724, 406);
+            this.ClientSize = new System.Drawing.Size(724, 427);
             this.Controls.Add(this.DebugTestModeButton);
             this.Controls.Add(this.DebugTesterUD);
             this.Controls.Add(this.DebugStatusLog);
@@ -2058,10 +2824,38 @@
             ((System.ComponentModel.ISupportInitialize)(this.Effect_Float_Start_Red_LowUD)).EndInit();
             this.EffectTabControl.ResumeLayout(false);
             this.tabStatic.ResumeLayout(false);
-            this.tabStatic.PerformLayout();
             this.StaticMouseLightsGB.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).EndInit();
             this.tabReactive.ResumeLayout(false);
+            this.ReactiveTabControl.ResumeLayout(false);
+            this.ReactiveTab_Reactive.ResumeLayout(false);
+            this.ReactiveTab_Reactive.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_DurationUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_FrequencyUD)).EndInit();
+            this.Reactive_StartGB.ResumeLayout(false);
+            this.Reactive_StartGB.PerformLayout();
+            this.Reactive_Start_BlueGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Blue_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Blue_LowUD)).EndInit();
+            this.Reactive_Start_GreenGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Green_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Green_LowUD)).EndInit();
+            this.Reactive_Start_RedGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Red_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_Start_Red_LowUD)).EndInit();
+            this.Reactive_EndGB.ResumeLayout(false);
+            this.Reactive_EndGB.PerformLayout();
+            this.Reactive_End_BlueGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Blue_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Blue_LowUD)).EndInit();
+            this.Reactive_End_GreenGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Green_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Green_LowUD)).EndInit();
+            this.Reactive_End_RedGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Red_HighUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Reactive_End_Red_LowUD)).EndInit();
+            this.ReactiveTab_Heatmap.ResumeLayout(false);
+            this.ReactiveTab_Heatmap.PerformLayout();
             this.tabSettings.ResumeLayout(false);
             this.tabSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsIdleTimeUD)).EndInit();
@@ -2104,7 +2898,6 @@
         private System.Windows.Forms.ComboBox SpectroBgEffectCB;
         private System.Windows.Forms.Button SpectroColorBg;
         private System.Windows.Forms.PictureBox GraphicsPictureBox;
-        private System.Windows.Forms.CheckBox SettingsUSB3ModeCheck;
         private System.Windows.Forms.CheckBox SpectroShowGraphicsCheck;
         private System.Windows.Forms.Label SpectroWidthLabel;
         private System.Windows.Forms.NumericUpDown SpectroBgWidth;
@@ -2165,8 +2958,8 @@
         private System.Windows.Forms.Button Effect_Float_Start_Red_HighButton;
         private System.Windows.Forms.Button Effect_Float_Start_Red_LowButton;
         private System.Windows.Forms.Button Effect_Float_Start_ColourButton;
-        private System.Windows.Forms.RadioButton Effect_Float_Start_Radio2;
-        private System.Windows.Forms.RadioButton Effect_Float_Start_Radio1;
+        private System.Windows.Forms.RadioButton Effect_Float_Start_RadioRandom;
+        private System.Windows.Forms.RadioButton Effect_Float_Start_RadioDefined;
         private System.Windows.Forms.GroupBox Effect_Float_EndGB;
         private System.Windows.Forms.GroupBox Effect_Float_End_BlueGB;
         private System.Windows.Forms.NumericUpDown Effect_Float_End_Blue_HighUD;
@@ -2184,8 +2977,8 @@
         private System.Windows.Forms.Button Effect_Float_End_Red_HighButton;
         private System.Windows.Forms.Button Effect_Float_End_Red_LowButton;
         private System.Windows.Forms.Button Effect_Float_End_ColourButton;
-        private System.Windows.Forms.RadioButton Effect_Float_End_Radio2;
-        private System.Windows.Forms.RadioButton Effect_Float_End_Radio1;
+        private System.Windows.Forms.RadioButton Effect_Float_End_RadioRandom;
+        private System.Windows.Forms.RadioButton Effect_Float_End_RadioDefined;
         private System.Windows.Forms.Button EffectsStopButton;
         private System.Windows.Forms.ToolStripMenuItem tsmShowStatic;
         private System.Windows.Forms.ToolStripMenuItem tsmStartEffects;
@@ -2213,14 +3006,69 @@
         private System.Windows.Forms.TabControl EffectTabControl;
         private System.Windows.Forms.TabPage EffectTab_RandomLights;
         private System.Windows.Forms.TabPage EffectTab_Rainfall;
-        private System.Windows.Forms.Button ReactiveColor;
         private System.Windows.Forms.Button ReactiveStopButton;
         private System.Windows.Forms.Button ReactiveStartButton;
         private System.Windows.Forms.TabPage tabReactive;
         private System.Windows.Forms.CheckBox AnimationsUseStaticLights;
-        private System.Windows.Forms.Label StaticMutedColourLabel;
         private System.Windows.Forms.Button StaticMutedColourButton;
         private System.Windows.Forms.Timer MuteCheckTimer;
+        private System.Windows.Forms.TabControl ReactiveTabControl;
+        private System.Windows.Forms.TabPage ReactiveTab_Reactive;
+        private System.Windows.Forms.GroupBox Reactive_StartGB;
+        private System.Windows.Forms.RadioButton Reactive_Start_RadioRainbow;
+        private System.Windows.Forms.GroupBox Reactive_Start_BlueGB;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Blue_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Blue_LowUD;
+        private System.Windows.Forms.Button Reactive_Start_Blue_HighButton;
+        private System.Windows.Forms.Button Reactive_Start_Blue_LowButton;
+        private System.Windows.Forms.GroupBox Reactive_Start_GreenGB;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Green_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Green_LowUD;
+        private System.Windows.Forms.Button Reactive_Start_Green_HighButton;
+        private System.Windows.Forms.Button Reactive_Start_Green_LowButton;
+        private System.Windows.Forms.GroupBox Reactive_Start_RedGB;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Red_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_Start_Red_LowUD;
+        private System.Windows.Forms.Button Reactive_Start_Red_HighButton;
+        private System.Windows.Forms.Button Reactive_Start_Red_LowButton;
+        private System.Windows.Forms.Button Reactive_Start_ColourButton;
+        private System.Windows.Forms.RadioButton Reactive_Start_RadioRandom;
+        private System.Windows.Forms.RadioButton Reactive_Start_RadioDefined;
+        private System.Windows.Forms.GroupBox Reactive_EndGB;
+        private System.Windows.Forms.GroupBox Reactive_End_BlueGB;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Blue_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Blue_LowUD;
+        private System.Windows.Forms.Button Reactive_End_Blue_HighButton;
+        private System.Windows.Forms.Button Reactive_End_Blue_LowButton;
+        private System.Windows.Forms.GroupBox Reactive_End_GreenGB;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Green_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Green_LowUD;
+        private System.Windows.Forms.Button Reactive_End_Green_HighButton;
+        private System.Windows.Forms.Button Reactive_End_Green_LowButton;
+        private System.Windows.Forms.GroupBox Reactive_End_RedGB;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Red_HighUD;
+        private System.Windows.Forms.NumericUpDown Reactive_End_Red_LowUD;
+        private System.Windows.Forms.Button Reactive_End_Red_HighButton;
+        private System.Windows.Forms.Button Reactive_End_Red_LowButton;
+        private System.Windows.Forms.Button Reactive_End_ColourButton;
+        private System.Windows.Forms.RadioButton Reactive_End_RadioRandom;
+        private System.Windows.Forms.RadioButton Reactive_End_RadioDefined;
+        private System.Windows.Forms.TabPage ReactiveTab_Heatmap;
+        private System.Windows.Forms.RadioButton Reactive_End_RadioOriginal;
+        private System.Windows.Forms.Button StaticNumColourButton;
+        private System.Windows.Forms.Button StaticScrollColourButton;
+        private System.Windows.Forms.Button StaticCapsColourButton;
+        private System.Windows.Forms.Label Reactive_FrequencyLabel;
+        private System.Windows.Forms.Label Reactive_DurationLabel;
+        private System.Windows.Forms.NumericUpDown Reactive_DurationUD;
+        private System.Windows.Forms.NumericUpDown Reactive_FrequencyUD;
+        private System.Windows.Forms.Label Heatmap_End_ColourLabel;
+        private System.Windows.Forms.Label Heatmap_Start_ColourLabel;
+        private System.Windows.Forms.Button Heatmap_End_ColourButton;
+        private System.Windows.Forms.Button Heatmap_Start_ColourButton;
+        private System.Windows.Forms.Button Heatmap_ResetMaxButton;
+        private System.Windows.Forms.ToolStripMenuItem tsmReactive;
+        private System.Windows.Forms.ToolStripMenuItem tsmHeatmap;
 
     }
 }

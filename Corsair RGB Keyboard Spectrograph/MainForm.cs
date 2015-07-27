@@ -35,14 +35,17 @@ namespace RGBKeyboardSpectrograph
         double keyboardImageScale = 0.6;
         int StaticCopyPasteMode = 0;
         bool StaticUnsavedChanges = false;
-        int[] KeyIDArray;
 
         Thread workerThread = Program.newWorker;
         Thread idleWatcherThread = Program.idleThread;
-        
+
+        public Reactive_SingleLight ReactiveThread;
+        public Reactive_Heatmap HeatmapThread;
+                
         public MainForm()
         {
             InitializeComponent();
+            // Allow transparent Button BackColors
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
@@ -56,7 +59,10 @@ namespace RGBKeyboardSpectrograph
             UpdateStatusMessage.ShowStatusMessage(2, "Closing threads...");
           
             if (workerThread != null) {
+                // Ask the thread to destroy itself
                 Program.RunKeyboardThread = 0;
+
+                // If the thread is busy, wait for it to end
                 while (workerThread.IsAlive)
                 {
                     Application.DoEvents();
@@ -65,7 +71,10 @@ namespace RGBKeyboardSpectrograph
             };
             if (idleWatcherThread != null)
             {
+                // Ask the thread to destroy itself
                 Program.WatchForInactivity = false;
+
+                // If the thread is busy, wait for it to end
                 while (idleWatcherThread.IsAlive)
                 {
                     Application.DoEvents();
@@ -73,13 +82,15 @@ namespace RGBKeyboardSpectrograph
                 }
             };
 
-            if (Program.SettingsRestoreOnExit == true)
+            // Restore keyboard's on-board lighting effects
+            if (Program.SettingsRestoreLightingOnExit == true)
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Restoring Keyboard Lighting");
                 KeyboardWriter restoreLightingWriter = new KeyboardWriter(true);
                 Thread.Sleep(500);
             }
 
+            // Launch CUE
             if (Program.SettingLaunchCueOnExit == true)
             {
                 try
@@ -92,9 +103,8 @@ namespace RGBKeyboardSpectrograph
 
             Application.DoEvents();
 
-            // Destroy custom handles
+            // Destroy thread-safe handles
             UpdateStatusMessage.NewMsg -= UpdateStatusMessage_NewMsg;
-            UpdateWorkerThread.NewAct -= UpdateWorker_NewAct;
             UpdateGraphicOutput.NewOut -= UpdateGraphicOutput_NewOut;
             InactivityStatusChanged.DoAction -= InactivityStatusChanged_Action;
 
@@ -121,7 +131,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.spectroCaptureDevice = SpectroWasapiDevicesCB.Text;
 
             // Effects
-            if (Effect_Float_Start_Radio1.Checked == true) { Properties.Settings.Default.Effect_RandomLights_Start_Mode = 1; }
+            if (Effect_Float_Start_RadioDefined.Checked == true) { Properties.Settings.Default.Effect_RandomLights_Start_Mode = 1; }
             else { Properties.Settings.Default.Effect_RandomLights_Start_Mode = 2; }
             Properties.Settings.Default.Effect_RandomLights_Start_DefinedColor = Effect_Float_Start_ColourButton.BackColor;
             Properties.Settings.Default.Effect_RandomLights_Start_CLow_Red = Program.EfColors.SRandRLow;
@@ -131,7 +141,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Green = Program.EfColors.SRandGHigh;
             Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Blue = Program.EfColors.SRandBHigh;
 
-            if (Effect_Float_End_Radio1.Checked == true) { Properties.Settings.Default.Effect_RandomLights_End_Mode = 1; }
+            if (Effect_Float_End_RadioDefined.Checked == true) { Properties.Settings.Default.Effect_RandomLights_End_Mode = 1; }
             else { Properties.Settings.Default.Effect_RandomLights_End_Mode = 2; }
             Properties.Settings.Default.Effect_RandomLights_End_DefinedColor = Effect_Float_End_ColourButton.BackColor;
             Properties.Settings.Default.Effect_RandomLights_End_CLow_Red = Program.EfColors.ERandRLow;
@@ -149,6 +159,35 @@ namespace RGBKeyboardSpectrograph
             // Static
             Properties.Settings.Default.appLastUsedProfile = Program.SettingsLastUsedProfile;
 
+            // Reactive 
+            if (Reactive_Start_RadioDefined.Checked == true) { Properties.Settings.Default.Reactive_Start_Mode = 0; }
+            else if (Reactive_Start_RadioRainbow.Checked == true) {Properties.Settings.Default.Reactive_Start_Mode = 1; }
+            else { Properties.Settings.Default.Reactive_Start_Mode = 2; }
+            Properties.Settings.Default.Reactive_Start_DefinedColor = Reactive_Start_ColourButton.BackColor;
+            Properties.Settings.Default.Reactive_Start_CLow_Red = Program.ReactColors.SRandRLow;
+            Properties.Settings.Default.Reactive_Start_CLow_Green = Program.ReactColors.SRandGLow;
+            Properties.Settings.Default.Reactive_Start_CLow_Blue = Program.ReactColors.SRandBLow;
+            Properties.Settings.Default.Reactive_Start_CHigh_Red = Program.ReactColors.SRandRHigh;
+            Properties.Settings.Default.Reactive_Start_CHigh_Green = Program.ReactColors.SRandGHigh;
+            Properties.Settings.Default.Reactive_Start_CHigh_Blue = Program.ReactColors.SRandBHigh;
+
+            if (Reactive_End_RadioDefined.Checked == true) { Properties.Settings.Default.Reactive_End_Mode = 0; }
+            else if (Reactive_End_RadioOriginal.Checked == true) { Properties.Settings.Default.Reactive_End_Mode = 1; }
+            else { Properties.Settings.Default.Reactive_End_Mode = 2; }
+            Properties.Settings.Default.Reactive_End_DefinedColor = Reactive_End_ColourButton.BackColor;
+            Properties.Settings.Default.Reactive_End_CLow_Red = Program.ReactColors.ERandRLow;
+            Properties.Settings.Default.Reactive_End_CLow_Green = Program.ReactColors.ERandGLow;
+            Properties.Settings.Default.Reactive_End_CLow_Blue = Program.ReactColors.ERandBLow;
+            Properties.Settings.Default.Reactive_End_CHigh_Red = Program.ReactColors.ERandRHigh;
+            Properties.Settings.Default.Reactive_End_CHigh_Green = Program.ReactColors.ERandGHigh;
+            Properties.Settings.Default.Reactive_End_CHigh_Blue = Program.ReactColors.ERandBHigh;
+
+            Properties.Settings.Default.Reactive_Duration = (int)Reactive_DurationUD.Value;
+            Properties.Settings.Default.Reactive_Delay = (int)Reactive_FrequencyUD.Value;
+
+            Properties.Settings.Default.Heatmap_StartColour = Heatmap_Start_ColourButton.BackColor;
+            Properties.Settings.Default.Heatmap_EndColour = Heatmap_End_ColourButton.BackColor;
+
             // Settings
             Properties.Settings.Default.settingKeyboardModel = SettingsKeyboardModelCB.Text;
             Properties.Settings.Default.settingKeyboardLayout = SettingsKeyboardLayoutCB.Text;
@@ -157,7 +196,6 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.debugLogLevel = (int)DebugLogLevelUD.Value;
 
             Properties.Settings.Default.settingMinimizeToTray = SettingsMinimizeToTrayCheck.Checked;
-            Properties.Settings.Default.settingUsb3Mode = SettingsUSB3ModeCheck.Checked;
             Properties.Settings.Default.settingStartMinimized = SettingsStartMinimizedCheck.Checked;
             Properties.Settings.Default.settingSpectroOnStart = SettingsSpectroOnStartCheck.Checked;
             Properties.Settings.Default.settingEffectsOnStart = SettingsEffectsOnStartCheck.Checked;
@@ -179,6 +217,7 @@ namespace RGBKeyboardSpectrograph
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+            // Minimize to tray
             if (this.WindowState == FormWindowState.Minimized && SettingsMinimizeToTrayCheck.Checked == true)
             {
                 notifyIcon.Visible = true;
@@ -190,9 +229,8 @@ namespace RGBKeyboardSpectrograph
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Thread-safe method handlers
+            // Thread-safe handles
             UpdateStatusMessage.NewMsg += UpdateStatusMessage_NewMsg;
-            UpdateWorkerThread.NewAct += UpdateWorker_NewAct;
             UpdateGraphicOutput.NewOut += UpdateGraphicOutput_NewOut;
             InactivityStatusChanged.DoAction += InactivityStatusChanged_Action; 
 
@@ -205,24 +243,6 @@ namespace RGBKeyboardSpectrograph
             // Start manipulating controls and loading saved values
             UpdateStatusMessage.ShowStatusMessage(1, "Populating Controls");
             if (!Program.DevMode) { notifyIcon.Visible = false; };
-
-            #region KeyIDArray Population
-            KeyIDArray = new int[] {27, 192, 9, 20, 160, 162, 123, 187, -1, 103,
-                                    2221, -1, 112, 49, 81, 65, -1,  91, 44, -2,
-                                    173, 104, -1, -1, 113, 50, 87, 83, 90, 164,
-                                    145, 8, 178, 105, -1, -1, 114, 51, 69, 68,
-                                    88, -2, 19, 46, 177, -2, -1, -1, 115, 52,
-                                    82, 70, 67, 32, 45, 35, 179, 100, -1, -1,
-                                    116, 53, 84, 71, 86, -2, 36, 34, 176, 101,
-                                    -1, -1, 117, 54, 89, 72, 66, -2, 33, 161,
-                                    144, 102, -1, -1, 118, 55, 85, 74, 78, 165,
-                                    221, 163, 111, 97, -1, -1, 119, 56, 73, 75,
-                                    77, 92, 220, 38, 106, 98, -1, -1, 120, 57, 
-                                    79, 76, 188, 93, -2, 37, 109, 99, -1, -1,
-                                    121, 48, 80, 186, 190, -2, 13, 40, 107, 96, 
-                                    -2, -1, 122, 189, 219, 222, 191, -1, -2, 39,
-                                    14, 110, -2, -1, -2};
-            #endregion
 
             #region Populate Combo Boxes
 
@@ -252,10 +272,9 @@ namespace RGBKeyboardSpectrograph
             SettingsIdleModeCB.Items.Add("Random Lights");
             SettingsIdleModeCB.Items.Add("Static Profile");
 
-
             #endregion Pupulate Combo Boxes
 
-            // Get Input Device list
+            // Get audio input device list
             var deviceEnum = new MMDeviceEnumerator();
             var devices = deviceEnum.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).ToList();
             SpectroWasapiDevicesCB.DataSource = devices;
@@ -265,7 +284,7 @@ namespace RGBKeyboardSpectrograph
             // are first loaded to variables to help manipulate them.
             UpdateStatusMessage.ShowStatusMessage(1, "Loading Settings");
 
-            #region Spectro
+            #region Settings: Spectro
 
             string settingBackgroundColorType = Properties.Settings.Default.spectroColorBackgroundType;
             if (SpectroBgEffectCB.FindStringExact(settingBackgroundColorType) > -1) { SpectroBgEffectCB.SelectedIndex = SpectroBgEffectCB.FindStringExact(settingBackgroundColorType); }
@@ -345,96 +364,181 @@ namespace RGBKeyboardSpectrograph
 
             tsmStartSpectro.DropDownItems.Add(tsmSpectroAmplitude);
 
-            #endregion Spectro
+            #endregion Settings: Spectro
 
-            #region Effects
+            #region Settings: Effects
 
-        #region Effects - Random Lights - Start
-            int setting_Eff_RL_S_Mode = Properties.Settings.Default.Effect_RandomLights_Start_Mode;
-            if (setting_Eff_RL_S_Mode == 1) { Effect_Float_Start_Radio1.Checked = true; }
-            else {Effect_Float_Start_Radio2.Checked = true; }
+            #region Effects - Random Lights - Start
+            int setting_Effect_RandomLights_S_Mode = Properties.Settings.Default.Effect_RandomLights_Start_Mode;
+            if (setting_Effect_RandomLights_S_Mode == 1) { Effect_Float_Start_RadioDefined.Checked = true; }
+            else {Effect_Float_Start_RadioRandom.Checked = true; }
 
             Effect_Float_Start_ColourButton.BackColor = Properties.Settings.Default.Effect_RandomLights_Start_DefinedColor;
 
-            int setting_Eff_RL_S_CLow_Red = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Red;
-            if (setting_Eff_RL_S_CLow_Red < 0 || setting_Eff_RL_S_CLow_Red > 255) { setting_Eff_RL_S_CLow_Red = 0; };
-            Effect_Float_Start_Red_LowUD.Value = setting_Eff_RL_S_CLow_Red;
+            int setting_Effect_RandomLights_S_CLow_Red = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Red;
+            if (setting_Effect_RandomLights_S_CLow_Red < 0 || setting_Effect_RandomLights_S_CLow_Red > 255) { setting_Effect_RandomLights_S_CLow_Red = 0; };
+            Effect_Float_Start_Red_LowUD.Value = setting_Effect_RandomLights_S_CLow_Red;
 
-            int setting_Eff_RL_S_CLow_Green = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Green;
-            if (setting_Eff_RL_S_CLow_Green < 0 || setting_Eff_RL_S_CLow_Green > 255) { setting_Eff_RL_S_CLow_Green = 0; };
-            Effect_Float_Start_Green_LowUD.Value = setting_Eff_RL_S_CLow_Green;
+            int setting_Effect_RandomLights_S_CLow_Green = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Green;
+            if (setting_Effect_RandomLights_S_CLow_Green < 0 || setting_Effect_RandomLights_S_CLow_Green > 255) { setting_Effect_RandomLights_S_CLow_Green = 0; };
+            Effect_Float_Start_Green_LowUD.Value = setting_Effect_RandomLights_S_CLow_Green;
 
-            int setting_Eff_RL_S_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Blue;
-            if (setting_Eff_RL_S_CLow_Blue < 0 || setting_Eff_RL_S_CLow_Blue > 255) { setting_Eff_RL_S_CLow_Blue = 0; };
-            Effect_Float_Start_Blue_LowUD.Value = setting_Eff_RL_S_CLow_Blue;
+            int setting_Effect_RandomLights_S_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CLow_Blue;
+            if (setting_Effect_RandomLights_S_CLow_Blue < 0 || setting_Effect_RandomLights_S_CLow_Blue > 255) { setting_Effect_RandomLights_S_CLow_Blue = 0; };
+            Effect_Float_Start_Blue_LowUD.Value = setting_Effect_RandomLights_S_CLow_Blue;
 
-            int setting_Eff_RL_S_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Red;
-            if (setting_Eff_RL_S_CHigh_Red < 0 || setting_Eff_RL_S_CHigh_Red > 255) { setting_Eff_RL_S_CHigh_Red = 255; };
-            Effect_Float_Start_Red_HighUD.Value = setting_Eff_RL_S_CHigh_Red;
+            int setting_Effect_RandomLights_S_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Red;
+            if (setting_Effect_RandomLights_S_CHigh_Red < 0 || setting_Effect_RandomLights_S_CHigh_Red > 255) { setting_Effect_RandomLights_S_CHigh_Red = 255; };
+            Effect_Float_Start_Red_HighUD.Value = setting_Effect_RandomLights_S_CHigh_Red;
 
-            int setting_Eff_RL_S_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Green;
-            if (setting_Eff_RL_S_CHigh_Green < 0 || setting_Eff_RL_S_CHigh_Green > 255) { setting_Eff_RL_S_CHigh_Green = 255; };
-            Effect_Float_Start_Green_HighUD.Value = setting_Eff_RL_S_CHigh_Green;
+            int setting_Effect_RandomLights_S_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Green;
+            if (setting_Effect_RandomLights_S_CHigh_Green < 0 || setting_Effect_RandomLights_S_CHigh_Green > 255) { setting_Effect_RandomLights_S_CHigh_Green = 255; };
+            Effect_Float_Start_Green_HighUD.Value = setting_Effect_RandomLights_S_CHigh_Green;
 
-            int setting_Eff_RL_S_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Blue;
-            if (setting_Eff_RL_S_CHigh_Blue < 0 || setting_Eff_RL_S_CHigh_Blue > 255) { setting_Eff_RL_S_CHigh_Blue = 255; };
-            Effect_Float_Start_Blue_HighUD.Value = setting_Eff_RL_S_CHigh_Blue;
+            int setting_Effect_RandomLights_S_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_Start_CHigh_Blue;
+            if (setting_Effect_RandomLights_S_CHigh_Blue < 0 || setting_Effect_RandomLights_S_CHigh_Blue > 255) { setting_Effect_RandomLights_S_CHigh_Blue = 255; };
+            Effect_Float_Start_Blue_HighUD.Value = setting_Effect_RandomLights_S_CHigh_Blue;
 
         #endregion Effects - Random Lights - Start
 
-        #region Effects - Random Lights - End
-            int setting_Eff_RL_E_Mode = Properties.Settings.Default.Effect_RandomLights_End_Mode;
-            if (setting_Eff_RL_E_Mode == 2) { Effect_Float_End_Radio2.Checked = true; }
-            else { Effect_Float_End_Radio1.Checked = true; }
+            #region Effects - Random Lights - End
+            int setting_Effect_RandomLights_E_Mode = Properties.Settings.Default.Effect_RandomLights_End_Mode;
+            if (setting_Effect_RandomLights_E_Mode == 2) { Effect_Float_End_RadioRandom.Checked = true; }
+            else { Effect_Float_End_RadioDefined.Checked = true; }
 
             Effect_Float_End_ColourButton.BackColor = Properties.Settings.Default.Effect_RandomLights_End_DefinedColor;
 
-            int setting_Eff_RL_E_CLow_Red = Properties.Settings.Default.Effect_RandomLights_End_CLow_Red;
-            if (setting_Eff_RL_E_CLow_Red < 0 || setting_Eff_RL_E_CLow_Red > 255) { setting_Eff_RL_E_CLow_Red = 0; };
-            Effect_Float_End_Red_LowUD.Value = setting_Eff_RL_E_CLow_Red;
+            int setting_Effect_RandomLights_E_CLow_Red = Properties.Settings.Default.Effect_RandomLights_End_CLow_Red;
+            if (setting_Effect_RandomLights_E_CLow_Red < 0 || setting_Effect_RandomLights_E_CLow_Red > 255) { setting_Effect_RandomLights_E_CLow_Red = 0; };
+            Effect_Float_End_Red_LowUD.Value = setting_Effect_RandomLights_E_CLow_Red;
 
-            int setting_Eff_RL_E_CLow_Green = Properties.Settings.Default.Effect_RandomLights_End_CLow_Green;
-            if (setting_Eff_RL_E_CLow_Green < 0 || setting_Eff_RL_E_CLow_Green > 255) { setting_Eff_RL_E_CLow_Green = 0; };
-            Effect_Float_End_Green_LowUD.Value = setting_Eff_RL_E_CLow_Green;
+            int setting_Effect_RandomLights_E_CLow_Green = Properties.Settings.Default.Effect_RandomLights_End_CLow_Green;
+            if (setting_Effect_RandomLights_E_CLow_Green < 0 || setting_Effect_RandomLights_E_CLow_Green > 255) { setting_Effect_RandomLights_E_CLow_Green = 0; };
+            Effect_Float_End_Green_LowUD.Value = setting_Effect_RandomLights_E_CLow_Green;
 
-            int setting_Eff_RL_E_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_End_CLow_Blue;
-            if (setting_Eff_RL_E_CLow_Blue < 0 || setting_Eff_RL_E_CLow_Blue > 255) { setting_Eff_RL_E_CLow_Blue = 0; };
-            Effect_Float_End_Blue_LowUD.Value = setting_Eff_RL_E_CLow_Blue;
+            int setting_Effect_RandomLights_E_CLow_Blue = Properties.Settings.Default.Effect_RandomLights_End_CLow_Blue;
+            if (setting_Effect_RandomLights_E_CLow_Blue < 0 || setting_Effect_RandomLights_E_CLow_Blue > 255) { setting_Effect_RandomLights_E_CLow_Blue = 0; };
+            Effect_Float_End_Blue_LowUD.Value = setting_Effect_RandomLights_E_CLow_Blue;
 
-            int setting_Eff_RL_E_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Red;
-            if (setting_Eff_RL_E_CHigh_Red < 0 || setting_Eff_RL_E_CHigh_Red > 255) { setting_Eff_RL_E_CHigh_Red = 255; };
-            Effect_Float_End_Red_HighUD.Value = setting_Eff_RL_E_CHigh_Red;
+            int setting_Effect_RandomLights_E_CHigh_Red = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Red;
+            if (setting_Effect_RandomLights_E_CHigh_Red < 0 || setting_Effect_RandomLights_E_CHigh_Red > 255) { setting_Effect_RandomLights_E_CHigh_Red = 255; };
+            Effect_Float_End_Red_HighUD.Value = setting_Effect_RandomLights_E_CHigh_Red;
 
-            int setting_Eff_RL_E_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Green;
-            if (setting_Eff_RL_E_CHigh_Green < 0 || setting_Eff_RL_E_CHigh_Green > 255) { setting_Eff_RL_E_CHigh_Green = 255; };
-            Effect_Float_End_Green_HighUD.Value = setting_Eff_RL_E_CHigh_Green;
+            int setting_Effect_RandomLights_E_CHigh_Green = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Green;
+            if (setting_Effect_RandomLights_E_CHigh_Green < 0 || setting_Effect_RandomLights_E_CHigh_Green > 255) { setting_Effect_RandomLights_E_CHigh_Green = 255; };
+            Effect_Float_End_Green_HighUD.Value = setting_Effect_RandomLights_E_CHigh_Green;
 
-            int setting_Eff_RL_E_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Blue;
-            if (setting_Eff_RL_E_CHigh_Blue < 0 || setting_Eff_RL_E_CHigh_Blue > 255) { setting_Eff_RL_E_CHigh_Blue = 255; };
-            Effect_Float_End_Blue_HighUD.Value = setting_Eff_RL_E_CHigh_Blue;
+            int setting_Effect_RandomLights_E_CHigh_Blue = Properties.Settings.Default.Effect_RandomLights_End_CHigh_Blue;
+            if (setting_Effect_RandomLights_E_CHigh_Blue < 0 || setting_Effect_RandomLights_E_CHigh_Blue > 255) { setting_Effect_RandomLights_E_CHigh_Blue = 255; };
+            Effect_Float_End_Blue_HighUD.Value = setting_Effect_RandomLights_E_CHigh_Blue;
 
         #endregion Effects - Random Lights - End
 
             Effect_Float_DurationUD.Value = Properties.Settings.Default.Effect_RandomLights_Duration;
             Effect_Float_FrequencyUD.Value = Properties.Settings.Default.Effect_RandomLights_Delay;
 
-            Eff_RL_Start_UpdateColorBoxes(null, null);
-            Eff_RL_End_UpdateColorBoxes(null, null);
-            Eff_RL_Start_RadioCheckedChanged(null, null);
-            Eff_RL_End_RadioCheckedChanged(null, null);
+            Effect_RandomLights_Start_UpdateColorBoxes(null, null);
+            Effect_RandomLights_End_UpdateColorBoxes(null, null);
+            Effects_RandomLights_Start_RadioCheckedChanged(null, null);
+            Effects_RandomLights_End_RadioCheckedChanged(null, null);
 
             AnimationsUseStaticLights.Checked = Properties.Settings.Default.EffectUseStaticKeys;
 
-        #endregion Effects
+            #endregion Settings: Effects
 
-            #region Static
+            #region Settings: Static
 
             Program.SettingsLastUsedProfile = Properties.Settings.Default.appLastUsedProfile;
             StaticKeysLoadProfileList();
 
-            #endregion Static
+            #endregion Settings: Static
 
-            #region Settings
+            #region Settings: Reactive
+
+            #region Reactive - Start
+            int setting_Reactive_S_Mode = Properties.Settings.Default.Reactive_Start_Mode;
+            if (setting_Reactive_S_Mode == 0) { Reactive_Start_RadioDefined.Checked = true; }
+            else if (setting_Reactive_S_Mode == 1) { Reactive_Start_RadioRandom.Checked = true; } //This should be RaidoRainbow, but we don't want users selecting it
+            else if (setting_Reactive_S_Mode == 2) { Reactive_Start_RadioRandom.Checked = true; }
+            else { Reactive_Start_RadioRandom.Checked = true; }
+
+            Reactive_Start_ColourButton.BackColor = Properties.Settings.Default.Reactive_Start_DefinedColor;
+
+            int setting_Reactive_S_CLow_Red = Properties.Settings.Default.Reactive_Start_CLow_Red;
+            if (setting_Reactive_S_CLow_Red < 0 || setting_Reactive_S_CLow_Red > 255) { setting_Reactive_S_CLow_Red = 0; };
+            Reactive_Start_Red_LowUD.Value = setting_Reactive_S_CLow_Red;
+
+            int setting_Reactive_S_CLow_Green = Properties.Settings.Default.Reactive_Start_CLow_Green;
+            if (setting_Reactive_S_CLow_Green < 0 || setting_Reactive_S_CLow_Green > 255) { setting_Reactive_S_CLow_Green = 0; };
+            Reactive_Start_Green_LowUD.Value = setting_Reactive_S_CLow_Green;
+
+            int setting_Reactive_S_CLow_Blue = Properties.Settings.Default.Reactive_Start_CLow_Blue;
+            if (setting_Reactive_S_CLow_Blue < 0 || setting_Reactive_S_CLow_Blue > 255) { setting_Reactive_S_CLow_Blue = 0; };
+            Reactive_Start_Blue_LowUD.Value = setting_Reactive_S_CLow_Blue;
+
+            int setting_Reactive_S_CHigh_Red = Properties.Settings.Default.Reactive_Start_CHigh_Red;
+            if (setting_Reactive_S_CHigh_Red < 0 || setting_Reactive_S_CHigh_Red > 255) { setting_Reactive_S_CHigh_Red = 255; };
+            Reactive_Start_Red_HighUD.Value = setting_Reactive_S_CHigh_Red;
+
+            int setting_Reactive_S_CHigh_Green = Properties.Settings.Default.Reactive_Start_CHigh_Green;
+            if (setting_Reactive_S_CHigh_Green < 0 || setting_Reactive_S_CHigh_Green > 255) { setting_Reactive_S_CHigh_Green = 255; };
+            Reactive_Start_Green_HighUD.Value = setting_Reactive_S_CHigh_Green;
+
+            int setting_Reactive_S_CHigh_Blue = Properties.Settings.Default.Reactive_Start_CHigh_Blue;
+            if (setting_Reactive_S_CHigh_Blue < 0 || setting_Reactive_S_CHigh_Blue > 255) { setting_Reactive_S_CHigh_Blue = 255; };
+            Reactive_Start_Blue_HighUD.Value = setting_Reactive_S_CHigh_Blue;
+
+            #endregion Reactive - Start
+
+            #region Reactive - End
+            int setting_Reactive_E_Mode = Properties.Settings.Default.Reactive_End_Mode;
+            if (setting_Reactive_E_Mode == 0) { Reactive_End_RadioDefined.Checked = true; }
+            else if (setting_Reactive_E_Mode == 1) { Reactive_End_RadioOriginal.Checked = true; }
+            else if (setting_Reactive_E_Mode == 2) { Reactive_End_RadioRandom.Checked = true; }
+            else { Reactive_End_RadioRandom.Checked = true; }
+
+            Reactive_End_ColourButton.BackColor = Properties.Settings.Default.Reactive_End_DefinedColor;
+
+            int setting_Reactive_E_CLow_Red = Properties.Settings.Default.Reactive_End_CLow_Red;
+            if (setting_Reactive_E_CLow_Red < 0 || setting_Reactive_E_CLow_Red > 255) { setting_Reactive_E_CLow_Red = 0; };
+            Reactive_End_Red_LowUD.Value = setting_Reactive_E_CLow_Red;
+
+            int setting_Reactive_E_CLow_Green = Properties.Settings.Default.Reactive_End_CLow_Green;
+            if (setting_Reactive_E_CLow_Green < 0 || setting_Reactive_E_CLow_Green > 255) { setting_Reactive_E_CLow_Green = 0; };
+            Reactive_End_Green_LowUD.Value = setting_Reactive_E_CLow_Green;
+
+            int setting_Reactive_E_CLow_Blue = Properties.Settings.Default.Reactive_End_CLow_Blue;
+            if (setting_Reactive_E_CLow_Blue < 0 || setting_Reactive_E_CLow_Blue > 255) { setting_Reactive_E_CLow_Blue = 0; };
+            Reactive_End_Blue_LowUD.Value = setting_Reactive_E_CLow_Blue;
+
+            int setting_Reactive_E_CHigh_Red = Properties.Settings.Default.Reactive_End_CHigh_Red;
+            if (setting_Reactive_E_CHigh_Red < 0 || setting_Reactive_E_CHigh_Red > 255) { setting_Reactive_E_CHigh_Red = 255; };
+            Reactive_End_Red_HighUD.Value = setting_Reactive_E_CHigh_Red;
+
+            int setting_Reactive_E_CHigh_Green = Properties.Settings.Default.Reactive_End_CHigh_Green;
+            if (setting_Reactive_E_CHigh_Green < 0 || setting_Reactive_E_CHigh_Green > 255) { setting_Reactive_E_CHigh_Green = 255; };
+            Reactive_End_Green_HighUD.Value = setting_Reactive_E_CHigh_Green;
+
+            int setting_Reactive_E_CHigh_Blue = Properties.Settings.Default.Reactive_End_CHigh_Blue;
+            if (setting_Reactive_E_CHigh_Blue < 0 || setting_Reactive_E_CHigh_Blue > 255) { setting_Reactive_E_CHigh_Blue = 255; };
+            Reactive_End_Blue_HighUD.Value = setting_Reactive_E_CHigh_Blue;
+
+            #endregion Reactive - End
+
+            Reactive_DurationUD.Value = Properties.Settings.Default.Reactive_Duration;
+            Reactive_FrequencyUD.Value = Properties.Settings.Default.Reactive_Delay;
+
+            Reactive_Start_UpdateColorBoxes(null, null);
+            Reactive_End_UpdateColorBoxes(null, null);
+            Reactive_Start_RadioCheckedChanged(null, null);
+            Reactive_End_RadioCheckedChanged(null, null);
+
+            Heatmap_Start_ColourButton.BackColor = Properties.Settings.Default.Heatmap_StartColour;
+            Heatmap_End_ColourButton.BackColor = Properties.Settings.Default.Heatmap_EndColour;
+
+            #endregion Settings: Reactive
+
+            #region Settings: Settings
 
             string settingKeyboardModel = Properties.Settings.Default.settingKeyboardModel;
             if (SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel) > -1) { SettingsKeyboardModelCB.SelectedIndex = SettingsKeyboardModelCB.FindStringExact(settingKeyboardModel); };
@@ -453,7 +557,6 @@ namespace RGBKeyboardSpectrograph
 
 
             SettingsMinimizeToTrayCheck.Checked = Properties.Settings.Default.settingMinimizeToTray;
-            SettingsUSB3ModeCheck.Checked = Properties.Settings.Default.settingUsb3Mode;
             SpectroShowGraphicsCheck.Checked = Properties.Settings.Default.settingShowGraphics;
             SpectroShowGraphicsCheck_CheckedChanged(null, null); // Update the Program variable and the picturebox's visibility
             SettingsStartMinimizedCheck.Checked = Properties.Settings.Default.settingStartMinimized;
@@ -480,7 +583,7 @@ namespace RGBKeyboardSpectrograph
 
             SettingsIdleSwitcher_CheckedChanged(null, null);
 
-            #endregion Settings
+            #endregion Settings: Settings
 
             #region Tooltips
             ToolTip hintsToolTip = new ToolTip();
@@ -510,8 +613,8 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.Effect_Float_End_Green_HighUD, "Set the highest value for the green channel.");
             hintsToolTip.SetToolTip(this.Effect_Float_End_Green_LowButton, "Displaying the lowermost green value selected.");
             hintsToolTip.SetToolTip(this.Effect_Float_End_Green_LowUD, "Set the lowest value for the green channel.");
-            hintsToolTip.SetToolTip(this.Effect_Float_End_Radio1, "Transition to a defined colour.");
-            hintsToolTip.SetToolTip(this.Effect_Float_End_Radio2, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_RadioDefined, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_End_RadioRandom, "Transition to a random colour.");
             hintsToolTip.SetToolTip(this.Effect_Float_End_Red_HighButton, "Displaying the uppermost red value selected.");
             hintsToolTip.SetToolTip(this.Effect_Float_End_Red_HighUD, "Set the highest value for the red channel.");
             hintsToolTip.SetToolTip(this.Effect_Float_End_Red_LowButton, "Displaying the lowermost red value selected.");
@@ -527,8 +630,8 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_HighUD, "Set the highest value for the green channel.");
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_LowButton, "Displaying the lowermost green value selected.");
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Green_LowUD, "Set the lowest value for the green channel.");
-            hintsToolTip.SetToolTip(this.Effect_Float_Start_Radio1, "Transition to a defined colour.");
-            hintsToolTip.SetToolTip(this.Effect_Float_Start_Radio2, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_RadioDefined, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Effect_Float_Start_RadioRandom, "Transition to a random colour.");
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_HighButton, "Displaying the uppermost red value selected.");
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_HighUD, "Set the highest value for the red channel.");
             hintsToolTip.SetToolTip(this.Effect_Float_Start_Red_LowButton, "Displaying the lowermost red value selected.");
@@ -537,6 +640,47 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.EffectsStopButton, "Stop all effects.");
             hintsToolTip.SetToolTip(this.EffectTab_Rainfall, "Display a rainfall effect.");
             hintsToolTip.SetToolTip(this.EffectTab_RandomLights, "Light up random keys.");
+            hintsToolTip.SetToolTip(this.Heatmap_End_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Heatmap_End_ColourLabel, "The colour for the least clicked keys.");
+            hintsToolTip.SetToolTip(this.Heatmap_ResetMaxButton, "Reset the counters for all keys to zero.");
+            hintsToolTip.SetToolTip(this.Heatmap_Start_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Heatmap_Start_ColourLabel, "The colour for the most clicked keys.");
+            hintsToolTip.SetToolTip(this.Reactive_DurationLabel, "Lifespan of a lit-up key.");
+            hintsToolTip.SetToolTip(this.Reactive_DurationUD, "Lifespan of a lit-up key.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Blue_HighButton, "Displaying the uppermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Blue_HighUD, "Set the highest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Blue_LowButton, "Displaying the lowermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Blue_LowUD, "Set the lowest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Reactive_End_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Green_HighButton, "Displaying the uppermost green value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Green_HighUD, "Set the highest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Green_LowButton, "Displaying the lowermost green value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Green_LowUD, "Set the lowest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Reactive_End_RadioDefined, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Reactive_End_RadioOriginal, "Transition to the original colour of the key.");
+            hintsToolTip.SetToolTip(this.Reactive_End_RadioRandom, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Red_HighButton, "Displaying the uppermost red value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Red_HighUD, "Set the highest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Red_LowButton, "Displaying the lowermost red value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_End_Red_LowUD, "Set the lowest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Reactive_FrequencyLabel, "Time between cycles.");
+            hintsToolTip.SetToolTip(this.Reactive_FrequencyUD, "Time between cycles.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Blue_HighButton, "Displaying the uppermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Blue_HighUD, "Set the highest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Blue_LowButton, "Displaying the lowermost blue value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Blue_LowUD, "Set the lowest value for the blue channel.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_ColourButton, "Click to select a colour.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Green_HighButton, "Displaying the uppermost green value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Green_HighUD, "Set the highest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Green_LowButton, "Displaying the lowermost green value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Green_LowUD, "Set the lowest value for the green channel.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_RadioDefined, "Transition to a defined colour.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_RadioRainbow, "Transition through a spectral cycle. [To be implemented soon]");
+            hintsToolTip.SetToolTip(this.Reactive_Start_RadioRandom, "Transition to a random colour.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Red_HighButton, "Displaying the uppermost red value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Red_HighUD, "Set the highest value for the red channel.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Red_LowButton, "Displaying the lowermost red value selected.");
+            hintsToolTip.SetToolTip(this.Reactive_Start_Red_LowUD, "Set the lowest value for the red channel.");
             hintsToolTip.SetToolTip(this.SettingsBrowseCuePathButton, "Find your CUE executable for automatic launching upon close. This is not required.");
             hintsToolTip.SetToolTip(this.SettingsCuePathLabel, "Find your CUE executable for automatic launching upon close. This is not required.");
             hintsToolTip.SetToolTip(this.SettingsCuePathTextBox, "Find your CUE executable for automatic launching upon close. This is not required.");
@@ -553,7 +697,6 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.SettingsSpectroOnStartCheck, "Automatically start the spectrograph when the program starts.");
             hintsToolTip.SetToolTip(this.SettingsStartMinimizedCheck, "Automatically minimizes the program when it is started.");
             hintsToolTip.SetToolTip(this.SettingsStaticOnStartCheck, "Display a static keys profile when the program is started.");
-            hintsToolTip.SetToolTip(this.SettingsUSB3ModeCheck, "What have you done!? You shouldn't be seeing this!");
             hintsToolTip.SetToolTip(this.SpectroAmplitudeLabel, "Change the sensitivity of the spectrograph.");
             hintsToolTip.SetToolTip(this.SpectroAmplitudeUD, "Change the sensitivity of the spectrograph.");
             hintsToolTip.SetToolTip(this.SpectroBarBrightnessUD, "Change the brightness of the foreground of the spectrograph.");
@@ -573,6 +716,7 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.SpectroWasapiLoopbackRadio, "Listen to the audio being output by your computer's default sound device. NOTE: This may not work on AMD HDMI Audio lines.");
             hintsToolTip.SetToolTip(this.SpectroWasapiRadio, "Listen to the audio being input to your computer over devices such as a microphone or line-in.");
             hintsToolTip.SetToolTip(this.StartSpectrographButton, "Starts the Spectrograph.");
+            hintsToolTip.SetToolTip(this.StaticCapsColourButton, "Click to select a colour for Caps Lock.");
             hintsToolTip.SetToolTip(this.StaticClearButton, "Clear the copied colour.");
             hintsToolTip.SetToolTip(this.StaticCopyButton, "Copy a key's colour.");
             hintsToolTip.SetToolTip(this.StaticCopyPasteColor, "Click to define the colour that will be pasted.");
@@ -583,19 +727,20 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.StaticMouseLight2, "Click to define Mouse Light 2.");
             hintsToolTip.SetToolTip(this.StaticMouseLight3, "Click to define Mouse Light 3.");
             hintsToolTip.SetToolTip(this.StaticMouseLight4, "Click to define Mouse Light 4. (Saber Only)");
-            hintsToolTip.SetToolTip(this.StaticMutedColourButton, "Click to select a colour.");
-            hintsToolTip.SetToolTip(this.StaticMutedColourLabel, "The colour of the mute button when Windows audio is muted.");
+            hintsToolTip.SetToolTip(this.StaticMutedColourButton, "Click to select a colour for the mute button.");
             hintsToolTip.SetToolTip(this.StaticNewProfileButton, "Clear the current profile.");
+            hintsToolTip.SetToolTip(this.StaticNumColourButton, "Click to select a colour for Num Lock.");
             hintsToolTip.SetToolTip(this.StaticPasteButton, "Paste the copied colour.");
             hintsToolTip.SetToolTip(this.StaticProfileListCB, "Profiles stored in the Profiles folder.");
             hintsToolTip.SetToolTip(this.StaticSaveProfileAsButton, "Save the current profile as a new profile.");
             hintsToolTip.SetToolTip(this.StaticSaveProfileButton, "Save the current profile over the selected profile.");
+            hintsToolTip.SetToolTip(this.StaticScrollColourButton, "Click to select a colour for Scroll Lock.");
             hintsToolTip.SetToolTip(this.StaticUpdateKeyboardButton, "DEBUG: Outputs current display to the keyboard.");
             hintsToolTip.SetToolTip(this.StopSpectrographButton, "Stops all effects.");
 
             #endregion Tooltips
 
-            #region Post Load Tasks
+            #region Post-Load Tasks
             // Automatically minimize
             if (Properties.Settings.Default.settingStartMinimized == true) { this.WindowState = FormWindowState.Minimized; };
 
@@ -669,16 +814,25 @@ namespace RGBKeyboardSpectrograph
             };
 
             // Start up mute watching timer
-            MuteCheckTimer.Start();
+            //MuteCheckTimer.Start();
 
             #endregion Post Load Tasks
+
+            // Get rid of the Rainfall tab for now
+            EffectTabControl.TabPages.Remove(EffectTab_Rainfall);
 
             // Done!
             UpdateStatusMessage.ShowStatusMessage(1, "Ready");
         }
 
+        /// <summary>
+        /// Loads keyboard's configuration from .XML.
+        /// </summary>
+        /// <param name="KeyboardID">ID of the keyboard to load configs for.</param>
+        /// <returns>True for success, false for failure.</returns>
         public bool LoadFromConfig(string KeyboardID)
         {
+            // Make sure the config files can be found
             if (File.Exists("corsair_devices\\" + KeyboardID + ".xml") == false)
             {
                 UpdateStatusMessage.ShowStatusMessage(3, "Keyboard Layout Not Found");
@@ -688,12 +842,14 @@ namespace RGBKeyboardSpectrograph
             {
                 UpdateStatusMessage.ShowStatusMessage(1, "Loading Keyboard Layouts");
 
+                // Send all elements from the document to four parallel arrays
                 var document = XDocument.Load("corsair_devices\\" + KeyboardID + ".xml");
                 keyboardIDs = document.Descendants("id").Select(element => element.Value).ToArray();
                 keyboardNames = document.Descendants("name").Select(element => element.Value).ToArray();
                 keyboardPositionMaps = document.Descendants("positionmap").Select(element => element.Value).ToArray();
                 keyboardSizeMaps = document.Descendants("sizemap").Select(element => element.Value).ToArray();
 
+                // If in DevMode, always use the K95 and M65
                 if (Program.DevMode == true)
                 {
                     Program.SettingsKeyboardID = 0x1B11;
@@ -715,10 +871,10 @@ namespace RGBKeyboardSpectrograph
                     }
                 }
                 
-
                 UpdateStatusMessage.ShowStatusMessage(4, "Hardware ID: " + Program.SettingsKeyboardID.ToString("X"));
-                SettingsKeyboardLayoutCB.Items.Clear();
 
+                // Populate the layouts ComboBox
+                SettingsKeyboardLayoutCB.Items.Clear();
                 for (int i = 0; i < keyboardNames.Length; i++)
                 {
                     SettingsKeyboardLayoutCB.Items.Add(keyboardNames[i]);
@@ -728,6 +884,10 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        /// <summary>
+        /// Finds all profiles stored in the Profiles folder and stores their paths in an array.
+        /// </summary>
+        /// <returns>A string[] containing paths to all of the XML files in /Profiles.</returns>
         public string[] LoadStaticProfileList()
         {
             string path = Program.StaticProfilesPath;
@@ -743,12 +903,17 @@ namespace RGBKeyboardSpectrograph
             return files;
         }
 
-        Color ContrastColor(Color color)
+        /// <summary>
+        /// Check colour and determine if overlaying text should be black or white.
+        /// </summary>
+        /// <param name="colour">Source colour to find a contrast for.</param>
+        /// <returns>A Colour suitable as contrast.</returns>
+        Color ContrastColor(Color colour)
         {
             int d = 0;
 
             // Check luminance with green bias
-            double a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255;
+            double a = 1 - (0.299 * colour.R + 0.587 * colour.G + 0.114 * colour.B) / 255;
 
             if (a < 0.5)
                 d = 0; // Bright colours, dark text
@@ -758,12 +923,14 @@ namespace RGBKeyboardSpectrograph
             return Color.FromArgb(d, d, d);
         }
 
+        /// <summary>
+        /// Gets the version info XML file from the version server.
+        /// </summary>
         private void CheckForUpdates()
         {
             bool updateIsAvailable = false;
-
-
-            String URLString = "http://elestriel.cf/pages/keyboardspectro/version.xml";
+            
+            String URLString = "http://emily-maxwell.com/pages/keyboardspectro/version.xml";
             try
             {
                 XmlTextReader reader = new XmlTextReader(URLString);
@@ -786,6 +953,7 @@ namespace RGBKeyboardSpectrograph
                 updateIsAvailable = false;
             }
 
+            // If there's a new build available, print a message in the log
             if (updateIsAvailable == true)
             {
                 if (Program.VersionCheckData[0] != Program.VersionNumber)
@@ -799,6 +967,9 @@ namespace RGBKeyboardSpectrograph
 
         #region Effects Start/Stop
 
+        /// <summary>
+        /// Sets mouse ID to match the selected mouse.
+        /// </summary>
         private void SetMouseSettings()
         {
             switch (SettingsMouseModelCB.Text)
@@ -822,13 +993,26 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        /// <summary>
+        /// Starts rendering effects.
+        /// </summary>
+        /// <param name="Effect">Which effects to launch.</param>
+        /// <param name="isIdleLaunch">Is the effect being launched by the idle timer?</param>
+        /// <returns>True for success, false for failure.</returns>
         private bool StartEffects(string Effect, bool isIdleLaunch = false)
         {
+            // If this is an idle launch, remember the ongoing effect so it can be resumed later
             if (!isIdleLaunch) { Program.InactivityResumeAction = Effect; };
 
+            // If the mouse is to be included, set it up
             Program.IncludeMouseInEffects = SettingsEffectsIncludeMouse.Checked;
             SetMouseSettings();
 
+            // Check if CUE is still running
+            Process[] pname = Process.GetProcessesByName("CorsairHID");
+            if (pname.Length != 0) UpdateStatusMessage.ShowStatusMessage(3, "Corsair Utility Engine is still running!");
+
+            // Launch effects
             switch (Effect)
             {
                 case "Spectro":
@@ -848,22 +1032,37 @@ namespace RGBKeyboardSpectrograph
                     if (Program.RunKeyboardThread == 10) { return false; };
                     if (LoadSizePositionMaps() == false) { return false; };
 
+                    Program.ReactSettings.Set((int)Reactive_DurationUD.Value, (int)Reactive_FrequencyUD.Value, 0);
+
                     Program.RunKeyboardThread = 10;
-                    Reactive_SingleLight react = new Reactive_SingleLight();
-                    workerThread = new Thread(() => react.KeyboardControl());
+                    ReactiveThread = new Reactive_SingleLight();
+                    workerThread = new Thread(() => ReactiveThread.KeyboardControl());
+                    workerThread.Start();
+                    return true;
+                case "Reactive-Heatmap":
+                    if (Program.RunKeyboardThread == 11) { return false; };
+                    if (LoadSizePositionMaps() == false) { return false; };
+
+                    Heatmap_UpdateColorConfig();
+
+                    Program.RunKeyboardThread = 11;
+                    HeatmapThread = new Reactive_Heatmap();
+                    workerThread = new Thread(() => HeatmapThread.KeyboardControl());
                     workerThread.Start();
                     return true;
                 default:
+                    // An inexistant effect was requested
                     return false;
             }
         }
 
+        /// <summary>
+        /// Sets up and starts the Spectro.
+        /// </summary>
+        /// <param name="RunType"></param>
+        /// <returns>True for success, false for failure.</returns>
         private bool StartSpectrograph(int RunType = 0)
         {
-            // Check if CUE is still running
-            Process[] pname = Process.GetProcessesByName("CorsairHID");
-            if (pname.Length != 0) UpdateStatusMessage.ShowStatusMessage(3, "Corsair Utility Engine is still running!");
-
             // Set Program variables
             Program.SpectroAmplitude = (float)SpectroAmplitudeUD.Value;
             Program.SpectroBg.Color.SetD(SpectroColorBg.BackColor);
@@ -878,7 +1077,7 @@ namespace RGBKeyboardSpectrograph
                                     (float)SpectroBarSpeed.Value,
                                     0f,
                                     (float)SpectroBarBrightnessUD.Value);
-            Program.SettingsRestoreOnExit = SettingsRestoreLightingCheck.Checked;
+            Program.SettingsRestoreLightingOnExit = SettingsRestoreLightingCheck.Checked;
 
             // Get audio device info
             if (SpectroWasapiLoopbackRadio.Checked == true) { Program.CSCore_DeviceType = 0; };
@@ -926,14 +1125,30 @@ namespace RGBKeyboardSpectrograph
             return true;
         }
 
+        /// <summary>
+        /// Stops effects.
+        /// </summary>
         private void StopEffects()
         {
+            // Set thread state to 0; this should cause any ongoing effect threads to terminate themselves
             Program.RunKeyboardThread = 0;
             DebugTestModeButton.Enabled = true;
 
-            MuteCheckTimer.Start();
+            //MuteCheckTimer.Start();
         }
 
+        /// <summary>
+        /// Stops effects. This overload is for controls to call.
+        /// </summary>
+        private void StopEffects(object sender, EventArgs e)
+        {
+            StopEffects();
+        }
+
+        /// <summary>
+        /// Loads the size and position maps for the selected keyboard and layout.
+        /// </summary>
+        /// <returns>True for success, false for failure.</returns>
         private bool LoadSizePositionMaps()
         {
             // Break if there's no keyboard layout selected
@@ -1000,12 +1215,18 @@ namespace RGBKeyboardSpectrograph
 
         #region Thread Safe Delegate Functions
 
+        /// <summary>
+        /// Posts a status message to the log and to console.
+        /// </summary>
+        /// <param name="messageType">Message level</param>
+        /// <param name="messageText">Message text</param>
         public void UpdateStatusMessage_NewMsg(int messageType, string messageText)
         {
             string messagePrefix;
             System.ConsoleColor messageColour;
             Color logColour;
             
+            // Determine the colour and prefix for the supplied messageType
             switch (messageType)
             {
                 case 1:
@@ -1055,6 +1276,7 @@ namespace RGBKeyboardSpectrograph
                     break;
             }
 
+            // If the log level is high enough to show the message, show it
             if (messageType <= Program.LogLevel)
             {
                 Console.ForegroundColor = messageColour;
@@ -1064,6 +1286,8 @@ namespace RGBKeyboardSpectrograph
                 StatusLabel.Text = messageText;
                 this.Invoke((MethodInvoker)(() => DebugStatusLog.AppendText(messagePrefix + messageText + Environment.NewLine, logColour)));
             }
+
+            // If the message is concerning an available update, enable the update button
             if (messageType == 9)
             {
                 Console.ForegroundColor = messageColour;
@@ -1081,46 +1305,43 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        public void UpdateWorker_NewAct(string strAction)
-        {
-            switch (strAction)
-            {
-                case "Stop":
-                    this.Invoke((MethodInvoker)(() => Program.RunKeyboardThread = 0));
-                    break;
-                default:
-                    break;
-            }
-        }
-
+        /// <summary>
+        /// Updates the graphical representation of the keyboard's lights. No longer used. Kept here for reference for customized canvas building.
+        /// </summary>
+        /// <param name="render"></param>
         public void UpdateGraphicOutput_NewOut(Bitmap render)
         {
             this.Invoke((MethodInvoker)(() => GraphicsPictureBox.Image = Program.SpectroGraphicRender));
         }
 
-        public void InactivityStatusChanged_Action(int isIdle)
+        /// <summary>
+        /// Idle timer's thread-safe reactions.
+        /// </summary>
+        /// <param name="idleMode">1: Going from active to idle.
+        /// 2: Going from idle to active.</param>
+        public void InactivityStatusChanged_Action(int idleMode)
         {
             if (SettingsIdleSwitcher.Enabled == false)
             { 
                 this.Invoke((MethodInvoker)(() => SettingsIdleSwitcher.Enabled = true)); 
             };
 
-            if (isIdle > 0)
+            if (idleMode > 0)
             {
-                string modelText = "";
+                string modeText = "";
                 string profileText = "";
-                if (isIdle == 1) 
+                if (idleMode == 1) 
                 { 
                     this.Invoke((MethodInvoker)delegate()
                     { 
-                        modelText = SettingsIdleModeCB.Text;
+                        modeText = SettingsIdleModeCB.Text;
                         profileText = Program.StaticProfilesPath + SettingsIdleProfileCB.Text;
                     }
                     ); 
                 }
-                else if (isIdle == 2)
+                else if (idleMode == 2)
                 { 
-                    modelText = Program.InactivityResumeAction;
+                    modeText = Program.InactivityResumeAction;
                     profileText = Program.SettingsLastUsedProfile;
                 }
 
@@ -1134,7 +1355,7 @@ namespace RGBKeyboardSpectrograph
                     }
                 };
 
-                switch (modelText)
+                switch (modeText)
                 {
                     case "Spectro":
                         this.Invoke((MethodInvoker)delegate() { StartEffects("Spectro", true); });
@@ -1160,11 +1381,18 @@ namespace RGBKeyboardSpectrograph
                             StaticUnsavedChanges = false;
                         }
                         break;
+                    case "Reactive-SingleLight":
+                        this.Invoke((MethodInvoker)delegate() { StartEffects("Reactive-SingleLight", true); });
+                        break;
+                    case "Reactive-Heatmap":
+                        this.Invoke((MethodInvoker)delegate() { StartEffects("Reactive-Heatmap", true); });
+                        break;
                     default:
                         break;
                 }
             }
         }
+
         #endregion
 
         #region Sections
@@ -1172,6 +1400,13 @@ namespace RGBKeyboardSpectrograph
         #region Tab: Spectro
 
         #region [Spectro] Buttons
+
+        /// <summary>
+        /// Starts the Spectrograph effect.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>Need to remove graphical output portions.</remarks>
         private void StartSpectrograph_Click(object sender, EventArgs e)
         {
             RightClickMenu.Hide();
@@ -1195,11 +1430,6 @@ namespace RGBKeyboardSpectrograph
                 StatusTimer.Start();
                 DebugTestModeButton.Enabled = false;
             }
-        }
-
-        private void StopSpectrograph_Click(object sender, EventArgs e)
-        {
-            StopEffects();
         }
 
         #endregion [Spectro] Buttons
@@ -1421,40 +1651,7 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion [Spectro] CheckBoxes
-
-        #region [Spectro] Colours
-        private void SpectroColorBars_Click(object sender, EventArgs e)
-        {
-            ColorDialog ColorPicker = new ColorDialog();
-            ColorPicker.AllowFullOpen = true;
-            ColorPicker.ShowHelp = true;
-            ColorPicker.Color = SpectroColorBars.BackColor;
-
-            if (ColorPicker.ShowDialog() == DialogResult.OK)
-            {
-                SpectroColorBars.BackColor = ColorPicker.Color;
-                SpectroColorBars.ForeColor = ContrastColor(ColorPicker.Color);
-                Program.SpectroBars.Color.SetD(SpectroColorBars.BackColor);
-            }
-        }
-
-        private void SpectroColorBackground_Click(object sender, EventArgs e)
-        {
-            ColorDialog ColorPicker = new ColorDialog();
-            ColorPicker.AllowFullOpen = true;
-            ColorPicker.ShowHelp = true;
-            ColorPicker.Color = SpectroColorBg.BackColor;
-
-            if (ColorPicker.ShowDialog() == DialogResult.OK)
-            {
-                SpectroColorBg.BackColor = ColorPicker.Color;
-                SpectroColorBg.ForeColor = ContrastColor(ColorPicker.Color);
-                Program.SpectroBg.Color.SetD(SpectroColorBg.BackColor);
-            }
-        }
-
-        #endregion [Spectro] Colours
-
+        
         #region [Spectro] CSCore
         private void SpectroWasapiLoopbackRadio_CheckedChanged(object sender, EventArgs e)
         {
@@ -1511,11 +1708,6 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
-        private void EffectsStopButton_Click(object sender, EventArgs e)
-        {
-            StopEffects();
-        }
-
         private void AnimationsUseStaticLights_CheckedChanged(object sender, EventArgs e)
         {
             Program.AnimationsUseStaticKeys = AnimationsUseStaticLights.Checked;
@@ -1543,7 +1735,7 @@ namespace RGBKeyboardSpectrograph
         }
 
         #region Tab: Effects: Random Lights
-        private void Eff_RL_UpdateColorConfig(int mode)
+        private void Effects_RandomLights_UpdateColorConfig(int mode)
         {
             switch (mode) { 
                 case 1:
@@ -1551,7 +1743,7 @@ namespace RGBKeyboardSpectrograph
                         (byte)Effect_Float_Start_ColourButton.BackColor.R,
                         (byte)Effect_Float_Start_ColourButton.BackColor.G,
                         (byte)Effect_Float_Start_ColourButton.BackColor.B,
-                        Eff_RL_End_GetMode());
+                        Effects_RandomLights_End_GetMode());
                     break;
                 case 2:
                     Program.EfColors.SetStart(
@@ -1561,7 +1753,7 @@ namespace RGBKeyboardSpectrograph
                         (int)Effect_Float_Start_Green_HighUD.Value,
                         (int)Effect_Float_Start_Blue_LowUD.Value,
                         (int)Effect_Float_Start_Blue_HighUD.Value,
-                        Eff_RL_End_GetMode());
+                        Effects_RandomLights_End_GetMode());
                     break;
                 case 3:
                     Program.EfColors.SetEnd(
@@ -1571,19 +1763,19 @@ namespace RGBKeyboardSpectrograph
                         (int)Effect_Float_End_Green_HighUD.Value,
                         (int)Effect_Float_End_Blue_LowUD.Value,
                         (int)Effect_Float_End_Blue_HighUD.Value,
-                        Eff_RL_End_GetMode());
+                        Effects_RandomLights_End_GetMode());
                     break;
                 case 4:
                     Program.EfColors.SetEnd(
                         (byte)Effect_Float_End_ColourButton.BackColor.R,
                         (byte)Effect_Float_End_ColourButton.BackColor.G,
                         (byte)Effect_Float_End_ColourButton.BackColor.B,
-                        Eff_RL_End_GetMode());
+                        Effects_RandomLights_End_GetMode());
                     break;
         }
         }
 
-        private void Eff_RL_Start_UpdateColorBoxes(object sender, EventArgs e)
+        private void Effect_RandomLights_Start_UpdateColorBoxes(object sender, EventArgs e)
         {
             Effect_Float_Start_Red_LowButton.BackColor = Color.FromArgb(255, (int)Effect_Float_Start_Red_LowUD.Value, 0, 0);
             Effect_Float_Start_Red_HighButton.BackColor = Color.FromArgb(255, (int)Effect_Float_Start_Red_HighUD.Value, 0, 0);
@@ -1598,10 +1790,10 @@ namespace RGBKeyboardSpectrograph
             Effect_Float_Start_Green_LowUD.Maximum = Effect_Float_Start_Green_HighUD.Value;
             Effect_Float_Start_Blue_LowUD.Maximum = Effect_Float_Start_Blue_HighUD.Value;
 
-            Eff_RL_UpdateColorConfig(2);
+            Effects_RandomLights_UpdateColorConfig(2);
         }
 
-        private void Eff_RL_End_UpdateColorBoxes(object sender, EventArgs e)
+        private void Effect_RandomLights_End_UpdateColorBoxes(object sender, EventArgs e)
         {
             Effect_Float_End_Red_LowButton.BackColor = Color.FromArgb(255, (int)Effect_Float_End_Red_LowUD.Value, 0, 0);
             Effect_Float_End_Red_HighButton.BackColor = Color.FromArgb(255, (int)Effect_Float_End_Red_HighUD.Value, 0, 0);
@@ -1616,10 +1808,10 @@ namespace RGBKeyboardSpectrograph
             Effect_Float_End_Green_LowUD.Maximum = Effect_Float_End_Green_HighUD.Value;
             Effect_Float_End_Blue_LowUD.Maximum = Effect_Float_Start_Blue_HighUD.Value;
 
-            Eff_RL_UpdateColorConfig(3);
+            Effects_RandomLights_UpdateColorConfig(3);
         }
 
-        private int Eff_RL_End_GetMode()
+        private int Effects_RandomLights_End_GetMode()
         {
             /* Modes
              * 1: Defined + Defined
@@ -1629,19 +1821,19 @@ namespace RGBKeyboardSpectrograph
              */
             int newMode = 0;
 
-            if (Effect_Float_Start_Radio1.Checked && Effect_Float_End_Radio1.Checked)
+            if (Effect_Float_Start_RadioDefined.Checked && Effect_Float_End_RadioDefined.Checked)
             {
                 newMode = 1;
             }
-            else if (Effect_Float_Start_Radio2.Checked && Effect_Float_End_Radio1.Checked)
+            else if (Effect_Float_Start_RadioRandom.Checked && Effect_Float_End_RadioDefined.Checked)
             {
                 newMode = 2;
             }
-            else if (Effect_Float_Start_Radio1.Checked && Effect_Float_End_Radio2.Checked)
+            else if (Effect_Float_Start_RadioDefined.Checked && Effect_Float_End_RadioRandom.Checked)
             {
                 newMode = 3;
             }
-            else if (Effect_Float_Start_Radio2.Checked && Effect_Float_End_Radio2.Checked)
+            else if (Effect_Float_Start_RadioRandom.Checked && Effect_Float_End_RadioRandom.Checked)
             {
                 newMode = 4;
             }
@@ -1649,50 +1841,41 @@ namespace RGBKeyboardSpectrograph
             return newMode;
         }
 
-        private void Eff_RL_ColourButton_Click(object sender, EventArgs e)
+        private void Effects_RandomLights_ColourButton_Click(object sender, EventArgs e)
         {
-            System.Windows.Media.Color selectedMediaColor;
-            Color selectedColor = ((Button)sender).BackColor;
-            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
-            if (dia.ShowDialog() == true)
-            {
-                selectedMediaColor = dia.SelectedColor;
-                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
-            }
-            ((Button)sender).BackColor = selectedColor;
+            OpenColorPicker(sender);
 
-            if (((Button)sender).Name.ToString() == "Eff_RL_Start_ColourButton")
-            { Eff_RL_UpdateColorConfig(1); }
+            if (((Button)sender).Name.ToString() == "Effect_Float_Start_ColourButton")
+            { Effects_RandomLights_UpdateColorConfig(1); }
 
-            if (((Button)sender).Name.ToString() == "Eff_RL_End_ColourButton")
-            { Eff_RL_UpdateColorConfig(4); }
+            if (((Button)sender).Name.ToString() == "Effect_Float_End_ColourButton")
+            { Effects_RandomLights_UpdateColorConfig(4); }
         }
 
-        private void Eff_RL_Start_RadioCheckedChanged(object sender, EventArgs e)
+        private void Effects_RandomLights_Start_RadioCheckedChanged(object sender, EventArgs e)
         {
-            if (Effect_Float_Start_Radio1.Checked == true)
-            { Eff_RL_UpdateColorConfig(1); }
+            if (Effect_Float_Start_RadioDefined.Checked == true)
+            { Effects_RandomLights_UpdateColorConfig(1); }
 
-            else if (Effect_Float_Start_Radio2.Checked == true)
-            { Eff_RL_UpdateColorConfig(2); }
+            else if (Effect_Float_Start_RadioRandom.Checked == true)
+            { Effects_RandomLights_UpdateColorConfig(2); }
         }
 
-        private void Eff_RL_End_RadioCheckedChanged(object sender, EventArgs e)
+        private void Effects_RandomLights_End_RadioCheckedChanged(object sender, EventArgs e)
         {
-            if (Effect_Float_End_Radio1.Checked == true)
-            { Eff_RL_UpdateColorConfig(4); }
+            if (Effect_Float_End_RadioDefined.Checked == true)
+            { Effects_RandomLights_UpdateColorConfig(4); }
 
-            else if (Effect_Float_End_Radio2.Checked == true)
-            { Eff_RL_UpdateColorConfig(3); }
+            else if (Effect_Float_End_RadioRandom.Checked == true)
+            { Effects_RandomLights_UpdateColorConfig(3); }
         }
 
-        private void Eff_RL_DurationUD_ValueChanged(object sender, EventArgs e)
+        private void Effects_RandomLights_DurationUD_ValueChanged(object sender, EventArgs e)
         {
             Program.EfSettings.Duration = (int)Effect_Float_DurationUD.Value;
         }
 
-        private void Eff_RL_FrequencyUD_ValueChanged(object sender, EventArgs e)
+        private void Effects_RandomLights_FrequencyUD_ValueChanged(object sender, EventArgs e)
         {
             Program.EfSettings.Frequency = (int)Effect_Float_FrequencyUD.Value;
         }
@@ -1774,17 +1957,26 @@ namespace RGBKeyboardSpectrograph
             SendColorsToMouse();
         }
         
-        private void SendStaticKeysToKeyboard(bool UseLastProfile, bool SuppressMessages = false)
+        public void SendStaticKeysToKeyboard(bool UseLastProfile, bool SuppressMessages = false)
         {
             if (LoadSizePositionMaps() == false) { return; };
-            KeyboardWriter keyWriter = new KeyboardWriter(SuppressMessages: SuppressMessages);
-            try
+
+            // Reactive Keys will handle the refresh if it's running
+            if (Program.RunKeyboardThread == 10)
             {
-                keyWriter.Write(Program.StaticKeyColorsBytes, true);
+                ReactiveThread.InitiateReactiveBackground();
             }
-            catch
+            else // Otherwise, refresh manually
             {
-                UpdateStatusMessage.ShowStatusMessage(3, "Send Keys Failed");
+                KeyboardWriter keyWriter = new KeyboardWriter(SuppressMessages: SuppressMessages);
+                try
+                {
+                    keyWriter.Write(Program.StaticKeyColorsBytes, true);
+                }
+                catch
+                {
+                    UpdateStatusMessage.ShowStatusMessage(3, "Send Keys Failed");
+                }
             }
         }
 
@@ -1928,34 +2120,11 @@ namespace RGBKeyboardSpectrograph
             StaticUnsavedChanges = true;
         }
         
-        private void StaticCopyPasteColor_Click(object sender, EventArgs e)
-        {
-            System.Windows.Media.Color selectedMediaColor;
-            Color selectedColor = ((Button)sender).BackColor;
-            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R,((Button)sender).BackColor.G,((Button)sender).BackColor.B);
-            if (dia.ShowDialog() == true)
-            {
-                selectedMediaColor = dia.SelectedColor; //do something with the selected color
-                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
-            }
-            ((Button)sender).BackColor = selectedColor;
-        }
-        
         private void StaticMouseColor_Click(object sender, EventArgs e)
         {
             if (StaticCopyPasteMode == 0) // Open the color picker
             {
-                System.Windows.Media.Color selectedMediaColor;
-                Color selectedColor = ((Button)sender).BackColor;
-                ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-                dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
-                if (dia.ShowDialog() == true)
-                {
-                    selectedMediaColor = dia.SelectedColor; //do something with the selected color
-                    selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
-                }
-                ((Button)sender).BackColor = selectedColor;
+                Color selectedColor = OpenColorPicker(sender);
                 int buttonID = 1;
 
                 string buttonName = ((Button)sender).Name;
@@ -2187,6 +2356,8 @@ namespace RGBKeyboardSpectrograph
         #endregion Tab: Static Keys
 
         #region Tab: Reactive
+
+        #region Reactive - Reactive
         private void ReactiveColor_Click(object sender, EventArgs e)
         {
             System.Windows.Media.Color selectedMediaColor;
@@ -2203,13 +2374,157 @@ namespace RGBKeyboardSpectrograph
 
         private void ReactiveStartButton_Click(object sender, EventArgs e)
         {
-            StartEffects("Reactive-SingleLight");
+            Reactive_Start_RadioCheckedChanged(null, null);
+            Reactive_End_RadioCheckedChanged(null, null);
+
+            if (ReactiveTabControl.SelectedTab == ReactiveTabControl.TabPages["ReactiveTab_Reactive"])
+            { StartEffects("Reactive-SingleLight"); }
+            else if (ReactiveTabControl.SelectedTab == ReactiveTabControl.TabPages["ReactiveTab_Heatmap"])
+            { StartEffects("Reactive-Heatmap"); }
         }
 
-        private void ReactiveStopButton_Click(object sender, EventArgs e)
+        private void ReactiveStartButton_LaunchFromRightClickMenu(object sender, EventArgs e)
         {
-            Program.RunKeyboardThread = 0;
+            if (((ToolStripMenuItem)sender).Name == "tsmReactive")
+            { StartEffects("Reactive-SingleLight"); };
+
+            if (((ToolStripMenuItem)sender).Name == "tsmHeatmap")
+            { StartEffects("Reactive-Heatmap"); };
         }
+
+        private void Reactive_DurationUD_ValueChanged(object sender, EventArgs e)
+        {
+            Program.ReactSettings.Duration = (int)Reactive_DurationUD.Value;
+        }
+
+        private void Reactive_FrequencyUD_ValueChanged(object sender, EventArgs e)
+        {
+            Program.ReactSettings.Frequency = (int)Reactive_FrequencyUD.Value;
+        }
+
+        private void Reactive_Start_RadioCheckedChanged(object sender, EventArgs e)
+        {
+            if (Reactive_Start_RadioDefined.Checked == true)
+            { Program.ReactTypeStart = 0; }
+
+            else if (Reactive_Start_RadioRainbow.Checked == true)
+            { Program.ReactTypeStart = 1; }
+
+            else if (Reactive_Start_RadioRandom.Checked == true)
+            { Program.ReactTypeStart = 2; }
+        }
+
+        private void Reactive_End_RadioCheckedChanged(object sender, EventArgs e)
+        {
+            if (Reactive_End_RadioDefined.Checked == true)
+            { Program.ReactTypeEnd = 0; }
+
+            else if (Reactive_End_RadioOriginal.Checked == true)
+            { Program.ReactTypeEnd = 1; }
+
+            else if (Reactive_End_RadioRandom.Checked == true)
+            { Program.ReactTypeEnd = 2; }
+        }
+
+        private void Reactive_ColourButton_ColourChange(object sender, EventArgs e)
+        {
+            OpenColorPicker(sender);
+            Reactive_UpdateColorConfig();
+        }
+
+        private void Reactive_UpdateColorConfig()
+        {
+            Program.ReactColors.SetStart(
+                Reactive_Start_ColourButton.BackColor.R,
+                Reactive_Start_ColourButton.BackColor.G,
+                Reactive_Start_ColourButton.BackColor.B, 0);
+
+            Program.ReactColors.SRandRLow = (int)Reactive_Start_Red_LowUD.Value;
+            Program.ReactColors.SRandRHigh = (int)Reactive_Start_Red_HighUD.Value;
+            Program.ReactColors.SRandGLow = (int)Reactive_Start_Green_LowUD.Value;
+            Program.ReactColors.SRandGHigh = (int)Reactive_Start_Green_HighUD.Value;
+            Program.ReactColors.SRandBLow = (int)Reactive_Start_Blue_LowUD.Value;
+            Program.ReactColors.SRandBHigh = (int)Reactive_Start_Blue_HighUD.Value;
+
+            Program.ReactColors.SetEnd(
+                Reactive_End_ColourButton.BackColor.R,
+                Reactive_End_ColourButton.BackColor.G,
+                Reactive_End_ColourButton.BackColor.B, 0);
+
+            Program.ReactColors.ERandRLow = (int)Reactive_End_Red_LowUD.Value;
+            Program.ReactColors.ERandRHigh = (int)Reactive_End_Red_HighUD.Value;
+            Program.ReactColors.ERandGLow = (int)Reactive_End_Green_LowUD.Value;
+            Program.ReactColors.ERandGHigh = (int)Reactive_End_Green_HighUD.Value;
+            Program.ReactColors.ERandBLow = (int)Reactive_End_Blue_LowUD.Value;
+            Program.ReactColors.ERandBHigh = (int)Reactive_End_Blue_HighUD.Value;
+        }
+
+        private void Reactive_Start_UpdateColorBoxes(object sender, EventArgs e)
+        {
+            Reactive_Start_Red_LowButton.BackColor = Color.FromArgb(255, (int)Reactive_Start_Red_LowUD.Value, 0, 0);
+            Reactive_Start_Red_HighButton.BackColor = Color.FromArgb(255, (int)Reactive_Start_Red_HighUD.Value, 0, 0);
+
+            Reactive_Start_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Reactive_Start_Green_LowUD.Value, 0);
+            Reactive_Start_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Reactive_Start_Green_HighUD.Value, 0);
+
+            Reactive_Start_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Reactive_Start_Blue_LowUD.Value);
+            Reactive_Start_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Reactive_Start_Blue_HighUD.Value);
+
+            Reactive_Start_Red_LowUD.Maximum = Reactive_Start_Red_HighUD.Value;
+            Reactive_Start_Green_LowUD.Maximum = Reactive_Start_Green_HighUD.Value;
+            Reactive_Start_Blue_LowUD.Maximum = Reactive_Start_Blue_HighUD.Value;
+
+            Reactive_UpdateColorConfig();
+        }
+
+        private void Reactive_End_UpdateColorBoxes(object sender, EventArgs e)
+        {
+            Reactive_End_Red_LowButton.BackColor = Color.FromArgb(255, (int)Reactive_End_Red_LowUD.Value, 0, 0);
+            Reactive_End_Red_HighButton.BackColor = Color.FromArgb(255, (int)Reactive_End_Red_HighUD.Value, 0, 0);
+
+            Reactive_End_Green_LowButton.BackColor = Color.FromArgb(255, 0, (int)Reactive_End_Green_LowUD.Value, 0);
+            Reactive_End_Green_HighButton.BackColor = Color.FromArgb(255, 0, (int)Reactive_End_Green_HighUD.Value, 0);
+
+            Reactive_End_Blue_LowButton.BackColor = Color.FromArgb(255, 0, 0, (int)Reactive_End_Blue_LowUD.Value);
+            Reactive_End_Blue_HighButton.BackColor = Color.FromArgb(255, 0, 0, (int)Reactive_End_Blue_HighUD.Value);
+
+            Reactive_End_Red_LowUD.Maximum = Reactive_End_Red_HighUD.Value;
+            Reactive_End_Green_LowUD.Maximum = Reactive_End_Green_HighUD.Value;
+            Reactive_End_Blue_LowUD.Maximum = Reactive_Start_Blue_HighUD.Value;
+
+            Reactive_UpdateColorConfig();
+        }
+
+        #endregion Reactive - Reactive
+
+        #region Reactive - Heatmap
+
+        private void Heatmap_ColourButton_ColourChange(object sender, EventArgs e)
+        {
+            OpenColorPicker(sender);
+            Heatmap_UpdateColorConfig();
+        }
+
+        private void Heatmap_UpdateColorConfig()
+        {
+            Program.HeatmapColors.SetStart(
+                Heatmap_Start_ColourButton.BackColor.R,
+                Heatmap_Start_ColourButton.BackColor.G,
+                Heatmap_Start_ColourButton.BackColor.B, 0);
+
+            Program.HeatmapColors.SetEnd(
+                Heatmap_End_ColourButton.BackColor.R,
+                Heatmap_End_ColourButton.BackColor.G,
+                Heatmap_End_ColourButton.BackColor.B, 0);
+        }
+
+        private void Heatmap_ResetMaxButton_Click(object sender, EventArgs e)
+        {
+            Program.HighestStrikeCount = 0;
+        }
+
+        #endregion Reactive - Heatmap
+
         #endregion Tab: Reactive
 
         #region Tab: Settings
@@ -2295,14 +2610,10 @@ namespace RGBKeyboardSpectrograph
         #endregion [Settings] ListBoxes
         
         #region [Settings] CheckBoxes
-        private void SettingsUSB3Mode_CheckedChanged(object sender, EventArgs e)
-        {
-            Program.SettingsUsb3Mode = SettingsUSB3ModeCheck.Checked;
-        }
 
         private void SettingsRestoreLightingCheck_CheckedChanged(object sender, EventArgs e)
         {
-            Program.SettingsRestoreOnExit = SettingsRestoreLightingCheck.Checked;
+            Program.SettingsRestoreLightingOnExit = SettingsRestoreLightingCheck.Checked;
         }
 
         private void SettingsLaunchCueCheck_CheckedChanged(object sender, EventArgs e)
@@ -2390,7 +2701,7 @@ namespace RGBKeyboardSpectrograph
 
         #endregion Tab: Settings
 
-        #region Program: Debug
+        #region Debug
 
         #region [Debug] Buttons
         private void DebugTestModeButton_Click(object sender, EventArgs e)
@@ -2417,7 +2728,7 @@ namespace RGBKeyboardSpectrograph
 
         #endregion [Debug] UpDowns
 
-        #endregion Tab: Debug
+        #endregion Debug
 
         #region Program
 
@@ -2488,6 +2799,37 @@ namespace RGBKeyboardSpectrograph
         {
             // Leave if one of the effects are running, as they will manage mute state
             if (Program.RunKeyboardThread > 1) { return; };
+            
+        }
+
+        /// <summary>
+        /// Sender-sensitive ColorPicker. Non-control-called method returns the selected Color.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private Color OpenColorPicker(object sender)
+        {
+            System.Windows.Media.Color selectedMediaColor;
+            Color selectedColor = ((Button)sender).BackColor;
+            ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
+            dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+            if (dia.ShowDialog() == true)
+            {
+                selectedMediaColor = dia.SelectedColor; //do something with the selected color
+                selectedColor = Color.FromArgb(255, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
+            }
+            ((Button)sender).BackColor = selectedColor;
+            return selectedColor;
+        }
+
+        /// <summary>
+        /// Sender-sensitive ColorPicker. This is the control-called method.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenColorPicker(object sender, EventArgs e)
+        {
+            OpenColorPicker(sender);
         }
         #endregion Program
 
@@ -2510,6 +2852,7 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion ToolStrip
+
 
         #endregion Sections
 
@@ -2538,30 +2881,6 @@ namespace RGBKeyboardSpectrograph
             else
             {
                 NewMsg(messageType, messageText);
-            }
-        }
-    }
-
-    public delegate void NewActionDelegate(string strAction);
-    public static class UpdateWorkerThread
-    {
-        public static Form MainForm;
-        public static event NewActionDelegate NewAct;
-
-        public static void UpdateAction(string strAction)
-        {
-            ThreadSafeActionUpdate(strAction);
-        }
-
-        private static void ThreadSafeActionUpdate(string strAction)
-        {
-            if (MainForm != null && MainForm.InvokeRequired)
-            {
-                MainForm.Invoke(new NewActionDelegate(ThreadSafeActionUpdate), new object[] { strAction });
-            }
-            else
-            {
-                NewAct(strAction);
             }
         }
     }
@@ -2633,6 +2952,5 @@ namespace RGBKeyboardSpectrograph
 
 #endregion Custom Controls
 
-    
 #endregion Helper Classes
 }

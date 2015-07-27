@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,13 +10,16 @@ using System.Windows.Forms;
 
 namespace RGBKeyboardSpectrograph
 {
-    class Reactive_SingleLight
+    public class Reactive_SingleLight
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
-        private RawInputHook InputHook;
 
         static SingleKeyFade[] keyMatrix = new SingleKeyFade[144];
+        static StaticColorCollection[] sendMatrix = new StaticColorCollection[144];
+        static RawInputKeyCodes keys = new RawInputKeyCodes();
+
+        Random rnd = new Random();
 
         public void KeyboardControl()
         {
@@ -25,51 +29,68 @@ namespace RGBKeyboardSpectrograph
 
             // Raw Input Hook
             // http://www.codeproject.com/Articles/558413/Minimal-Key-Logger-Using-RAWINPUT
-            InputHook = new RawInputHook();
-            InputHook.OnRawInputFromKeyboard += InputFromKeyboard;
+            //Program.InputHook = new RawInputHook();
+            Program.InputHook.OnRawInputFromKeyboard += InputFromKeyboard_SingleLight;
 
             KeyboardWriter keyWriter = new KeyboardWriter();
-            StaticColorCollection[] sendMatrix = new StaticColorCollection[144];
 
-            Program.EfSettings.Duration = 120;
-
-            for (int i = 0; i < 144; i++)
-            {
-                keyMatrix[i] = new SingleKeyFade(0, 0, 0);
-                sendMatrix[i] = new StaticColorCollection();
-            }
+            InitiateReactiveBackground();
 
             while (Program.RunKeyboardThread == 10)
             {
                 for (int i = 0; i < 144; i++)
                 {
-                    /*
-                    if (Program.AnimationsUseStaticKeys == true && Program.StaticKeyColorsBytes[i].Transparent == false)
-                    {
-                        sendMatrix[i].Set(Program.StaticKeyColorsBytes[i].KeyColor);
-                    }
-                    else
-                    {
-                        sendMatrix[i].SetD(keyMatrix[i].KeyColor);
-                    }
-                     * */
                     sendMatrix[i].SetD(keyMatrix[i].KeyColor);
                     keyMatrix[i].IncrementStep();
                 }
                 
                 keyWriter.Write(sendMatrix, true);
 
-                Thread.Sleep(10);
+                Thread.Sleep(Program.ReactSettings.Frequency);
             }
+
+            //Program.InputHook.OnRawInputFromKeyboard -= InputFromKeyboard_SingleLight;
 
             UpdateStatusMessage.ShowStatusMessage(2, "Stopping Reactive Typing");
         }
 
-        public void InputFromKeyboard(RAWINPUTHEADER riHeader, RAWKEYBOARD riKeyboard)
+        public void InitiateReactiveBackground()
+        {
+
+            for (int i = 0; i < 144; i++)
+            {
+                if (Program.StaticKeyColors[i] == Color.Transparent)
+                {
+                    keyMatrix[i] = new SingleKeyFade(
+                        20,
+                        (byte)0,
+                        (byte)0,
+                        (byte)0,
+                        (byte)0,
+                        (byte)0,
+                        (byte)0);
+                }
+                else
+                {
+                    keyMatrix[i] = new SingleKeyFade(
+                        20,
+                        (byte)0,
+                        (byte)0,
+                        (byte)0,
+                        (byte)Program.StaticKeyColors[i].R,
+                        (byte)Program.StaticKeyColors[i].G,
+                        (byte)Program.StaticKeyColors[i].B);
+                }
+                sendMatrix[i] = new StaticColorCollection();
+            }
+        }
+
+        public void InputFromKeyboard_SingleLight(RAWINPUTHEADER riHeader, RAWKEYBOARD riKeyboard)
         {
             if (riKeyboard.Flags == 0x0) { return; };
             if (riKeyboard.Flags == 0x2 && Control.IsKeyLocked(Keys.NumLock)) { return; };
             
+            /*
             string s = "";
             s = s + "0x" + riKeyboard.MakeCode.ToString("X4");
             s = s + "  0x" + riKeyboard.VKey.ToString("X4");
@@ -83,18 +104,70 @@ namespace RGBKeyboardSpectrograph
             //            s = s + "   wPara: 0x" + riHeader.wParam.ToString("X4");
             System.Diagnostics.Debug.Write(s);
             UpdateStatusMessage.ShowStatusMessage(5, s);
+             * */
 
+            int currentKey = keys.GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags);
+            int sR = 0; int sG = 0; int sB = 0; 
+            int eR = 0; int eG = 0; int eB = 0;
 
-            keyMatrix[GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags)] = new SingleKeyFade(
-                (byte)255,
-                (byte)0,
-                (byte)255,
-                (byte)0,
-                (byte)0,
-                (byte)0);
+            switch (Program.ReactTypeStart)
+            {
+                case 0:
+                    sR = Program.ReactColors.StartR;
+                    sG = Program.ReactColors.StartG;
+                    sB = Program.ReactColors.StartB;
+                    break;
+                case 1:
+                    //Figure out how to make a rainbow here, probably going to need to rewrite SingleKeyFade classs
+                    break;
+                case 2:
+                    sR = rnd.Next(Program.ReactColors.SRandRLow, Program.ReactColors.SRandRHigh);
+                    sG = rnd.Next(Program.ReactColors.SRandGLow, Program.ReactColors.SRandGHigh);
+                    sB = rnd.Next(Program.ReactColors.SRandBLow, Program.ReactColors.SRandBHigh);
+                    break;
+                default:
+                    break;
+            }
+
+            switch (Program.ReactTypeEnd)
+            {
+                case 0:
+                    eR = Program.ReactColors.EndR;
+                    eG = Program.ReactColors.EndG;
+                    eB = Program.ReactColors.EndB;
+                    break;
+                case 1:
+                    if (Program.StaticKeyColors[currentKey] != Color.Transparent)
+                    {
+                        eR = Program.StaticKeyColors[currentKey].R;
+                        eG = Program.StaticKeyColors[currentKey].G;
+                        eB = Program.StaticKeyColors[currentKey].B;
+                    }
+                    break;
+                case 2:
+                    eR = rnd.Next(Program.ReactColors.ERandRLow, Program.ReactColors.ERandRHigh);
+                    eG = rnd.Next(Program.ReactColors.ERandGLow, Program.ReactColors.ERandGHigh);
+                    eB = rnd.Next(Program.ReactColors.ERandBLow, Program.ReactColors.ERandBHigh);
+                    break;
+                default:
+                    break;
+            }
+
+            keyMatrix[currentKey] = new SingleKeyFade(
+                    Program.ReactSettings.Duration,
+                    (byte)sR,
+                    (byte)sG,
+                    (byte)sB,
+                    (byte)eR,
+                    (byte)eG,
+                    (byte)eB);
         }
 
-        private int GetKeyCode(int mcode, int vkey, int flag)
+    }
+
+    public class RawInputKeyCodes
+    {
+        public int GetKeyCode(int mcode, int vkey, int flag)
         {
             // Letters
             if (mcode == 0x001E && vkey == 0x0041 && flag == 0x0001) { return 15; } //A
@@ -239,7 +312,6 @@ namespace RGBKeyboardSpectrograph
             else if (mcode == 0x0052 && vkey == 0x0060 && flag == 0x0001) { return 129; } //0
             else if (mcode == 0x0053 && vkey == 0x006E && flag == 0x0001) { return 141; } //Decimal
 
-
             // NumPad with NumLock OFF
             else if (mcode == 0x004F && vkey == 0x0023 && flag == 0x0001) { return 93; } //1
             else if (mcode == 0x0050 && vkey == 0x0028 && flag == 0x0001) { return 105; } //2
@@ -263,6 +335,7 @@ namespace RGBKeyboardSpectrograph
 
             else { return 1; }
         }
+
     }
 }
 

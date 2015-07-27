@@ -1,0 +1,180 @@
+﻿0.6.3:
+- Added 141 tooltips to the program to improve usability.
+- Created reactive typing integration.
+- Created a reactive heatmap.
+* Upcoming: Reactive mouse.
+- Moved "Show Static Keys in Animations" option to the Settings page.
+- Modified the Spectro Start/Stop buttons' appearance and location to fit with the Effects page.
+- Increased the height of the program's main form to accomodate some new changes.
+- Expanded the log window height and moved the buttons below it a bit further down. Aligned the buttons properly so the 1px difference wouldn't cause nervous ticks.
+- Completely removed the USB 3.0 button and deprecated protocols.
+- Huge code cleanup.
+- - Renamed a bunch of controls and variables to increase consistency and readability.
+- - Added some more comments.
+- - Created new methods and overloads in order to remove redundant code.
+
+0.6.2:
+- Added support for M65 RGB and both models of Saber mice.
+- Random Keys effect has been extended to the mouse.
+- New options supporting mouse have been implemented.
+* Coming soon: Restore lighting on exit for mice.
+* Coming soon: Spectrograph will support mouse output as a sort of beat analyzer.
+
+0.6.1:
+- Addition of a Profiles folder, where profiles will be saved and loaded by default.
+- - Addition of a dropdown menu, Save As.. button, and rewrite of Load and Save behaviour.
+- - System Tray right click menu now allows switching profiles.
+- - Included a colourful pink-based default profile.
+- Added an idle timer that can change to a different mode or profile when idle for a set time.
+- Fixed a bug in the Random Keys effect causing the G18 key not to light up.
+- - Fixed some issues with the K65 and K70 UK/KR/JP/BR layouts.
+- Minimizing to the system tray no longer causes a balloon tip to appear. 
+- Fixed a possible crash issues when quitting the program, caused by incorrectly cleaning unmanaged code. 
+- Amplitude can now go down to 0. This will effectively mute it, allowing you to see only the background effects. 
+- Amplitude can now be adjusted in the System Tray right-click menu. 
+- - This is a flyout from the Start Spectro menu button. Clicking Start Spectro will still start it. 
+- Moved keyboard layout files to /corsair_devices to keep things tidy.
+
+0.6.0:
+- Massive code cleanup.
+- New USB Protocol! This should completely eradicate freezing issues.
+- - USB 3.0 switch has been hidden. After some community feedback, I'll completely remove it from the program if everything works well.
+- New look and layout.
+- - Everything is split into tabs, categorically.
+- - No more self-resizing form. Hopefully this resolves the issues for people using scaling.
+- When no keyboard layout is selected on launch, the Settings page is shown.
+- New rendering engine added.
+- New effects unrelated to sound.
+- - Random keys lighting up.
+- - - You can choose random colours within limits, or set colour, for before and after the animation.
+- - *PLANNED Rainfall effect.
+- Static keys during effects.
+- - Profiles can be saved and loaded.
+- - New option to automatically apply previously-used profile when launching.
+- - *PLANNED NumLock, CapsLock, and ScrollLock indicators can change colours based on lock status.
+- - *PLANNED Mute indicator can change colours based on whether the default device is muted or not.
+- - *PLANNED Reactive typing effects.
+- Static keys are also displayed outside of effects. Simply load or modify a profile with no effects running.
+- Spectro rendering engine is changed significantly.
+- - Code organization: Effect rendering is now contained within its own class.
+- - - More restructuring to follow as the new engine comes along.
+- - Created a custom windowing function that makes peaks look smoother, and less "tentacley".
+- - Effects for Spectro mode will align themselves at any width, as long as speed is the same.
+- - Disabled graphical output. It's pretty superfluous at this point.
+- - The Rainbow background effect has been changed to Rainbow Right and Rainbow Left.
+- - Roughly 30% performance improvement. Each cycle is now 22~33ms, variable on how long it has to wait for enough audio data. Basically, it's reacting as fast as it can.
+- Path to CUE can be selected. With this, Launch CUE on Exit has been enabled.
+- - There may still be issues with this. It might be necessary to require elevation before this works properly.
+- Update checker is now an async task. This means that if the update server is not responding, the program will still launch normally.
+- Updated right-click menu when minimized to the tray.
+- - Effects and spectro can be started and stopped.
+- - Static keys during animations can be toggled.
+- - Static keys outside of animations can be refreshed.
+- * [Done in 0.6.1] Add a list of all profiles in the most recently used profile's folder as a flyout menu.
+
+Notes and known issues:
+- The download will be fairly large, now, because it contains images from CUE. It's a bit under 8MB.
+- When you switch keyboards, the Static Keys page will take longer to load. This is normal, as it's repopulating the new layout.
+- The colorpicker is kind of weird, sometimes. I'm working on fixing it up.
+- If you quit with "Static Keys on Start" disabled, the program won't automatically re-load your previous profile on next launch. This will be corrected in a later release.
+
+0.5.3:
+- Huge overhaul to spectro maps. This is now all dynamic, based on the keyboard selected and output frequency of your default audio device. This means that any frequency (44.1, 48, 96, and 192KHz) is now supported!
+- Tweaked volume curves some more. Everything feels pretty linear, now. The bass will respond a little bit less than I'd like, but this is a good start.
+- Made some optimizations. The fastest I've gotten this to cycle is 33ms, which is very close to the old OpenTK's 26ms. I don't think I can get it down any further than this.
+- Added an option to restore the keyboard to on-board memory when quitting.
+- Added a new bar style called "Classic Bars". These are green-yellow-red as they increase.
+- Input selection dropdown is now grayed out when Output is selected. This should help clear things up for some users.
+- Fixed the issue with bar style being blank when newly opened.
+
+0.5.2:
+- Added a new icon to the application.
+- Corrected the issue where the bars don't light up until you change their brightness settings.
+- Corrected the ALT-TAB/Minimization issues when minimizing to tray.
+- Corrected some issues regarding the program not completely exiting when closed.
+- Some fixes to effect widths.
+- Decreased the minimum Refresh Delay to 0.
+- Changed the new library from NAudio to CSCore.
+- - Audio can be picked up faster. In my testing, I was seeing resolutions of about 45ms, compared to NAudio's 77ms. This should look more like the old OpenTK implementation, although will still be a little bit slower. I'm working on optimizing it further!
+- - Significant threading optimizations, due to not needing weird workarounds any more.
+
+0.5.1:
+- Moved away from OpenTK and now using NAudio.
+- - OpenAL/OpenTK/Virtual Audio Cable are no longer needed.
+- - Windows Vista and above is required.
+- - Significant decrease in package size.
+- New effects added
+- - Bars can be solid, rainbow towards right or left, static rainbow, or full fade.
+- - All audio passing through the default output device will be picked up.
+- - Audio coming in to any input device can be picked up.
+- Update Checker has been implemented. This will check for updates, and if there are any, show a button leading to the download page.
+- The visualization itself is tuned differently, better representing what we hear.
+
+0.5.0d:
+- Corrected an issue with colour selection.
+- Corrected issues with launching with previously saved colours.
+
+0.5.0c:
+-Fixed the fixes of the fixes for people using scaling in Windows.
+
+0.5.0b:
+- Fixed the fix for people using display scaling in Windows.
+
+0.5.0a:
+- Fix for people using display scaling in Windows.
+
+0.5.0:
+- Changed the layout.
+- - Debug info, including log and Test Mode can be found by hitting the "Debug' button.
+- - Application settings can be found by hitting the 'Settings' button.
+- Fixed an issue where Brightness wouldn't be loaded with values above 30.
+- Added a graphical representation of the keyboard data.
+- Added new effects. These can be manipulated with the controls to the right of the effects dropdown.
+- - The Solid Colour effect uses the closest approximation to the selected Background colour.
+- - The Rainbow effect is the same as the old default effect, however it can also be slowed down, sped up, or smushed together. I don't recommend going below 6 width if you're epileptic, though.
+- - The Colour Fade effect looks best with higher brightness. I can't figure out how to get it to step well at lower brightnesses yet, thanks to the 512 colour limitation.
+- - The other two effects are just neat to play with, and were basically mathematical errors that looked cool.
+- Added new settings:
+- - Start Minimized: Starts the application minimized.
+- - Effects on Start: Starts the effects when the application is launched.
+- Cleaned up a ton of code and made some optimizations.
+
+0.4.5a:
+- Fixed keyboard recognition for K70 and K65
+- Added a 1ms delay between packets sent to the keyboard. This might help those on USB 3.0 that were having freeze issues. Just tick the "USB 3.0" checkbox in the bottom-right. This does mean that you're adding 5ms between frames, slowing down the process a little bit, but it shouldn't be too noticeable. You can decrease the main sleep time to adjust! Thanks to dfinkelstein for the idea.
+- The way bar colour is selected has been changed. Click on the 'Bar' button to get a color picker. Keep in mind that we're still working in 512 colour mode so it won't be very precise. The button text won't turn light if the colour is too dark, so you might not be able to see the text on it. I'll fix that soon. :)
+
+0.4.5:
+- Changed USB protocol slightly, hoping that it will improve performance for persons with freezing keyboards.
+- Updated layouts so that the spacebar light looks better.
+
+0.4.4:
+- Some changes to the way the bars are calculated from the audio data. If you used to run on 10 Amplitude, you'll need to run on 20 now to get roughly the same effect.
+- Stability and additional debugging information. The green "running" indicator will now turn orange if the main thread hasn't reported back for 100ms. If you're running at the default 20ms resolution, or anything below 60ms, this should stay solid green. Going over about 60ms will likely cause it to blink. For those with the freezing issue, running at 20ms and watching this indicator should give us a bit of information about what's going on; whether it's the keyboard that's pooping or if it's the thread. Futhermore, data that doesn't seem like it should be getting sent to the keyboards (packets with values of less than 0 or more than 127) will be reported in the log. If one of these is reported, please let me know.
+
+0.4.3
+- Timing between keyboard updates can now be selected. The default is 20ms, but this can be lowered to as low as 5ms, and increased up to 1000ms (1 second). Hopefully this will help for the users of z87/z97 chipsets who are having freezing issues.
+- System Tray Icon now has a right-click menu that allows the application to be started, stopped, or quit.
+- A warning will now appear when starting the spectrograph, if CUE hasn't been closed first.
+- All K65 profiles updated to now include proper mapping of the top row of buttons. Please let me know if this works; as I don't have a K65 I can't test this myself.
+- The keyboard thread won't report back to the form thread every time it loops. This means you won't be seeing those "Repeat [x]" messages any more, but it also means that it's less back-and-forth that could cause issues. The form will check every 100ms to ensure that the keyboard is still running, and the little square in the bottom-left corner will show green if it's running, and red if it's stopped.
+
+0.4.2
+Regional decimal separator settings are now taken into account, and the XML config files are now semicolon-delimited, instead of comma-delimited, to support changes to reading methods. This means crashes for that anyone who had their computers set to use something other than a period as a decimals separator are fixed.
+
+0.4.1
+- Added an option to minimize to System Tray.
+
+0.4
+- Many crashes should be resolved. There are now informative error messages for some of the most common issues.
+- Console has been removed and replaced with an in-app output, with several levels of verbosity. (3 is enough for the typical user, but if you're getting errors, set it to 6 and let me know what you get!)
+- Multi-threading has been rewritten and should be significantly more stable.
+- Keyboard layout and even model can be swapped on the fly, and no longer require a restart.
+- Maximum brightness of the background effect increased to 40 from 30.
+- Adjusting Amplitude, Background Effect Brightness, and Bar Colour is now instant, and does not require an "Apply" button.
+- Test mode can be run even without a working keyboard layout. This means that even if you get errors opening a capture device, you can enter test mode to ensure that the program can communicate with your keyboard.
+- Test mode and Regular mode can be used interchangeably, without requiring a restart.
+- Some slight changes were made to the K70 and K65 layouts. The top row of buttons (brightness, winlock, volume, etc.) might be slightly off. Feedback on this one is greatly appreciated!
+
+Before 0.4
+- These builds came out so fast, it's best to just consider 0.4 as the first release!

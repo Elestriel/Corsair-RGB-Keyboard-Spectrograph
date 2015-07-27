@@ -79,7 +79,9 @@
     <Compile Include="RawInput\RawInputHook.cs" />
     <Compile Include="RawInput\RawInputNativeMethods.cs" />
     <Compile Include="RawInput\SimpleMessageWindow.cs" />
+    <Compile Include="Reactive_Heatmap.cs" />
     <Compile Include="Reactive_SingleLight.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SpectroEffects.cs" />
     <Compile Include="SpectroControl.cs" />
     <Compile Include="KeyboardWriter.cs" />
@@ -121,6 +123,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Changelog.txt" />
     <Content Include="Resources\CorsairLogo.ico" />
     <Content Include="Resources\CorsairLogoTransparent.ico" />
     <Content Include="corsair_devices\cgk65rgb\image\be.jpg" />
@@ -183,7 +186,6 @@
     <Content Include="corsair_devices\sabre2\image\sabre2.png" />
     <Content Include="corsair_devices\sabre2\profile_sabre2.xml" />
     <Content Include="Resources\Corsair_Sails_Small.ico" />
-    <Content Include="Notes.txt" />
     <None Include="Resources\paintbucket.png" />
     <None Include="Resources\eyedropper.png" />
   </ItemGroup>

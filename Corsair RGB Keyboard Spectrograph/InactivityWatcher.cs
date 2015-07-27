@@ -23,11 +23,11 @@ namespace RGBKeyboardSpectrograph
                 { UpdateStatusMessage.ShowStatusMessage(1, "Inactive: " + idleTime); }
 
                 // When inactivity timer pops, change layout and then enter a loop waiting for activity
-                if ((IdleTimeFinder.GetIdleTime() / 1000) >= Program.InactivityTimeTrigger * 60 && Program.InactivityTimeTrigger > 0)
+                if ((IdleTimeFinder.GetIdleTime() / 1000) >= Program.InactivityTimeTrigger * 6 && Program.InactivityTimeTrigger > 0)
                 {
                     InactivityStatusChanged.UpdateInactivity(1);
 
-                    while ((idleTime / 1000) >= Program.InactivityTimeTrigger * 60)
+                    while ((idleTime / 1000) >= Program.InactivityTimeTrigger * 6) //FIXME
                     {
                         idleTime = IdleTimeFinder.GetIdleTime();
                         Thread.Sleep(100);
@@ -61,14 +61,14 @@ namespace RGBKeyboardSpectrograph
 
         public static uint GetIdleTime()
         {
-            LASTINPUTINFO lastInPut = new LASTINPUTINFO();
-            lastInPut.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(lastInPut);
-            GetLastInputInfo(ref lastInPut);
+            LASTINPUTINFO lastInput = new LASTINPUTINFO();
+            lastInput.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(lastInput);
+            GetLastInputInfo(ref lastInput);
 
-            return ((uint)Environment.TickCount - lastInPut.dwTime);
+            return ((uint)Environment.TickCount - lastInput.dwTime);
         }
         /// <summary>
-        /// Get the Last input time in ticks
+        /// Get the last input time in ticks
         /// </summary>
         /// <returns></returns>
         public static long GetLastInputTime()

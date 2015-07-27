@@ -874,5 +874,243 @@ namespace RGBKeyboardSpectrograph.Properties {
                 this["Effect_Rainfall_Delay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_Start_Mode {
+            get {
+                return ((int)(this["Reactive_Start_Mode"]));
+            }
+            set {
+                this["Reactive_Start_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color Reactive_Start_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Reactive_Start_DefinedColor"]));
+            }
+            set {
+                this["Reactive_Start_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_Start_CLow_Red {
+            get {
+                return ((int)(this["Reactive_Start_CLow_Red"]));
+            }
+            set {
+                this["Reactive_Start_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_Start_CLow_Green {
+            get {
+                return ((int)(this["Reactive_Start_CLow_Green"]));
+            }
+            set {
+                this["Reactive_Start_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_Start_CLow_Blue {
+            get {
+                return ((int)(this["Reactive_Start_CLow_Blue"]));
+            }
+            set {
+                this["Reactive_Start_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_Start_CHigh_Red {
+            get {
+                return ((int)(this["Reactive_Start_CHigh_Red"]));
+            }
+            set {
+                this["Reactive_Start_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_Start_CHigh_Green {
+            get {
+                return ((int)(this["Reactive_Start_CHigh_Green"]));
+            }
+            set {
+                this["Reactive_Start_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_Start_CHigh_Blue {
+            get {
+                return ((int)(this["Reactive_Start_CHigh_Blue"]));
+            }
+            set {
+                this["Reactive_Start_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_End_Mode {
+            get {
+                return ((int)(this["Reactive_End_Mode"]));
+            }
+            set {
+                this["Reactive_End_Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color Reactive_End_DefinedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["Reactive_End_DefinedColor"]));
+            }
+            set {
+                this["Reactive_End_DefinedColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_End_CLow_Red {
+            get {
+                return ((int)(this["Reactive_End_CLow_Red"]));
+            }
+            set {
+                this["Reactive_End_CLow_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_End_CLow_Green {
+            get {
+                return ((int)(this["Reactive_End_CLow_Green"]));
+            }
+            set {
+                this["Reactive_End_CLow_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Reactive_End_CLow_Blue {
+            get {
+                return ((int)(this["Reactive_End_CLow_Blue"]));
+            }
+            set {
+                this["Reactive_End_CLow_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_End_CHigh_Red {
+            get {
+                return ((int)(this["Reactive_End_CHigh_Red"]));
+            }
+            set {
+                this["Reactive_End_CHigh_Red"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_End_CHigh_Green {
+            get {
+                return ((int)(this["Reactive_End_CHigh_Green"]));
+            }
+            set {
+                this["Reactive_End_CHigh_Green"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255")]
+        public int Reactive_End_CHigh_Blue {
+            get {
+                return ((int)(this["Reactive_End_CHigh_Blue"]));
+            }
+            set {
+                this["Reactive_End_CHigh_Blue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("160")]
+        public int Reactive_Duration {
+            get {
+                return ((int)(this["Reactive_Duration"]));
+            }
+            set {
+                this["Reactive_Duration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int Reactive_Delay {
+            get {
+                return ((int)(this["Reactive_Delay"]));
+            }
+            set {
+                this["Reactive_Delay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color Heatmap_StartColour {
+            get {
+                return ((global::System.Drawing.Color)(this["Heatmap_StartColour"]));
+            }
+            set {
+                this["Heatmap_StartColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Fuchsia")]
+        public global::System.Drawing.Color Heatmap_EndColour {
+            get {
+                return ((global::System.Drawing.Color)(this["Heatmap_EndColour"]));
+            }
+            set {
+                this["Heatmap_EndColour"] = value;
+            }
+        }
     }
 }

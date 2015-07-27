@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.3pre1";
+        public static string VersionNumber = "0.6.3";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -45,14 +45,21 @@ namespace RGBKeyboardSpectrograph
         public static EffectColorSettings EfColors = new EffectColorSettings();
         public static bool AnimationsUseStaticKeys = false;
 
+        // Reactive
+        public static EffectSettings ReactSettings = new EffectSettings();
+        public static EffectColorSettings ReactColors = new EffectColorSettings();
+        public static EffectColorSettings HeatmapColors = new EffectColorSettings();
+        public static int ReactTypeStart;
+        public static int ReactTypeEnd;
+        public static int HighestStrikeCount = 0;
+
         // Settings
         public static string SettingsKeyboardModel;
         public static string SettingsKeyboardLayout;
         public static uint SettingsKeyboardID;
         public static uint SettingsMouseID;
         public static string SettingsMouseModel;
-        public static bool SettingsUsb3Mode;
-        public static bool SettingsRestoreOnExit = false;
+        public static bool SettingsRestoreLightingOnExit = false;
         public static bool SettingLaunchCueOnExit = false;
         public static string SettingsLastUsedProfile;
         public static bool StaticKeysNeedRedraw = false;
@@ -68,13 +75,15 @@ namespace RGBKeyboardSpectrograph
         public static int RefreshDelay = 10;
         public static int ThreadStatus = 0;
         public static bool FailedPacketLogWritten = false;
-        public static bool DevMode = true;
+        public static bool DevMode = false;
         public static string[] VersionCheckData = new string[4];
 
         // Worker Thread
         public volatile static Thread newWorker = null;
         public volatile static Thread idleThread = null;
-        
+
+        // Input Watcher
+        public static RawInputHook InputHook = new RawInputHook();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

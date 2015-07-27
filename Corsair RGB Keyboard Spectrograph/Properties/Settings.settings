@@ -215,5 +215,65 @@
     <Setting Name="Effect_Rainfall_Delay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="Reactive_Start_Mode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_DefinedColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Reactive_Start_CLow_Red" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_CLow_Green" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_CLow_Blue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_CHigh_Red" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_CHigh_Green" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_Start_CHigh_Blue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_End_Mode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_End_DefinedColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Reactive_End_CLow_Red" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_End_CLow_Green" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_End_CLow_Blue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Reactive_End_CHigh_Red" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_End_CHigh_Green" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_End_CHigh_Blue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="Reactive_Duration" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">160</Value>
+    </Setting>
+    <Setting Name="Reactive_Delay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Heatmap_StartColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+    <Setting Name="Heatmap_EndColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Fuchsia</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

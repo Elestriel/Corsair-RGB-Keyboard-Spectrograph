@@ -23,12 +23,12 @@ namespace RGBKeyboardSpectrograph
 
             for (int i = 0; i < 144; i++)
             {
-                keyMatrix[i] = new SingleKeyFade(0, 0, 0);
+                keyMatrix[i] = new SingleKeyFade(Program.EfSettings.Duration, 0, 0, 0);
                 sendMatrix[i] = new StaticColorCollection();
             }
             for (int i = 144; i < 148; i++)
             {
-                keyMatrix[i] = new SingleKeyFade(0, 0, 0);
+                keyMatrix[i] = new SingleKeyFade(Program.EfSettings.Duration, 0, 0, 0);
                 mouseMatrix[i - 144] = new MouseColorCollection();
             }
 
@@ -46,6 +46,7 @@ namespace RGBKeyboardSpectrograph
                             {
                                 case 1:
                                     keyMatrix[keyToLight] = new SingleKeyFade(
+                                        Program.EfSettings.Duration,
                                         (byte)Program.EfColors.StartR,
                                         (byte)Program.EfColors.StartG,
                                         (byte)Program.EfColors.StartB,
@@ -55,6 +56,7 @@ namespace RGBKeyboardSpectrograph
                                     break;
                                 case 2:
                                     keyMatrix[keyToLight] = new SingleKeyFade(
+                                        Program.EfSettings.Duration,
                                         (byte)rnd.Next(Program.EfColors.SRandRLow, Program.EfColors.SRandRHigh),
                                         (byte)rnd.Next(Program.EfColors.SRandGLow, Program.EfColors.SRandGHigh),
                                         (byte)rnd.Next(Program.EfColors.SRandBLow, Program.EfColors.SRandBHigh),
@@ -64,6 +66,7 @@ namespace RGBKeyboardSpectrograph
                                     break;
                                 case 3:
                                     keyMatrix[keyToLight] = new SingleKeyFade(
+                                        Program.EfSettings.Duration,
                                         (byte)Program.EfColors.StartR,
                                         (byte)Program.EfColors.StartG,
                                         (byte)Program.EfColors.StartB,
@@ -73,6 +76,7 @@ namespace RGBKeyboardSpectrograph
                                     break;
                                 case 4:
                                     keyMatrix[keyToLight] = new SingleKeyFade(
+                                        Program.EfSettings.Duration,
                                         (byte)rnd.Next(Program.EfColors.SRandRLow, Program.EfColors.SRandRHigh),
                                         (byte)rnd.Next(Program.EfColors.SRandGLow, Program.EfColors.SRandGHigh),
                                         (byte)rnd.Next(Program.EfColors.SRandBLow, Program.EfColors.SRandBHigh),
@@ -137,21 +141,20 @@ namespace RGBKeyboardSpectrograph
         private byte sR, sG, sB, eR, eG, eB;
         
         private int CycleCount = 0;
-        private int CycleLimit = Program.EfSettings.Duration;
+        private int CycleLimit;
 
-        public SingleKeyFade(byte sR, byte sG, byte sB)
+        public SingleKeyFade(int limit, byte sR, byte sG, byte sB)
         {
+            this.CycleLimit = limit;
             this.R = sR;
             this.G = sG;
             this.B = sB;
             this.EffectInProgress = false;
         }
 
-        public SingleKeyFade(byte sR, byte sG, byte sB, byte eR, byte eG, byte eB)
+        public SingleKeyFade(int limit, byte sR, byte sG, byte sB, byte eR, byte eG, byte eB)
         {
-            //this.R = sR;
-            //this.G = sG;
-            //this.B = sB;
+            this.CycleLimit = limit;
             this.sR = sR;
             this.sG = sG;
             this.sB = sB;

@@ -17,7 +17,6 @@ namespace RGBKeyboardSpectrograph
 
     class SampleAggregator
     {
-        // FFT
         public event EventHandler<FftEventArgs> FftCalculated;
         public bool PerformFFT { get; set; }
 
