@@ -1,4 +1,9 @@
-﻿0.6.3:
+﻿0.6.3a:
+- Corrected an issue where the right-click sensitivity slider wouldn't update to what was picked in the main program.
+- Corrected an issue where resetting the heatmap only reset the maximum counts, not the individual keys' counts.
+- Added an option to reset the Heatmap from the right-click menu.
+
+0.6.3:
 - Added 141 tooltips to the program to improve usability.
 - Created reactive typing integration.
 - Created a reactive heatmap.

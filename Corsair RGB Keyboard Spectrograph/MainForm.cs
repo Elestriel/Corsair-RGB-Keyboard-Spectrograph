@@ -2521,6 +2521,7 @@ namespace RGBKeyboardSpectrograph
         private void Heatmap_ResetMaxButton_Click(object sender, EventArgs e)
         {
             Program.HighestStrikeCount = 0;
+            if (HeatmapThread != null) { HeatmapThread.ResetKeyStrikeCounts(); };
         }
 
         #endregion Reactive - Heatmap
@@ -2850,9 +2851,12 @@ namespace RGBKeyboardSpectrograph
             tsmSpectroAmplitude.Text = "Amplitude: " + tsmSpectroAmplitudeSlider.Value;
             SpectroAmplitudeUD.Value = ((TrackBar)sender).Value;
         }
+        private void RightClickMenu_Opening(object sender, CancelEventArgs e)
+        {
+            tsmSpectroAmplitudeSlider.Value = (int)Program.SpectroAmplitude;
+        }
 
         #endregion ToolStrip
-
 
         #endregion Sections
 

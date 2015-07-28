@@ -82,6 +82,14 @@ namespace RGBKeyboardSpectrograph
 
             keyMatrix[currentKey].NewStrike();
         }
+
+        public void ResetKeyStrikeCounts()
+        {
+            for (int i = 0; i < 144; i++)
+            {
+                keyMatrix[i].ResetCount();
+            }
+        }
     }
 
     class HeatmapKey
@@ -125,6 +133,11 @@ namespace RGBKeyboardSpectrograph
             if (this.strikes > Program.HighestStrikeCount) { Program.HighestStrikeCount = this.strikes; };
 
             ReloadIntensity();
+        }
+
+        public void ResetCount()
+        {
+            strikes = 0;
         }
 
         public void ReloadIntensity(byte RMin, byte GMin, byte BMin, byte RMax, byte GMax, byte BMax)

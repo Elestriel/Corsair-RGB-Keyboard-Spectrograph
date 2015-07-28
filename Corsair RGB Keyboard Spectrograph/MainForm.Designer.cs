@@ -54,8 +54,11 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmReactive = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmHeatmap = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmResetHeatmap = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmQuit = new System.Windows.Forms.ToolStripMenuItem();
@@ -230,8 +233,6 @@
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
             this.MuteCheckTimer = new System.Windows.Forms.Timer(this.components);
-            this.tsmHeatmap = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -504,6 +505,7 @@
             this.RightClickMenu.ShowCheckMargin = true;
             this.RightClickMenu.ShowImageMargin = false;
             this.RightClickMenu.Size = new System.Drawing.Size(173, 242);
+            this.RightClickMenu.Opening += new System.ComponentModel.CancelEventHandler(this.RightClickMenu_Opening);
             // 
             // tsmAbout
             // 
@@ -558,6 +560,14 @@
             this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
             this.tsmSpectroAmplitude.Text = "Amplitude: x";
             // 
+            // tsmSpectroAmplitudeSlider
+            // 
+            this.tsmSpectroAmplitudeSlider.Maximum = 10;
+            this.tsmSpectroAmplitudeSlider.Minimum = 0;
+            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
+            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
+            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
+            // 
             // tsmStartEffects
             // 
             this.tsmStartEffects.Name = "tsmStartEffects";
@@ -571,6 +581,22 @@
             this.tsmReactive.Size = new System.Drawing.Size(172, 22);
             this.tsmReactive.Text = "Start Reactive";
             this.tsmReactive.Click += new System.EventHandler(this.ReactiveStartButton_LaunchFromRightClickMenu);
+            // 
+            // tsmHeatmap
+            // 
+            this.tsmHeatmap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmResetHeatmap});
+            this.tsmHeatmap.Name = "tsmHeatmap";
+            this.tsmHeatmap.Size = new System.Drawing.Size(172, 22);
+            this.tsmHeatmap.Text = "Start Heatmap";
+            this.tsmHeatmap.Click += new System.EventHandler(this.ReactiveStartButton_LaunchFromRightClickMenu);
+            // 
+            // tsmResetHeatmap
+            // 
+            this.tsmResetHeatmap.Name = "tsmResetHeatmap";
+            this.tsmResetHeatmap.Size = new System.Drawing.Size(152, 22);
+            this.tsmResetHeatmap.Text = "Reset";
+            this.tsmResetHeatmap.Click += new System.EventHandler(this.Heatmap_ResetMaxButton_Click);
             // 
             // tsmStop
             // 
@@ -2741,21 +2767,6 @@
             // 
             this.MuteCheckTimer.Tick += new System.EventHandler(this.MuteCheckTimer_Tick);
             // 
-            // tsmHeatmap
-            // 
-            this.tsmHeatmap.Name = "tsmHeatmap";
-            this.tsmHeatmap.Size = new System.Drawing.Size(172, 22);
-            this.tsmHeatmap.Text = "Start Heatmap";
-            this.tsmHeatmap.Click += new System.EventHandler(this.ReactiveStartButton_LaunchFromRightClickMenu);
-            // 
-            // tsmSpectroAmplitudeSlider
-            // 
-            this.tsmSpectroAmplitudeSlider.Maximum = 10;
-            this.tsmSpectroAmplitudeSlider.Minimum = 0;
-            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
-            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
-            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -3069,6 +3080,7 @@
         private System.Windows.Forms.Button Heatmap_ResetMaxButton;
         private System.Windows.Forms.ToolStripMenuItem tsmReactive;
         private System.Windows.Forms.ToolStripMenuItem tsmHeatmap;
+        private System.Windows.Forms.ToolStripMenuItem tsmResetHeatmap;
 
     }
 }

@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.3";
+        public static string VersionNumber = "0.6.3a";
 
         // Application Variables
         public static byte[] MyPositionMap;
