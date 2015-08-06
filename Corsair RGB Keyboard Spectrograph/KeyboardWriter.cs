@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 namespace RGBKeyboardSpectrograph
@@ -455,7 +456,7 @@ namespace RGBKeyboardSpectrograph
                             }
                             else
                             {
-                                UpdateStatusMessage.ShowStatusMessage(6, "x: " + x + " y: " + y + " key: " + keys.Current);
+                                //UpdateStatusMessage.ShowStatusMessage(6, "x: " + x + " y: " + y + " key: " + keys.Current);
                                 key = (byte)keys.Current;
                                 keys.MoveNext();
                                 size = (int)(sizef * 4);
@@ -473,11 +474,11 @@ namespace RGBKeyboardSpectrograph
                 }
                 if ((byte)keys.Current != 255 || (float)sizes.Current != 0f)
                 {
-                    UpdateStatusMessage.ShowStatusMessage(4, "Bad line: " + keys.Current + ", " + sizes.Current + " Key " + key + y);
+                    UpdateStatusMessage.ShowStatusMessage(4, "Bad line: " + keys.Current + ", " + sizes.Current + " Key " + key + "." + y);
                 }
                 else
                 {
-                    UpdateStatusMessage.ShowStatusMessage(5, "Row Okay: " + keys.Current + ", " + sizes.Current + " Key " + key);
+                    //UpdateStatusMessage.ShowStatusMessage(5, "Row Okay: " + keys.Current + ", " + sizes.Current + " Key " + key + "." + y);
                 }
 
                 keys.MoveNext();
@@ -698,21 +699,6 @@ namespace RGBKeyboardSpectrograph
             return WriteFile(this.keyboardUsbDevice, usb_pkt, 65, ref written, IntPtr.Zero);
         }
         
-        private void WritePacketToLog(byte[] CurrentPacket, byte[] PreviousPacket)
-        {
-            if (Program.FailedPacketLogWritten == true) return;
-            string strOutput = "Previous Packet" + System.Environment.NewLine +
-                                BitConverter.ToString(PreviousPacket) + System.Environment.NewLine + 
-                                "Current Packet" + System.Environment.NewLine + 
-                                BitConverter.ToString(CurrentPacket);
-            strOutput = strOutput.Replace("-", System.Environment.NewLine);
-
-            string timeNow = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-            string outputPath = Directory.GetCurrentDirectory() + "log-" + timeNow + ".txt";
-            File.WriteAllText(outputPath, strOutput);
-            Program.FailedPacketLogWritten = true;
-        }
-
         private void WriteGraphics()
         {
             Color[] pixelData = new Color[144];

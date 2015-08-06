@@ -972,7 +972,7 @@ namespace RGBKeyboardSpectrograph.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int Reactive_End_Mode {
             get {
                 return ((int)(this["Reactive_End_Mode"]));
@@ -1110,6 +1110,114 @@ namespace RGBKeyboardSpectrograph.Properties {
             }
             set {
                 this["Heatmap_EndColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SuppressCueWarnings {
+            get {
+                return ((bool)(this["SuppressCueWarnings"]));
+            }
+            set {
+                this["SuppressCueWarnings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        public global::System.Drawing.Color ToggleCapsOnColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleCapsOnColour"]));
+            }
+            set {
+                this["ToggleCapsOnColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color ToggleCapsOffColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleCapsOffColour"]));
+            }
+            set {
+                this["ToggleCapsOffColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        public global::System.Drawing.Color ToggleNumOnColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleNumOnColour"]));
+            }
+            set {
+                this["ToggleNumOnColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color ToggleNumOffColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleNumOffColour"]));
+            }
+            set {
+                this["ToggleNumOffColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        public global::System.Drawing.Color ToggleScrollOnColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleScrollOnColour"]));
+            }
+            set {
+                this["ToggleScrollOnColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color ToggleScrollOffColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleScrollOffColour"]));
+            }
+            set {
+                this["ToggleScrollOffColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        public global::System.Drawing.Color ToggleMuteOnColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleMuteOnColour"]));
+            }
+            set {
+                this["ToggleMuteOnColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color ToggleMuteOffColour {
+            get {
+                return ((global::System.Drawing.Color)(this["ToggleMuteOffColour"]));
+            }
+            set {
+                this["ToggleMuteOffColour"] = value;
             }
         }
     }

@@ -124,6 +124,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt" />
+    <Content Include="corsair_devices\strafe\image\be.jpg" />
+    <Content Include="corsair_devices\strafe\image\br.jpg" />
+    <Content Include="corsair_devices\strafe\image\ch.jpg" />
+    <Content Include="corsair_devices\strafe\image\de.jpg" />
+    <Content Include="corsair_devices\strafe\image\es.jpg" />
+    <Content Include="corsair_devices\strafe\image\eu.jpg" />
+    <Content Include="corsair_devices\strafe\image\fr.jpg" />
+    <Content Include="corsair_devices\strafe\image\it.jpg" />
+    <Content Include="corsair_devices\strafe\image\jp.jpg" />
+    <Content Include="corsair_devices\strafe\image\kr.jpg" />
+    <Content Include="corsair_devices\strafe\image\mex.jpg" />
+    <Content Include="corsair_devices\strafe\image\na.jpg" />
+    <Content Include="corsair_devices\strafe\image\nd.jpg" />
+    <Content Include="corsair_devices\strafe\image\ru.jpg" />
+    <Content Include="corsair_devices\strafe\image\tw.jpg" />
+    <Content Include="corsair_devices\strafe\image\uk.jpg" />
+    <Content Include="corsair_devices\strafe\k70rgb_br.xml" />
+    <Content Include="corsair_devices\strafe\k70rgb_jp.xml" />
+    <Content Include="corsair_devices\strafe\k70rgb_kr.xml" />
+    <Content Include="corsair_devices\strafe\k70rgb_na.xml" />
+    <Content Include="corsair_devices\strafe\k70rgb_uk.xml" />
     <Content Include="Resources\CorsairLogo.ico" />
     <Content Include="Resources\CorsairLogoTransparent.ico" />
     <Content Include="corsair_devices\cgk65rgb\image\be.jpg" />
@@ -189,6 +210,7 @@
     <None Include="Resources\paintbucket.png" />
     <None Include="Resources\eyedropper.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -240,7 +240,7 @@
       <Value Profile="(Default)">255</Value>
     </Setting>
     <Setting Name="Reactive_End_Mode" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="Reactive_End_DefinedColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
@@ -274,6 +274,33 @@
     </Setting>
     <Setting Name="Heatmap_EndColour" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Fuchsia</Value>
+    </Setting>
+    <Setting Name="SuppressCueWarnings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ToggleCapsOnColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="ToggleCapsOffColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="ToggleNumOnColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="ToggleNumOffColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="ToggleScrollOnColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="ToggleScrollOffColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="ToggleMuteOnColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="ToggleMuteOffColour" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
     </Setting>
   </Settings>
 </SettingsFile>

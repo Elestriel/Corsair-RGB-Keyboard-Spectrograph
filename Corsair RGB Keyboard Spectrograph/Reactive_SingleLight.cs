@@ -90,7 +90,7 @@ namespace RGBKeyboardSpectrograph
             if (riKeyboard.Flags == 0x0) { return; };
             if (riKeyboard.Flags == 0x2 && Control.IsKeyLocked(Keys.NumLock)) { return; };
             
-            /*
+            
             string s = "";
             s = s + "0x" + riKeyboard.MakeCode.ToString("X4");
             s = s + "  0x" + riKeyboard.VKey.ToString("X4");
@@ -104,9 +104,9 @@ namespace RGBKeyboardSpectrograph
             //            s = s + "   wPara: 0x" + riHeader.wParam.ToString("X4");
             System.Diagnostics.Debug.Write(s);
             UpdateStatusMessage.ShowStatusMessage(5, s);
-             * */
 
-            int currentKey = keys.GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags);
+
+            int currentKey = keys.GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags, Control.IsKeyLocked(Keys.NumLock));
             int sR = 0; int sG = 0; int sB = 0; 
             int eR = 0; int eG = 0; int eB = 0;
 
@@ -167,7 +167,7 @@ namespace RGBKeyboardSpectrograph
 
     public class RawInputKeyCodes
     {
-        public int GetKeyCode(int mcode, int vkey, int flag)
+        public int GetKeyCode(int mcode, int vkey, int flag, bool numLock)
         {
             // Letters
             if (mcode == 0x001E && vkey == 0x0041 && flag == 0x0001) { return 15; } //A
@@ -253,7 +253,7 @@ namespace RGBKeyboardSpectrograph
             else if (mcode == 0x002B && vkey == 0x00E2 && flag == 0x0001) { return 16; } //EU \
 
             // System Keys
-            else if (mcode == 0x002A && vkey == 0x00FF && flag == 0x0003) { return 18; } //Print Screen
+            else if (mcode == 0x002A && vkey == 0x00FF && flag == 0x0003 && numLock == true) { return 18; } //Print Screen
             else if (mcode == 0x0037 && vkey == 0x002C && flag == 0x0003) { return 18; } //Print Screen
             else if (mcode == 0x0037 && vkey == 0x002C && flag == 0x0002) { return 18; } //Print Screen
             else if (mcode == 0x0046 && vkey == 0x0091 && flag == 0x0001) { return 30; } //Scroll Lock
@@ -333,7 +333,7 @@ namespace RGBKeyboardSpectrograph
             else if (mcode == 0x0000 && vkey == 0x00AD && flag == 0x0003) { return 20; } //Mute
 
 
-            else { return 1; }
+            else { return 142; }
         }
 
     }

@@ -158,6 +158,14 @@ namespace RGBKeyboardSpectrograph
 
             // Static
             Properties.Settings.Default.appLastUsedProfile = Program.SettingsLastUsedProfile;
+            Properties.Settings.Default.ToggleCapsOnColour = ToggleCapsOn.BackColor;
+            Properties.Settings.Default.ToggleCapsOffColour = ToggleCapsOff.BackColor;
+            Properties.Settings.Default.ToggleNumOnColour = ToggleNumOn.BackColor;
+            Properties.Settings.Default.ToggleNumOffColour = ToggleNumOff.BackColor;
+            Properties.Settings.Default.ToggleScrollOnColour = ToggleScrollOn.BackColor;
+            Properties.Settings.Default.ToggleScrollOffColour = ToggleScrollOff.BackColor;
+            Properties.Settings.Default.ToggleMuteOnColour = ToggleMuteOn.BackColor;
+            Properties.Settings.Default.ToggleMuteOffColour = ToggleMuteOff.BackColor;
 
             // Reactive 
             if (Reactive_Start_RadioDefined.Checked == true) { Properties.Settings.Default.Reactive_Start_Mode = 0; }
@@ -203,6 +211,7 @@ namespace RGBKeyboardSpectrograph
             Properties.Settings.Default.settingRestoreLighting = SettingsRestoreLightingCheck.Checked;
             Properties.Settings.Default.settingLaunchCueOnExit = SettingsLaunchCueCheck.Checked;
             Properties.Settings.Default.EffectsIncludeMouse = SettingsEffectsIncludeMouse.Checked;
+            Properties.Settings.Default.SuppressCueWarnings = SettingsSuppressCueWarnings.Checked;
 
             Properties.Settings.Default.settingCueLocation = SettingsCuePathTextBox.Text;
 
@@ -249,11 +258,12 @@ namespace RGBKeyboardSpectrograph
             SettingsKeyboardModelCB.Items.Add("K65-RGB");
             SettingsKeyboardModelCB.Items.Add("K70-RGB");
             SettingsKeyboardModelCB.Items.Add("K95-RGB");
+            SettingsKeyboardModelCB.Items.Add("STRAFE");
 
             SettingsMouseModelCB.Items.Add("None");
             SettingsMouseModelCB.Items.Add("M65 RGB");
-            SettingsMouseModelCB.Items.Add("Sabre 1");
-            SettingsMouseModelCB.Items.Add("Sabre 2");
+            SettingsMouseModelCB.Items.Add("Sabre Optical");
+            SettingsMouseModelCB.Items.Add("Sabre Laser");
 
             SpectroBgEffectCB.Items.Add("Solid Colour");
             SpectroBgEffectCB.Items.Add("Rainbow Right");
@@ -449,6 +459,16 @@ namespace RGBKeyboardSpectrograph
             #region Settings: Static
 
             Program.SettingsLastUsedProfile = Properties.Settings.Default.appLastUsedProfile;
+
+            ToggleCapsOn.BackColor = Properties.Settings.Default.ToggleCapsOnColour;
+            ToggleCapsOff.BackColor = Properties.Settings.Default.ToggleCapsOffColour;
+            ToggleNumOn.BackColor = Properties.Settings.Default.ToggleNumOnColour;
+            ToggleNumOff.BackColor = Properties.Settings.Default.ToggleNumOffColour;
+            ToggleScrollOn.BackColor = Properties.Settings.Default.ToggleScrollOnColour;
+            ToggleScrollOff.BackColor = Properties.Settings.Default.ToggleScrollOffColour;
+            ToggleMuteOn.BackColor = Properties.Settings.Default.ToggleMuteOnColour;
+            ToggleMuteOff.BackColor = Properties.Settings.Default.ToggleMuteOffColour;
+
             StaticKeysLoadProfileList();
 
             #endregion Settings: Static
@@ -566,6 +586,7 @@ namespace RGBKeyboardSpectrograph
             SettingsRestoreLightingCheck.Checked = Properties.Settings.Default.settingRestoreLighting;
             SettingsLaunchCueCheck.Checked = Properties.Settings.Default.settingLaunchCueOnExit;
             SettingsEffectsIncludeMouse.Checked = Properties.Settings.Default.EffectsIncludeMouse;
+            SettingsSuppressCueWarnings.Checked = Properties.Settings.Default.SuppressCueWarnings;
 
             SettingsCuePathTextBox.Text = Properties.Settings.Default.settingCueLocation;
 
@@ -716,7 +737,6 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.SpectroWasapiLoopbackRadio, "Listen to the audio being output by your computer's default sound device. NOTE: This may not work on AMD HDMI Audio lines.");
             hintsToolTip.SetToolTip(this.SpectroWasapiRadio, "Listen to the audio being input to your computer over devices such as a microphone or line-in.");
             hintsToolTip.SetToolTip(this.StartSpectrographButton, "Starts the Spectrograph.");
-            hintsToolTip.SetToolTip(this.StaticCapsColourButton, "Click to select a colour for Caps Lock.");
             hintsToolTip.SetToolTip(this.StaticClearButton, "Clear the copied colour.");
             hintsToolTip.SetToolTip(this.StaticCopyButton, "Copy a key's colour.");
             hintsToolTip.SetToolTip(this.StaticCopyPasteColor, "Click to define the colour that will be pasted.");
@@ -727,16 +747,24 @@ namespace RGBKeyboardSpectrograph
             hintsToolTip.SetToolTip(this.StaticMouseLight2, "Click to define Mouse Light 2.");
             hintsToolTip.SetToolTip(this.StaticMouseLight3, "Click to define Mouse Light 3.");
             hintsToolTip.SetToolTip(this.StaticMouseLight4, "Click to define Mouse Light 4. (Saber Only)");
-            hintsToolTip.SetToolTip(this.StaticMutedColourButton, "Click to select a colour for the mute button.");
+            hintsToolTip.SetToolTip(this.ToggleMuteOn, "Click to select a colour for the mute button.");
             hintsToolTip.SetToolTip(this.StaticNewProfileButton, "Clear the current profile.");
-            hintsToolTip.SetToolTip(this.StaticNumColourButton, "Click to select a colour for Num Lock.");
             hintsToolTip.SetToolTip(this.StaticPasteButton, "Paste the copied colour.");
             hintsToolTip.SetToolTip(this.StaticProfileListCB, "Profiles stored in the Profiles folder.");
             hintsToolTip.SetToolTip(this.StaticSaveProfileAsButton, "Save the current profile as a new profile.");
             hintsToolTip.SetToolTip(this.StaticSaveProfileButton, "Save the current profile over the selected profile.");
-            hintsToolTip.SetToolTip(this.StaticScrollColourButton, "Click to select a colour for Scroll Lock.");
             hintsToolTip.SetToolTip(this.StaticUpdateKeyboardButton, "DEBUG: Outputs current display to the keyboard.");
             hintsToolTip.SetToolTip(this.StopSpectrographButton, "Stops all effects.");
+            hintsToolTip.SetToolTip(this.ToggleCapsLabel, "Change the colour of the Caps Lock key when it is on or off.");
+            hintsToolTip.SetToolTip(this.ToggleCapsOn, "Click to select a colour for Caps Lock when ON.");
+            hintsToolTip.SetToolTip(this.ToggleCapsOff, "Click to select a colour for Caps Lock when OFF.");
+            hintsToolTip.SetToolTip(this.ToggleNumLabel, "Change the colour of the Num Lock key when it is on or off.");
+            hintsToolTip.SetToolTip(this.ToggleNumOn, "Click to select a colour for Num Lock when ON.");
+            hintsToolTip.SetToolTip(this.ToggleNumOff, "Click to select a colour for Num Lock when OFF.");
+            hintsToolTip.SetToolTip(this.ToggleScrollLabel, "Change the colour of the Num Lock key when it is on or off.");
+            hintsToolTip.SetToolTip(this.ToggleScrollOn, "Click to select a colour for Scroll Lock when ON.");
+            hintsToolTip.SetToolTip(this.ToggleScrollOff, "Click to select a colour for Scroll Lock when OFF.");
+            hintsToolTip.SetToolTip(this.UseToggleColoursCheck, "Use the colours defined below instead of those in the static profile.");
 
             #endregion Tooltips
 
@@ -810,11 +838,11 @@ namespace RGBKeyboardSpectrograph
             // Show Settings tab if there's no layout selected
             if (SettingsKeyboardLayoutCB.SelectedIndex < 0)
             {
-                MainTabControl.SelectTab(3);
+                MainTabControl.SelectTab(4);
             };
 
             // Start up mute watching timer
-            //MuteCheckTimer.Start();
+            ToggleCheckTimer.Start();
 
             #endregion Post Load Tasks
 
@@ -852,7 +880,7 @@ namespace RGBKeyboardSpectrograph
                 // If in DevMode, always use the K95 and M65
                 if (Program.DevMode == true)
                 {
-                    Program.SettingsKeyboardID = 0x1B11;
+                    Program.SettingsKeyboardID = 0x1B15;
                     Program.SettingsMouseID = 0x1B12;
                 }
                 else
@@ -867,6 +895,9 @@ namespace RGBKeyboardSpectrograph
                             break;
                         case "K95-RGB":
                             Program.SettingsKeyboardID = 0x1B11;
+                            break;
+                        case "STRAFE":
+                            Program.SettingsKeyboardID = 0x1B15;
                             break;
                     }
                 }
@@ -1134,7 +1165,7 @@ namespace RGBKeyboardSpectrograph
             Program.RunKeyboardThread = 0;
             DebugTestModeButton.Enabled = true;
 
-            //MuteCheckTimer.Start();
+            ToggleCheckTimer.Start();
         }
 
         /// <summary>
@@ -1154,8 +1185,9 @@ namespace RGBKeyboardSpectrograph
             // Break if there's no keyboard layout selected
             if (SettingsKeyboardLayoutCB.SelectedIndex < 0)
             {
-                MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("There is no layout selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 UpdateStatusMessage.ShowStatusMessage(3, "No layout selected.");
+                ToggleCheckTimer.Stop();
                 return false;
             };
 
@@ -1206,6 +1238,7 @@ namespace RGBKeyboardSpectrograph
             else
             {
                 UpdateStatusMessage.ShowStatusMessage(3, "The selected layout is empty");
+                ToggleCheckTimer.Stop();
                 return false;
             }
             return true;
@@ -1275,6 +1308,9 @@ namespace RGBKeyboardSpectrograph
                     logColour = Color.FromArgb(255, 255, 255);
                     break;
             }
+
+            // If the suppress CUE warnings option is selected, don't display that message
+            if (messageText == "Corsair Utility Engine is still running!") { return; };
 
             // If the log level is high enough to show the message, show it
             if (messageType <= Program.LogLevel)
@@ -1432,6 +1468,12 @@ namespace RGBKeyboardSpectrograph
             }
         }
 
+        private void SpectroColourButton_Click(object sender, EventArgs e)
+        {
+            OpenColorPicker(sender);
+            Program.SpectroBars.Color.SetD(SpectroColorBars.BackColor);
+            Program.SpectroBg.Color.SetD(SpectroColorBg.BackColor);
+        }
         #endregion [Spectro] Buttons
 
         #region [Spectro] ListBoxes
@@ -1503,6 +1545,7 @@ namespace RGBKeyboardSpectrograph
         private void SpectroBarEffectCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             Program.SpectroBars.Mode = SpectroBarEffectCB.Text;
+            ToggleCheckTimer.Start();
             if (SpectroBarEffectCB.Text == "Solid Colour")
             {
                 SpectroBarBrightnessUD.Enabled = false;
@@ -1893,6 +1936,9 @@ namespace RGBKeyboardSpectrograph
             int offsetX = 1;
             int offsetY = 0;
 
+            if (Program.SettingsKeyboardModel == "STRAFE")
+            { offsetX = -1; }
+
             Button[] keyboardButtons = new Button[keyData.Length];
 
             for (int i = 0; i < keyData.Length; i++)
@@ -2039,6 +2085,37 @@ namespace RGBKeyboardSpectrograph
             this.tsmSwitchStaticProfile.DropDownItems.AddRange(tsmProfileList);
         }
 
+        private void ToggleCheckTimer_Tick(object sender, EventArgs e)
+        {
+            // Leave if we don't want to use these
+            if (!Program.UseToggleIndicators)
+            {
+                Program.StaticKeyColorsBytes[3].SetD(Color.Transparent);
+                Program.StaticKeyColorsBytes[30].SetD(Color.Transparent);
+                Program.StaticKeyColorsBytes[80].SetD(Color.Transparent);
+                return;
+            }
+            else
+            {
+                if (Control.IsKeyLocked(Keys.CapsLock))
+                { Program.StaticKeyColorsBytes[3].SetD(ToggleCapsOn.BackColor); }
+                else { Program.StaticKeyColorsBytes[3].SetD(ToggleCapsOff.BackColor); };
+
+                if (Control.IsKeyLocked(Keys.NumLock))
+                { Program.StaticKeyColorsBytes[80].SetD(ToggleNumOn.BackColor); }
+                else { Program.StaticKeyColorsBytes[80].SetD(ToggleNumOff.BackColor); };
+
+                if (Control.IsKeyLocked(Keys.Scroll))
+                { Program.StaticKeyColorsBytes[30].SetD(ToggleScrollOn.BackColor); }
+                else { Program.StaticKeyColorsBytes[30].SetD(ToggleScrollOff.BackColor); };
+            };
+
+            // Leave if one of the effects are running, as they will manage mute state
+            if (Program.RunKeyboardThread > 1) { return; };
+
+            SendStaticKeysToKeyboard(false, true);
+        }
+
         #endregion [Static Keys] Functions
 
         #region [Static Keys] Buttons
@@ -2058,6 +2135,9 @@ namespace RGBKeyboardSpectrograph
                 case "K95-RGB":
                     keyboardDirectoryName = "k95rgb";
                     break;
+                case "STRAFE":
+                    keyboardDirectoryName = "strafe";
+                    break;
                 default:
                     return;
             }
@@ -2075,23 +2155,12 @@ namespace RGBKeyboardSpectrograph
             DrawKeysOnImage(keyData);
         }
         
-        public void KeyboardButton_Click(object sender, EventArgs e)
+        private void ToggleColours_Click(object sender, EventArgs e)
         {
             if (StaticCopyPasteMode == 0) // Open the color picker
             {
                 // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
-                int buttonID = (int)((Button)sender).Tag;
-
-                System.Windows.Media.Color selectedMediaColor;
-                Color selectedColor = ((Button)sender).BackColor;
-                ColorPickerStandardDialog dia = new ColorPickerStandardDialog();
-                dia.InitialColor = System.Windows.Media.Color.FromRgb(((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
-                if (dia.ShowDialog() == true)
-                {
-                    selectedMediaColor = dia.SelectedColor; //do something with the selected color
-                    selectedColor = Color.FromArgb(127, selectedMediaColor.R, selectedMediaColor.G, selectedMediaColor.B);
-                }
-                Program.StaticKeyColors[(int)(((Button)sender).Tag)] = selectedColor;
+                OpenColorPicker(sender);
                 RefreshKeyColors();
             }
             else if (StaticCopyPasteMode == 1) // Copy color
@@ -2102,7 +2171,40 @@ namespace RGBKeyboardSpectrograph
             }
             else if (StaticCopyPasteMode == 2) // Paste color
             {
-                
+                Color copiedColor;
+                if (StaticCopyPasteColor.BackColor == Color.Transparent)
+                {
+                    copiedColor = Color.Transparent;
+                }
+                else
+                {
+                    copiedColor = Color.FromArgb(255, StaticCopyPasteColor.BackColor.R, StaticCopyPasteColor.BackColor.G, StaticCopyPasteColor.BackColor.B);
+                }
+
+                ((Button)sender).BackColor = copiedColor;
+                RefreshKeyColors();
+            }
+        }
+
+        public void KeyboardButton_Click(object sender, EventArgs e)
+        {
+            if (StaticCopyPasteMode == 0) // Open the color picker
+            {
+                // ColorPicker based on http://www.codeproject.com/Articles/131708/WPF-Color-Picker-Construction-Kit
+                int buttonID = (int)((Button)sender).Tag;
+
+                Program.StaticKeyColors[(int)(((Button)sender).Tag)] = OpenColorPicker(sender);
+                RefreshKeyColors();
+            }
+            else if (StaticCopyPasteMode == 1) // Copy color
+            {
+                StaticCopyPasteColor.BackColor = Color.FromArgb(255, ((Button)sender).BackColor.R, ((Button)sender).BackColor.G, ((Button)sender).BackColor.B);
+                StaticCopyPasteMode = 0;
+                StaticCopyButton.FlatAppearance.BorderColor = Color.Black;
+            }
+            else if (StaticCopyPasteMode == 2) // Paste color
+            {
+
                 Color copiedColor;
                 if (StaticCopyPasteColor.BackColor == Color.Transparent)
                 {
@@ -2352,7 +2454,12 @@ namespace RGBKeyboardSpectrograph
         }
 
         #endregion [Static Keys] Buttons
-        
+
+        private void UseToggleColoursCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.UseToggleIndicators = UseToggleColoursCheck.Checked;
+        }
+
         #endregion Tab: Static Keys
 
         #region Tab: Reactive
@@ -2580,6 +2687,9 @@ namespace RGBKeyboardSpectrograph
                 case "K95-RGB":
                     Program.MyCanvasWidth = 104;
                     break;
+                case "STRAFE":
+                    Program.MyCanvasWidth = 92;
+                    break;
             }
             SpectroEffectWidth_ValueChanged(null, null);
             SpectroBarWidth_ValueChanged(null, null);
@@ -2795,14 +2905,7 @@ namespace RGBKeyboardSpectrograph
                 }
             }
         }
-
-        private void MuteCheckTimer_Tick(object sender, EventArgs e)
-        {
-            // Leave if one of the effects are running, as they will manage mute state
-            if (Program.RunKeyboardThread > 1) { return; };
-            
-        }
-
+        
         /// <summary>
         /// Sender-sensitive ColorPicker. Non-control-called method returns the selected Color.
         /// </summary>
@@ -2832,6 +2935,11 @@ namespace RGBKeyboardSpectrograph
         {
             OpenColorPicker(sender);
         }
+
+        private void SettingsSuppressCueWarnings_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.SuppressCueMessages = SettingsSuppressCueWarnings.Checked;
+        }
         #endregion Program
 
         #region ToolStrip
@@ -2851,13 +2959,14 @@ namespace RGBKeyboardSpectrograph
             tsmSpectroAmplitude.Text = "Amplitude: " + tsmSpectroAmplitudeSlider.Value;
             SpectroAmplitudeUD.Value = ((TrackBar)sender).Value;
         }
+
         private void RightClickMenu_Opening(object sender, CancelEventArgs e)
         {
             tsmSpectroAmplitudeSlider.Value = (int)Program.SpectroAmplitude;
         }
 
         #endregion ToolStrip
-
+        
         #endregion Sections
 
     } //MainForm

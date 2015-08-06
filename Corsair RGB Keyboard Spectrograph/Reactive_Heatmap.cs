@@ -77,8 +77,8 @@ namespace RGBKeyboardSpectrograph
         {
             if (riKeyboard.Flags == 0x0) { return; };
             if (riKeyboard.Flags == 0x2 && Control.IsKeyLocked(Keys.NumLock)) { return; };
-            
-            int currentKey = keys.GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags);
+
+            int currentKey = keys.GetKeyCode(riKeyboard.MakeCode, riKeyboard.VKey, riKeyboard.Flags, Control.IsKeyLocked(Keys.NumLock));
 
             keyMatrix[currentKey].NewStrike();
         }
@@ -156,6 +156,9 @@ namespace RGBKeyboardSpectrograph
             double intensity;
             if (Program.HighestStrikeCount == 0) { intensity = 1; }
             else { intensity = 1 - ((double)this.strikes / (double)Program.HighestStrikeCount); };
+
+            // Make sure that keys can't turn completely off.
+            if (intensity > .85 && intensity != 1) { intensity = .85; };
 
             this.R = (byte)(RMax - ((RMax - RMin) * intensity));
             this.G = (byte)(GMax - ((GMax - GMin) * intensity));

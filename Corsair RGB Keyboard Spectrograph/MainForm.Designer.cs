@@ -54,7 +54,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmStartSpectro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSpectroAmplitude = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.tsmStartEffects = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmReactive = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmHeatmap = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,10 +138,10 @@
             this.EffectTab_RandomLights = new System.Windows.Forms.TabPage();
             this.EffectTab_Rainfall = new System.Windows.Forms.TabPage();
             this.tabStatic = new System.Windows.Forms.TabPage();
-            this.StaticNumColourButton = new System.Windows.Forms.Button();
-            this.StaticScrollColourButton = new System.Windows.Forms.Button();
-            this.StaticCapsColourButton = new System.Windows.Forms.Button();
-            this.StaticMutedColourButton = new System.Windows.Forms.Button();
+            this.ToggleNumOn = new System.Windows.Forms.Button();
+            this.ToggleScrollOn = new System.Windows.Forms.Button();
+            this.ToggleCapsOn = new System.Windows.Forms.Button();
+            this.ToggleMuteOn = new System.Windows.Forms.Button();
             this.StaticMouseLightsGB = new System.Windows.Forms.GroupBox();
             this.StaticMouseLight4 = new System.Windows.Forms.Button();
             this.StaticMouseLight1 = new System.Windows.Forms.Button();
@@ -232,7 +231,18 @@
             this.SettingsBrowseCuePathButton = new System.Windows.Forms.Button();
             this.SettingsCuePathTextBox = new System.Windows.Forms.TextBox();
             this.SettingsCuePathLabel = new System.Windows.Forms.Label();
-            this.MuteCheckTimer = new System.Windows.Forms.Timer(this.components);
+            this.ToggleCheckTimer = new System.Windows.Forms.Timer(this.components);
+            this.SettingsSuppressCueWarnings = new System.Windows.Forms.CheckBox();
+            this.ToggleCapsLabel = new System.Windows.Forms.Label();
+            this.ToggleNumLabel = new System.Windows.Forms.Label();
+            this.ToggleNumOff = new System.Windows.Forms.Button();
+            this.ToggleCapsOff = new System.Windows.Forms.Button();
+            this.ToggleScrollOff = new System.Windows.Forms.Button();
+            this.ToggleMuteOff = new System.Windows.Forms.Button();
+            this.ToggleMuteLabel = new System.Windows.Forms.Label();
+            this.ToggleScrollLabel = new System.Windows.Forms.Label();
+            this.UseToggleColoursCheck = new System.Windows.Forms.CheckBox();
+            this.tsmSpectroAmplitudeSlider = new RGBKeyboardSpectrograph.ToolStripTrackBar();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroAmplitudeUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpectroBgBrightnessUD)).BeginInit();
@@ -560,14 +570,6 @@
             this.tsmSpectroAmplitude.Size = new System.Drawing.Size(164, 22);
             this.tsmSpectroAmplitude.Text = "Amplitude: x";
             // 
-            // tsmSpectroAmplitudeSlider
-            // 
-            this.tsmSpectroAmplitudeSlider.Maximum = 10;
-            this.tsmSpectroAmplitudeSlider.Minimum = 0;
-            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
-            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
-            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
-            // 
             // tsmStartEffects
             // 
             this.tsmStartEffects.Name = "tsmStartEffects";
@@ -594,7 +596,7 @@
             // tsmResetHeatmap
             // 
             this.tsmResetHeatmap.Name = "tsmResetHeatmap";
-            this.tsmResetHeatmap.Size = new System.Drawing.Size(152, 22);
+            this.tsmResetHeatmap.Size = new System.Drawing.Size(102, 22);
             this.tsmResetHeatmap.Text = "Reset";
             this.tsmResetHeatmap.Click += new System.EventHandler(this.Heatmap_ResetMaxButton_Click);
             // 
@@ -678,7 +680,7 @@
             this.SpectroColorBars.TabIndex = 29;
             this.SpectroColorBars.Text = "Bars";
             this.SpectroColorBars.UseVisualStyleBackColor = true;
-            this.SpectroColorBars.Click += new System.EventHandler(this.OpenColorPicker);
+            this.SpectroColorBars.Click += new System.EventHandler(this.SpectroColourButton_Click);
             // 
             // SpectroBgEffectCB
             // 
@@ -699,7 +701,7 @@
             this.SpectroColorBg.TabIndex = 31;
             this.SpectroColorBg.Text = "BG";
             this.SpectroColorBg.UseVisualStyleBackColor = true;
-            this.SpectroColorBg.Click += new System.EventHandler(this.OpenColorPicker);
+            this.SpectroColorBg.Click += new System.EventHandler(this.SpectroColourButton_Click);
             // 
             // GraphicsPictureBox
             // 
@@ -1620,10 +1622,19 @@
             // 
             // tabStatic
             // 
-            this.tabStatic.Controls.Add(this.StaticNumColourButton);
-            this.tabStatic.Controls.Add(this.StaticScrollColourButton);
-            this.tabStatic.Controls.Add(this.StaticCapsColourButton);
-            this.tabStatic.Controls.Add(this.StaticMutedColourButton);
+            this.tabStatic.Controls.Add(this.UseToggleColoursCheck);
+            this.tabStatic.Controls.Add(this.ToggleMuteLabel);
+            this.tabStatic.Controls.Add(this.ToggleScrollLabel);
+            this.tabStatic.Controls.Add(this.ToggleScrollOff);
+            this.tabStatic.Controls.Add(this.ToggleMuteOff);
+            this.tabStatic.Controls.Add(this.ToggleNumOff);
+            this.tabStatic.Controls.Add(this.ToggleCapsOff);
+            this.tabStatic.Controls.Add(this.ToggleNumLabel);
+            this.tabStatic.Controls.Add(this.ToggleCapsLabel);
+            this.tabStatic.Controls.Add(this.ToggleNumOn);
+            this.tabStatic.Controls.Add(this.ToggleScrollOn);
+            this.tabStatic.Controls.Add(this.ToggleCapsOn);
+            this.tabStatic.Controls.Add(this.ToggleMuteOn);
             this.tabStatic.Controls.Add(this.StaticMouseLightsGB);
             this.tabStatic.Controls.Add(this.StaticProfileListCB);
             this.tabStatic.Controls.Add(this.StaticSaveProfileAsButton);
@@ -1645,57 +1656,55 @@
             this.tabStatic.Text = "Static Keys";
             this.tabStatic.UseVisualStyleBackColor = true;
             // 
-            // StaticNumColourButton
+            // ToggleNumOn
             // 
-            this.StaticNumColourButton.Enabled = false;
-            this.StaticNumColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StaticNumColourButton.Location = new System.Drawing.Point(15, 328);
-            this.StaticNumColourButton.Name = "StaticNumColourButton";
-            this.StaticNumColourButton.Size = new System.Drawing.Size(80, 23);
-            this.StaticNumColourButton.TabIndex = 71;
-            this.StaticNumColourButton.Tag = "0";
-            this.StaticNumColourButton.Text = "Num Lock";
-            this.StaticNumColourButton.UseVisualStyleBackColor = true;
-            this.StaticNumColourButton.Visible = false;
+            this.ToggleNumOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleNumOn.Location = new System.Drawing.Point(322, 330);
+            this.ToggleNumOn.Name = "ToggleNumOn";
+            this.ToggleNumOn.Size = new System.Drawing.Size(36, 23);
+            this.ToggleNumOn.TabIndex = 71;
+            this.ToggleNumOn.Tag = "251";
+            this.ToggleNumOn.Text = "On";
+            this.ToggleNumOn.UseVisualStyleBackColor = true;
+            this.ToggleNumOn.Click += new System.EventHandler(this.ToggleColours_Click);
             // 
-            // StaticScrollColourButton
+            // ToggleScrollOn
             // 
-            this.StaticScrollColourButton.Enabled = false;
-            this.StaticScrollColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StaticScrollColourButton.Location = new System.Drawing.Point(101, 299);
-            this.StaticScrollColourButton.Name = "StaticScrollColourButton";
-            this.StaticScrollColourButton.Size = new System.Drawing.Size(80, 23);
-            this.StaticScrollColourButton.TabIndex = 70;
-            this.StaticScrollColourButton.Tag = "0";
-            this.StaticScrollColourButton.Text = "Scroll Lock";
-            this.StaticScrollColourButton.UseVisualStyleBackColor = true;
-            this.StaticScrollColourButton.Visible = false;
+            this.ToggleScrollOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleScrollOn.Location = new System.Drawing.Point(178, 329);
+            this.ToggleScrollOn.Name = "ToggleScrollOn";
+            this.ToggleScrollOn.Size = new System.Drawing.Size(36, 23);
+            this.ToggleScrollOn.TabIndex = 70;
+            this.ToggleScrollOn.Tag = "253";
+            this.ToggleScrollOn.Text = "On";
+            this.ToggleScrollOn.UseVisualStyleBackColor = true;
+            this.ToggleScrollOn.Click += new System.EventHandler(this.ToggleColours_Click);
             // 
-            // StaticCapsColourButton
+            // ToggleCapsOn
             // 
-            this.StaticCapsColourButton.Enabled = false;
-            this.StaticCapsColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StaticCapsColourButton.Location = new System.Drawing.Point(15, 299);
-            this.StaticCapsColourButton.Name = "StaticCapsColourButton";
-            this.StaticCapsColourButton.Size = new System.Drawing.Size(80, 23);
-            this.StaticCapsColourButton.TabIndex = 69;
-            this.StaticCapsColourButton.Tag = "0";
-            this.StaticCapsColourButton.Text = "Caps Lock";
-            this.StaticCapsColourButton.UseVisualStyleBackColor = true;
-            this.StaticCapsColourButton.Visible = false;
+            this.ToggleCapsOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleCapsOn.Location = new System.Drawing.Point(49, 329);
+            this.ToggleCapsOn.Name = "ToggleCapsOn";
+            this.ToggleCapsOn.Size = new System.Drawing.Size(36, 23);
+            this.ToggleCapsOn.TabIndex = 69;
+            this.ToggleCapsOn.Tag = "255";
+            this.ToggleCapsOn.Text = "On";
+            this.ToggleCapsOn.UseVisualStyleBackColor = true;
+            this.ToggleCapsOn.Click += new System.EventHandler(this.ToggleColours_Click);
             // 
-            // StaticMutedColourButton
+            // ToggleMuteOn
             // 
-            this.StaticMutedColourButton.Enabled = false;
-            this.StaticMutedColourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.StaticMutedColourButton.Location = new System.Drawing.Point(101, 328);
-            this.StaticMutedColourButton.Name = "StaticMutedColourButton";
-            this.StaticMutedColourButton.Size = new System.Drawing.Size(80, 23);
-            this.StaticMutedColourButton.TabIndex = 68;
-            this.StaticMutedColourButton.Tag = "0";
-            this.StaticMutedColourButton.Text = "Mute";
-            this.StaticMutedColourButton.UseVisualStyleBackColor = true;
-            this.StaticMutedColourButton.Visible = false;
+            this.ToggleMuteOn.Enabled = false;
+            this.ToggleMuteOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleMuteOn.Location = new System.Drawing.Point(451, 330);
+            this.ToggleMuteOn.Name = "ToggleMuteOn";
+            this.ToggleMuteOn.Size = new System.Drawing.Size(36, 23);
+            this.ToggleMuteOn.TabIndex = 68;
+            this.ToggleMuteOn.Tag = "249";
+            this.ToggleMuteOn.Text = "On";
+            this.ToggleMuteOn.UseVisualStyleBackColor = true;
+            this.ToggleMuteOn.Visible = false;
+            this.ToggleMuteOn.Click += new System.EventHandler(this.ToggleColours_Click);
             // 
             // StaticMouseLightsGB
             // 
@@ -2582,6 +2591,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.SettingsSuppressCueWarnings);
             this.tabSettings.Controls.Add(this.AnimationsUseStaticLights);
             this.tabSettings.Controls.Add(this.SettingsMouseModelCB);
             this.tabSettings.Controls.Add(this.SettingsEffectsIncludeMouse);
@@ -2763,9 +2773,126 @@
             this.SettingsCuePathLabel.TabIndex = 53;
             this.SettingsCuePathLabel.Text = "Corsair Utility Engine Path";
             // 
-            // MuteCheckTimer
+            // ToggleCheckTimer
             // 
-            this.MuteCheckTimer.Tick += new System.EventHandler(this.MuteCheckTimer_Tick);
+            this.ToggleCheckTimer.Tick += new System.EventHandler(this.ToggleCheckTimer_Tick);
+            // 
+            // SettingsSuppressCueWarnings
+            // 
+            this.SettingsSuppressCueWarnings.AutoSize = true;
+            this.SettingsSuppressCueWarnings.Location = new System.Drawing.Point(188, 191);
+            this.SettingsSuppressCueWarnings.Name = "SettingsSuppressCueWarnings";
+            this.SettingsSuppressCueWarnings.Size = new System.Drawing.Size(143, 17);
+            this.SettingsSuppressCueWarnings.TabIndex = 68;
+            this.SettingsSuppressCueWarnings.Text = "Suppress CUE Warnings";
+            this.SettingsSuppressCueWarnings.UseVisualStyleBackColor = true;
+            this.SettingsSuppressCueWarnings.CheckedChanged += new System.EventHandler(this.SettingsSuppressCueWarnings_CheckedChanged);
+            // 
+            // ToggleCapsLabel
+            // 
+            this.ToggleCapsLabel.AutoSize = true;
+            this.ToggleCapsLabel.Location = new System.Drawing.Point(12, 335);
+            this.ToggleCapsLabel.Name = "ToggleCapsLabel";
+            this.ToggleCapsLabel.Size = new System.Drawing.Size(31, 13);
+            this.ToggleCapsLabel.TabIndex = 72;
+            this.ToggleCapsLabel.Text = "Caps";
+            // 
+            // ToggleNumLabel
+            // 
+            this.ToggleNumLabel.AutoSize = true;
+            this.ToggleNumLabel.Location = new System.Drawing.Point(285, 335);
+            this.ToggleNumLabel.Name = "ToggleNumLabel";
+            this.ToggleNumLabel.Size = new System.Drawing.Size(29, 13);
+            this.ToggleNumLabel.TabIndex = 73;
+            this.ToggleNumLabel.Text = "Num";
+            // 
+            // ToggleNumOff
+            // 
+            this.ToggleNumOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleNumOff.Location = new System.Drawing.Point(360, 330);
+            this.ToggleNumOff.Name = "ToggleNumOff";
+            this.ToggleNumOff.Size = new System.Drawing.Size(36, 23);
+            this.ToggleNumOff.TabIndex = 75;
+            this.ToggleNumOff.Tag = "250";
+            this.ToggleNumOff.Text = "Off";
+            this.ToggleNumOff.UseVisualStyleBackColor = true;
+            this.ToggleNumOff.Click += new System.EventHandler(this.ToggleColours_Click);
+            // 
+            // ToggleCapsOff
+            // 
+            this.ToggleCapsOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleCapsOff.Location = new System.Drawing.Point(87, 329);
+            this.ToggleCapsOff.Name = "ToggleCapsOff";
+            this.ToggleCapsOff.Size = new System.Drawing.Size(36, 23);
+            this.ToggleCapsOff.TabIndex = 74;
+            this.ToggleCapsOff.Tag = "254";
+            this.ToggleCapsOff.Text = "Off";
+            this.ToggleCapsOff.UseVisualStyleBackColor = true;
+            this.ToggleCapsOff.Click += new System.EventHandler(this.ToggleColours_Click);
+            // 
+            // ToggleScrollOff
+            // 
+            this.ToggleScrollOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleScrollOff.Location = new System.Drawing.Point(216, 329);
+            this.ToggleScrollOff.Name = "ToggleScrollOff";
+            this.ToggleScrollOff.Size = new System.Drawing.Size(36, 23);
+            this.ToggleScrollOff.TabIndex = 77;
+            this.ToggleScrollOff.Tag = "252";
+            this.ToggleScrollOff.Text = "Off";
+            this.ToggleScrollOff.UseVisualStyleBackColor = true;
+            this.ToggleScrollOff.Click += new System.EventHandler(this.ToggleColours_Click);
+            // 
+            // ToggleMuteOff
+            // 
+            this.ToggleMuteOff.Enabled = false;
+            this.ToggleMuteOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ToggleMuteOff.Location = new System.Drawing.Point(489, 330);
+            this.ToggleMuteOff.Name = "ToggleMuteOff";
+            this.ToggleMuteOff.Size = new System.Drawing.Size(36, 23);
+            this.ToggleMuteOff.TabIndex = 76;
+            this.ToggleMuteOff.Tag = "248";
+            this.ToggleMuteOff.Text = "Off";
+            this.ToggleMuteOff.UseVisualStyleBackColor = true;
+            this.ToggleMuteOff.Visible = false;
+            this.ToggleMuteOff.Click += new System.EventHandler(this.ToggleColours_Click);
+            // 
+            // ToggleMuteLabel
+            // 
+            this.ToggleMuteLabel.AutoSize = true;
+            this.ToggleMuteLabel.Location = new System.Drawing.Point(414, 335);
+            this.ToggleMuteLabel.Name = "ToggleMuteLabel";
+            this.ToggleMuteLabel.Size = new System.Drawing.Size(31, 13);
+            this.ToggleMuteLabel.TabIndex = 79;
+            this.ToggleMuteLabel.Text = "Mute";
+            this.ToggleMuteLabel.Visible = false;
+            // 
+            // ToggleScrollLabel
+            // 
+            this.ToggleScrollLabel.AutoSize = true;
+            this.ToggleScrollLabel.Location = new System.Drawing.Point(139, 335);
+            this.ToggleScrollLabel.Name = "ToggleScrollLabel";
+            this.ToggleScrollLabel.Size = new System.Drawing.Size(33, 13);
+            this.ToggleScrollLabel.TabIndex = 78;
+            this.ToggleScrollLabel.Text = "Scroll";
+            // 
+            // UseToggleColoursCheck
+            // 
+            this.UseToggleColoursCheck.AutoSize = true;
+            this.UseToggleColoursCheck.Location = new System.Drawing.Point(15, 303);
+            this.UseToggleColoursCheck.Name = "UseToggleColoursCheck";
+            this.UseToggleColoursCheck.Size = new System.Drawing.Size(125, 17);
+            this.UseToggleColoursCheck.TabIndex = 80;
+            this.UseToggleColoursCheck.Text = "Use toggle indicators";
+            this.UseToggleColoursCheck.UseVisualStyleBackColor = true;
+            this.UseToggleColoursCheck.CheckedChanged += new System.EventHandler(this.UseToggleColoursCheck_CheckedChanged);
+            // 
+            // tsmSpectroAmplitudeSlider
+            // 
+            this.tsmSpectroAmplitudeSlider.Maximum = 10;
+            this.tsmSpectroAmplitudeSlider.Minimum = 0;
+            this.tsmSpectroAmplitudeSlider.Name = "tsmSpectroAmplitudeSlider";
+            this.tsmSpectroAmplitudeSlider.Size = new System.Drawing.Size(104, 45);
+            this.tsmSpectroAmplitudeSlider.Text = "toolStripTrackBar1";
             // 
             // MainForm
             // 
@@ -2835,6 +2962,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Effect_Float_Start_Red_LowUD)).EndInit();
             this.EffectTabControl.ResumeLayout(false);
             this.tabStatic.ResumeLayout(false);
+            this.tabStatic.PerformLayout();
             this.StaticMouseLightsGB.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.StaticKeyboardImageBox)).EndInit();
             this.tabReactive.ResumeLayout(false);
@@ -3021,8 +3149,8 @@
         private System.Windows.Forms.Button ReactiveStartButton;
         private System.Windows.Forms.TabPage tabReactive;
         private System.Windows.Forms.CheckBox AnimationsUseStaticLights;
-        private System.Windows.Forms.Button StaticMutedColourButton;
-        private System.Windows.Forms.Timer MuteCheckTimer;
+        private System.Windows.Forms.Button ToggleMuteOn;
+        private System.Windows.Forms.Timer ToggleCheckTimer;
         private System.Windows.Forms.TabControl ReactiveTabControl;
         private System.Windows.Forms.TabPage ReactiveTab_Reactive;
         private System.Windows.Forms.GroupBox Reactive_StartGB;
@@ -3066,9 +3194,9 @@
         private System.Windows.Forms.RadioButton Reactive_End_RadioDefined;
         private System.Windows.Forms.TabPage ReactiveTab_Heatmap;
         private System.Windows.Forms.RadioButton Reactive_End_RadioOriginal;
-        private System.Windows.Forms.Button StaticNumColourButton;
-        private System.Windows.Forms.Button StaticScrollColourButton;
-        private System.Windows.Forms.Button StaticCapsColourButton;
+        private System.Windows.Forms.Button ToggleNumOn;
+        private System.Windows.Forms.Button ToggleScrollOn;
+        private System.Windows.Forms.Button ToggleCapsOn;
         private System.Windows.Forms.Label Reactive_FrequencyLabel;
         private System.Windows.Forms.Label Reactive_DurationLabel;
         private System.Windows.Forms.NumericUpDown Reactive_DurationUD;
@@ -3081,6 +3209,16 @@
         private System.Windows.Forms.ToolStripMenuItem tsmReactive;
         private System.Windows.Forms.ToolStripMenuItem tsmHeatmap;
         private System.Windows.Forms.ToolStripMenuItem tsmResetHeatmap;
+        private System.Windows.Forms.CheckBox SettingsSuppressCueWarnings;
+        private System.Windows.Forms.Label ToggleNumLabel;
+        private System.Windows.Forms.Label ToggleCapsLabel;
+        private System.Windows.Forms.Label ToggleMuteLabel;
+        private System.Windows.Forms.Label ToggleScrollLabel;
+        private System.Windows.Forms.Button ToggleScrollOff;
+        private System.Windows.Forms.Button ToggleMuteOff;
+        private System.Windows.Forms.Button ToggleNumOff;
+        private System.Windows.Forms.Button ToggleCapsOff;
+        private System.Windows.Forms.CheckBox UseToggleColoursCheck;
 
     }
 }

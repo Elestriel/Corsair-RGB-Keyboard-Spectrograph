@@ -68,6 +68,9 @@ namespace RGBKeyboardSpectrograph
                 case "K95-RGB":
                     modelCode = "k95rgb";
                     break;
+                case "STRAFE":
+                    modelCode = "strafe";
+                    break;
             }
             return modelCode;
         }

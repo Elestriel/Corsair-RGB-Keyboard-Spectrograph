@@ -1,4 +1,19 @@
-﻿0.6.3a:
+﻿0.6.4:
+- Added STRAFE support. This works with all previous settings, but only looks at Red channels. Blues and greens are ignored.
+- - Download size has increased by roughly 3MB to encompass new images.
+- Modified the heatmap so that any key that has been pressed at least once will never return to the off state, but will just stay at the dimmest state possible.
+- Corrected issues with the wrong keys being picked up in Reactive modes when NumLock was off.
+- Corrected an issue that would cause an endless stream of errors to appear and make the program impossible to use.
+- Corrected an issue that would cause lock indicators to initiate keyboard refreshes when they were disabled.
+- LogLevel 5 will show key inputs. If there are any keys that aren't reactive for you, please let me know the codes for those keys.
+- LogLevels 5 and 6 will no longer show correct key loading messages; only errors.
+- Added an option to hide "CUE is still running" messages.
+- Fixed an issue where Reactive was being selected on first launch instead of Settings.
+- Fixed an issue where spectro solid colour settings aren't updated on the fly.
+- Added Caps/Num/Scroll Lock indicators to Spectro, Effects, and Static.
+- Reactive End colour is now set to Original by default.
+
+0.6.3a:
 - Corrected an issue where the right-click sensitivity slider wouldn't update to what was picked in the main program.
 - Corrected an issue where resetting the heatmap only reset the maximum counts, not the individual keys' counts.
 - Added an option to reset the Heatmap from the right-click menu.

@@ -33,7 +33,8 @@ Check out the main forum thread at http://forum.corsair.com/v3/showthread.php?t=
 Changelog and other information: http://emily-maxwell.com/
 
 #License
-This project is licensed under the GNU GPL v3.0.
+This project is licensed under the GNU GPL v3.0. When using snippets of my code, please ensure the following prefaces it:
+/// <summary> Written by Emily Maxwell. https://github.com/Elestriel/Corsair-RGB-Keyboard-Spectrograph </summary>
 
 #Cheers!
 I hope you enjoy using this program as much as I enjoy making it!

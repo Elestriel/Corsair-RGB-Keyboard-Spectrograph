@@ -12,7 +12,7 @@ namespace RGBKeyboardSpectrograph
     static class Program
     {
         // Version Number
-        public static string VersionNumber = "0.6.3a";
+        public static string VersionNumber = "0.6.4";
 
         // Application Variables
         public static byte[] MyPositionMap;
@@ -24,6 +24,7 @@ namespace RGBKeyboardSpectrograph
         public static int ColorModeDivisor = 32;
         public static float ColorsPerChannel = 7;
         public static string StaticProfilesPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Profiles\\";
+        public static bool SuppressCueMessages = false;
 
         // Cross-thread variables
         public volatile static int RunKeyboardThread = -1;
@@ -63,6 +64,7 @@ namespace RGBKeyboardSpectrograph
         public static bool SettingLaunchCueOnExit = false;
         public static string SettingsLastUsedProfile;
         public static bool StaticKeysNeedRedraw = false;
+        public static bool UseToggleIndicators = false;
 
         public static bool CSCore_FirstStart = true;
         public static bool CSCore_NewDevice = true;
