@@ -34,6 +34,7 @@ Changelog and other information: http://emily-maxwell.com/
 
 #License
 This project is licensed under the GNU GPL v3.0. When using snippets of my code, please ensure the following or something similar prefaces it:
+
 Written by Emily Maxwell. https://github.com/Elestriel/Corsair-RGB-Keyboard-Spectrograph
 
 #Cheers!
