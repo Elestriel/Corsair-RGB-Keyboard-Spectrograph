@@ -1009,13 +1009,13 @@ namespace RGBKeyboardSpectrograph
                     Program.SettingsMouseID = 0x1B12;
                     Program.SettingsMouseModel = "M65 RGB";
                     break;
-                case "Sabre 1":
+                case "Sabre Optical":
                     Program.SettingsMouseID = 0x1B14;
-                    Program.SettingsMouseModel = "Sabre 1";
+                    Program.SettingsMouseModel = "Sabre Optical";
                     break;
-                case "Sabre 2":
+                case "Sabre Laser":
                     Program.SettingsMouseID = 0x1B19;
-                    Program.SettingsMouseModel = "Sabre 2";
+                    Program.SettingsMouseModel = "Sabre Laser";
                     break;
                 case "None":
                     Program.SettingsMouseID = 0x0;
