@@ -1,5 +1,8 @@
 #Keyboard Spectrograph for Corsair RGB series keyboards and mice.
 
+#Note
+Please note that this is **not** the similar, but far more advanced Corsair Effects Engine. This code is pretty much archaic at this point, and is only here for reference.
+
 #Summary
 This application is made to run in the place of the Corsair Utility Engine. It provides several effects that are not available through CUE, such as a spectrograph for audio playing through the computer or from input devices, randomized lighting, reactive lighting effects, idle/away timer with profile switching, and other features. It is still in active development, and there are many new features on the way!
 
